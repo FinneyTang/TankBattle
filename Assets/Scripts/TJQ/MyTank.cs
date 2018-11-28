@@ -21,9 +21,10 @@ namespace TJQ
         private bool ApproachNextDestination()
         {
             NavMeshPath path = new NavMeshPath();
-            if (m_Agent.CalculatePath(new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50)), path))
+            if (NavAgent.CalculatePath(new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50)), path))
             {
-                m_Agent.path = path;
+                NavAgent.path = path;
+                TurretTurnTo(NavAgent.destination);
                 return true;
             }
             return false;
