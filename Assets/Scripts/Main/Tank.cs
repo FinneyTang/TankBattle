@@ -7,7 +7,7 @@ public class Tank : MonoBehaviour
 {
     private NavMeshAgent m_Agent;
     private float m_LastTime = 0;
-	void Start ()
+	void Awake ()
     {
         m_Agent = this.GetComponent<NavMeshAgent>();
     }
@@ -34,8 +34,11 @@ public class Tank : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(m_Agent.destination, 0.5f);
-        Gizmos.DrawLine(m_Agent.destination, gameObject.transform.position);
+        if(m_Agent != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(m_Agent.destination, 0.5f);
+            Gizmos.DrawLine(m_Agent.destination, gameObject.transform.position);
+        }
     }
 }
