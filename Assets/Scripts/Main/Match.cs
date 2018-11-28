@@ -25,7 +25,7 @@ namespace Main
                 return;
             }
             AddTank(ETeam.A);
-            if(TeamSettings.Count > 2)
+            if(TeamSettings.Count > 1)
             {
                 AddTank(ETeam.B);
             }
