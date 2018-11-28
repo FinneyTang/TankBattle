@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace TsiU
+namespace Main
 {
-    public class THoverCameraController : MonoBehaviour
+    public class HoverCameraController : MonoBehaviour
     {
         private enum MouseButton { Left = 0, Right = 1, Middle = 2, None = 3 }
         private readonly string MouseHorizontalAxisName = "Mouse X";

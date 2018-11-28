@@ -3,42 +3,59 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Tank : MonoBehaviour
+namespace Main
 {
-    private NavMeshAgent m_Agent;
-    private float m_LastTime = 0;
-	void Awake ()
+    public class Tank : MonoBehaviour
     {
-        m_Agent = this.GetComponent<NavMeshAgent>();
-    }
-	// Update is called once per frame
-	void Update ()
-    {
-        if(Time.time > m_LastTime)
+        protected NavMeshAgent m_Agent;
+        public ETeam Team
         {
-            if(ApproachNextDestination())
+            get; internal set;
+        }
+        void Awake()
+        {
+            m_Agent = this.GetComponent<NavMeshAgent>();
+            OnAwake();
+        }
+        void Start()
+        {
+            OnStart();
+        }
+        // Update is called once per frame
+        void Update()
+        {
+            OnUpdate();
+        }
+        private void OnDrawGizmos()
+        {
+            if (m_Agent != null)
             {
-                m_LastTime = Time.time + 5;
+                Gizmos.color = Color.red;
+                Gizmos.DrawSphere(m_Agent.destination, 0.5f);
+                Gizmos.DrawLine(m_Agent.destination, gameObject.transform.position);
             }
+            OnOnDrawGizmos();
         }
-    }
-    bool ApproachNextDestination()
-    {
-        NavMeshPath path = new NavMeshPath();
-        if (m_Agent.CalculatePath(new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50)), path))
+        protected virtual void OnAwake()
         {
-            m_Agent.path = path;
-            return true;
+
         }
-        return false;
-    }
-    private void OnDrawGizmos()
-    {
-        if(m_Agent != null)
+        protected virtual void OnStart()
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(m_Agent.destination, 0.5f);
-            Gizmos.DrawLine(m_Agent.destination, gameObject.transform.position);
+
+        }
+        protected virtual void OnUpdate()
+        {
+
+        }
+        protected virtual void OnOnDestroy()
+        {
+
+        }
+        protected virtual void OnOnDrawGizmos()
+        {
+
         }
     }
 }
+
