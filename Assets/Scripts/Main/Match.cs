@@ -38,8 +38,8 @@ namespace Main
             }
             GameObject tank = (GameObject)Instantiate(Resources.Load("Tank"));
             tank.transform.position = setting.Reborn ? setting.Reborn.transform.position : Vector3.zero;
-            MeshRenderer[] meshRed = tank.GetComponentsInChildren<MeshRenderer>();
-            foreach (var m in meshRed)
+            MeshRenderer[] mesh = tank.GetComponentsInChildren<MeshRenderer>();
+            foreach (var m in mesh)
             {
                 m.material.color = (team == ETeam.A ? Color.red : Color.cyan);
             }
