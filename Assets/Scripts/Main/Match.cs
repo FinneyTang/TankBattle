@@ -19,13 +19,16 @@ namespace Main
         public List<TeamSetting> TeamSettings;
         void Start()
         {
-            if(TeamSettings.Count < 2)
+            if(TeamSettings.Count < 1)
             {
-                Debug.LogError("must have 2 team settings");
+                Debug.LogError("must have 1 team settings");
                 return;
             }
             AddTank(ETeam.A);
-            AddTank(ETeam.B);
+            if(TeamSettings.Count > 2)
+            {
+                AddTank(ETeam.B);
+            }
         }
         private void AddTank(ETeam team)
         {
