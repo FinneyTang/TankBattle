@@ -18,6 +18,14 @@ namespace Main
         {
             get; internal set;
         }
+        public void TurretTurnTo(Vector3 targetPos)
+        {
+            m_TurretTargetPos = targetPos;
+        }
+        public Vector3 GetTurretAiming()
+        {
+            return m_TurretTF.forward;
+        }
         void Awake()
         {
             NavAgent = GetComponent<NavMeshAgent>();
@@ -45,14 +53,6 @@ namespace Main
                 Gizmos.DrawLine(NavAgent.destination, gameObject.transform.position);
             }
             OnOnDrawGizmos();
-        }
-        public void TurretTurnTo(Vector3 targetPos)
-        {
-            m_TurretTargetPos = targetPos;
-        }
-        public Vector3 GetTurretAiming()
-        {
-            return m_TurretTF.forward;
         }
         private void UpdateTurretRotation()
         {
