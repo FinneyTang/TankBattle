@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 199200332811060622}
   - component: {fileID: 114566962382578006}
   m_Layer: 9
-  m_Name: CFX_Explosion_B_Smoke+Text
+  m_Name: CFX_Explosion_B_Smoke
   m_TagString: FxTemporaire
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -4,3 +4,4 @@ TankBattle.CSharp.csproj
 Temp/
 .vs/TankBattle/v14/.suo
 TankBattle.csproj
+TankBattle.CSharp.Editor.csproj

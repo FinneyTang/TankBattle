@@ -56,9 +56,9 @@ namespace TJQ
         {
             return Move(GetID(), new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50)));
         }
-        public override int GetID()
+        public override string GetName()
         {
-            return 1;
+            return "TJQ";
         }
     }
 }

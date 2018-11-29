@@ -17,7 +17,7 @@ namespace Main
         {
             public GameObject Reborn;
             public string TankScript;
-            public int TankID;
+            public string TankName;
         }
         public List<TeamSetting> TeamSettings;
 
@@ -25,11 +25,10 @@ namespace Main
         public class MatchSetting
         {
             public float MatchTime = 180;
-            public int NumOfStartToWin = 10;
             public float FireInterval = 1f;
             public float MissileSpeed = 40f;
             public int MaxHP = 100;
-            public int DamagePerHit = 10;
+            public int DamagePerHit = 25;
         }
         public MatchSetting GlobalSetting = new MatchSetting();
 
@@ -90,6 +89,32 @@ namespace Main
                 {
                     m_Tanks[i].Born();
                 }
+            }
+        }
+        void OnGUI()
+        {
+            if(m_Tanks.Count > 0)
+            {
+                GUIStyle AInfoStyle = new GUIStyle();
+                AInfoStyle.normal.textColor = Color.red;
+                AInfoStyle.fontSize = 25;
+                AInfoStyle.fontStyle = FontStyle.Bold;
+                AInfoStyle.alignment = TextAnchor.UpperLeft;
+
+                string ainfo = string.Format("{0}\nHP: {1}", m_Tanks[0].GetName(), m_Tanks[0].HP);
+                GUI.Label(new Rect(10, 10, Screen.width * 0.5f - 10, 100), ainfo, AInfoStyle);
+            }
+
+            if (m_Tanks.Count > 1)
+            {
+                GUIStyle BInfoStyle = new GUIStyle();
+                BInfoStyle.normal.textColor = Color.cyan;
+                BInfoStyle.fontSize = 25;
+                BInfoStyle.fontStyle = FontStyle.Bold;
+                BInfoStyle.alignment = TextAnchor.UpperRight;
+
+                string binfo = string.Format("{0}\nHP: {1}", m_Tanks[0].GetName(), m_Tanks[1].HP);
+                GUI.Label(new Rect(Screen.width * 0.5f, 10, Screen.width * 0.5f - 10, 100), binfo, BInfoStyle);
             }
         }
     }

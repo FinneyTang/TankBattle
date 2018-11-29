@@ -37,11 +37,14 @@ namespace Main
                             hitOwner = true;
                         }
                     }
+                    Utils.PlayParticle("CFX3_Hit_SmokePuff", transform.position);
+                }
+                else
+                {
+                    Utils.PlayParticle("CFX3_Hit_SmokePuff_Wall", transform.position);
                 }
                 if(hitOwner == false)
                 {
-                    GameObject explosion = (GameObject)Instantiate(Resources.Load("CFX3_Hit_SmokePuff"));
-                    explosion.transform.position = transform.position;
                     Destroy(this.gameObject);
                 }
             }

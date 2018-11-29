@@ -1425,17 +1425,16 @@ MonoBehaviour:
   TeamSettings:
   - Reborn: {fileID: 1305338028}
     TankScript: TJQ.MyTank
-    TankID: 1
+    TankName: TJQ
   - Reborn: {fileID: 677785983}
     TankScript: TJQ.MyTank
-    TankID: 1
+    TankName: TJQ
   GlobalSetting:
     MatchTime: 180
-    NumOfStartToWin: 10
     FireInterval: 1
     MissileSpeed: 40
     MaxHP: 100
-    DamagePerHit: 10
+    DamagePerHit: 25
 --- !u!4 &1691881704
 Transform:
   m_ObjectHideFlags: 0

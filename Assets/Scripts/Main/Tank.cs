@@ -13,6 +13,7 @@ namespace Main
         private NavMeshAgent m_NavAgent;
         private FireCollider m_FireCollider;
         private float m_NextFireTime;
+        private int m_ID;
         public ETeam Team
         {
             get; internal set;
@@ -125,7 +126,7 @@ namespace Main
                 return transform.forward;
             }
         }
-        public abstract int GetID();
+        public abstract string GetName();
         void Awake()
         {
             m_NavAgent = GetComponent<NavMeshAgent>();
@@ -161,9 +162,12 @@ namespace Main
             HP = Match.instance.GlobalSetting.MaxHP;
             transform.position = Match.instance.TeamSettings[(int)Team].Reborn.transform.position;
             gameObject.SetActive(true);
-            GameObject boneEffect = (GameObject)Instantiate(Resources.Load("CFX3_MagicAura_B_Runic"));
-            boneEffect.transform.position = transform.position;
+            Utils.PlayParticle("CFX3_MagicAura_B_Runic", Position);
             OnBorn();
+        }
+        protected int GetID()
+        {
+            return GetName().GetHashCode();
         }
         private void OnDrawGizmos()
         {
@@ -182,13 +186,12 @@ namespace Main
         }
         private void Dead()
         {
-            GameObject explosion = (GameObject)Instantiate(Resources.Load("CFX_Explosion_B_Smoke+Text"));
-            explosion.transform.position = transform.position;
+            Utils.PlayParticle("CFX_Explosion_B_Smoke", Position);
             gameObject.SetActive(false);
         }
         private bool CheckOwner(int tankID)
         {
-            return GetID() == Match.instance.TeamSettings[(int)Team].TankID;
+            return GetID() == Match.instance.TeamSettings[(int)Team].TankName.GetHashCode();
         }
         private void UpdateTurretRotation()
         {
