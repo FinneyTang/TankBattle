@@ -32,12 +32,25 @@ namespace TJQ
                 if(seeOthers)
                 {
                     TurretTurnTo(GetID(), oppTank.Position);
+                    Vector3 aimDirection = GetTurretAiming();
+                    Vector3 toTarget = oppTank.Position - FirePos;
+                    toTarget.y = 0;
+                    toTarget.Normalize();
+                    if(Vector3.Dot(aimDirection, toTarget) > 0.98f)
+                    {
+                        Fire(GetID());
+                    }
                 }
                 else
                 {
                     TurretTurnTo(GetID(), Position + Forward);
                 }
             }
+        }
+        protected override void OnBorn()
+        {
+            base.OnBorn();
+            m_LastTime = 0;
         }
         private bool ApproachNextDestination()
         {

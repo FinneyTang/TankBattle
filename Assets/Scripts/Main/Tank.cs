@@ -11,9 +11,22 @@ namespace Main
         private Transform m_FirePosTF;
         private Vector3 m_TurretTargetPos;
         private NavMeshAgent m_NavAgent;
+        private FireCollider m_FireCollider;
+        private float m_NextFireTime;
         public ETeam Team
         {
             get; internal set;
+        }
+        public int HP
+        {
+            get; internal set;
+        }
+        public bool IsDead
+        {
+            get
+            {
+                return gameObject.activeSelf == false;
+            }
         }
         public void TurretTurnTo(int ownerID, Vector3 targetPos)
         {
@@ -48,6 +61,25 @@ namespace Main
                 return true;
             }
             return false;
+        }
+        public void Fire(int ownerID)
+        {
+            if (CheckOwner(ownerID) == false)
+            {
+                return;
+            }
+            if (CanFire() == false)
+            {
+                return;
+            }
+            m_NextFireTime = Time.time + Match.instance.GlobalSetting.FireInterval;
+            GameObject missileGO = (GameObject)Instantiate(Resources.Load("Missile"));
+            Missile missile = missileGO.GetComponent<Missile>();
+            missile.Init(Team, FirePos, GetTurretAiming() * Match.instance.GlobalSetting.MissileSpeed);
+        }
+        public bool CanFire()
+        {
+            return Time.time > m_NextFireTime;
         }
         public NavMeshPath CaculatePath(Vector3 targetPos)
         {
@@ -99,18 +131,39 @@ namespace Main
             m_NavAgent = GetComponent<NavMeshAgent>();
             m_TurretTF = Find(transform, "Turret");
             m_FirePosTF = Find(transform, "FirePos");
+            Transform tf = Find(transform, "FireCollider");
+            m_FireCollider = tf.GetComponent<FireCollider>();
+            m_FireCollider.Owner = this;
             m_TurretTargetPos = m_TurretTF.position + m_TurretTF.forward;
             OnAwake();
         }
         void Start()
         {
             OnStart();
+            Born();
         }
         // Update is called once per frame
         void Update()
         {
             OnUpdate();
             UpdateTurretRotation();
+        }
+        internal void TakeDamage()
+        {
+            HP -= Match.instance.GlobalSetting.DamagePerHit;
+            if(HP == 0)
+            {
+                Dead();
+            }
+        }
+        internal void Born()
+        {
+            HP = Match.instance.GlobalSetting.MaxHP;
+            transform.position = Match.instance.TeamSettings[(int)Team].Reborn.transform.position;
+            gameObject.SetActive(true);
+            GameObject boneEffect = (GameObject)Instantiate(Resources.Load("CFX3_MagicAura_B_Runic"));
+            boneEffect.transform.position = transform.position;
+            OnBorn();
         }
         private void OnDrawGizmos()
         {
@@ -126,6 +179,12 @@ namespace Main
                 Gizmos.DrawLine(m_FirePosTF.position, aimTarget);
             }
             OnOnDrawGizmos();
+        }
+        private void Dead()
+        {
+            GameObject explosion = (GameObject)Instantiate(Resources.Load("CFX_Explosion_B_Smoke+Text"));
+            explosion.transform.position = transform.position;
+            gameObject.SetActive(false);
         }
         private bool CheckOwner(int tankID)
         {
@@ -175,6 +234,10 @@ namespace Main
 
         }
         protected virtual void OnOnDrawGizmos()
+        {
+
+        }
+        protected virtual void OnBorn()
         {
 
         }
