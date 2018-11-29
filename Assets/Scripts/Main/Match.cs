@@ -8,15 +8,24 @@ namespace Main
     {
         A, B, NB
     }
-    class Match : MonoBehaviour
+    public class Match : MonoBehaviour
     {
+        public static Match instance = null;
+
         [Serializable]
-        public class TeamSetting : System.Object
+        public class TeamSetting
         {
             public GameObject Reborn;
             public string TankScript;
+            public int TankID;
         }
         public List<TeamSetting> TeamSettings;
+        private List<Tank> m_Tanks;
+        void Awake()
+        {
+            Application.targetFrameRate = 60;
+            Match.instance = this;
+        }
         void Start()
         {
             if(TeamSettings.Count < 1)
@@ -24,11 +33,21 @@ namespace Main
                 Debug.LogError("must have 1 team settings");
                 return;
             }
+            m_Tanks = new List<Tank>();
             AddTank(ETeam.A);
             if(TeamSettings.Count > 1)
             {
                 AddTank(ETeam.B);
             }
+        }
+        public Tank GetOppositeTank(ETeam team)
+        {
+            ETeam oppTeam = team == ETeam.A ? ETeam.B : ETeam.A;
+            if(m_Tanks.Count < (int)oppTeam)
+            {
+                return null;
+            }
+            return m_Tanks[(int)oppTeam];
         }
         private void AddTank(ETeam team)
         {
@@ -48,6 +67,7 @@ namespace Main
             }
             Tank t = (Tank)tank.AddComponent(scriptType);
             t.Team = team;
+            m_Tanks.Add(t);
         }
     }
 }

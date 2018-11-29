@@ -14,20 +14,38 @@ namespace TJQ
             {
                 if (ApproachNextDestination())
                 {
-                    m_LastTime = Time.time + 5;
+                    m_LastTime = Time.time + Random.Range(3, 8);
+                }
+            }
+            Tank oppTank = Match.instance.GetOppositeTank(Team);
+            if(oppTank != null)
+            {
+                bool seeOthers = false;
+                RaycastHit hitInfo;
+                if (Physics.Linecast(FirePos, oppTank.Position, out hitInfo, PhysicsUtils.LayerMask_Collsion))
+                {
+                    if(PhysicsUtils.IsFireCollider(hitInfo.collider))
+                    {
+                        seeOthers = true;
+                    }
+                }
+                if(seeOthers)
+                {
+                    TurretTurnTo(GetID(), oppTank.Position);
+                }
+                else
+                {
+                    TurretTurnTo(GetID(), Position + Forward);
                 }
             }
         }
         private bool ApproachNextDestination()
         {
-            NavMeshPath path = new NavMeshPath();
-            if (NavAgent.CalculatePath(new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50)), path))
-            {
-                NavAgent.path = path;
-                TurretTurnTo(NavAgent.destination);
-                return true;
-            }
-            return false;
+            return Move(GetID(), new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50)));
+        }
+        public override int GetID()
+        {
+            return 1;
         }
     }
 }

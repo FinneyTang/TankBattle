@@ -1425,8 +1425,10 @@ MonoBehaviour:
   TeamSettings:
   - Reborn: {fileID: 1305338028}
     TankScript: TJQ.MyTank
+    TankID: 1
   - Reborn: {fileID: 677785983}
     TankScript: TJQ.MyTank
+    TankID: 1
 --- !u!4 &1691881704
 Transform:
   m_ObjectHideFlags: 0
