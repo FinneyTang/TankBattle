@@ -89,6 +89,15 @@ namespace Main
         {
             return m_Stars;
         }
+        public Dictionary<int, Missile> GetOppositeMissiles(ETeam myTeam)
+        {
+            ETeam oppTeam = myTeam == ETeam.A ? ETeam.B : ETeam.A;
+            if (m_Missiles.Count < (int)oppTeam)
+            {
+                return null;
+            }
+            return m_Missiles[(int)oppTeam];
+        }
         public bool IsMathEnd()
         {
             return m_MatchEnd;
