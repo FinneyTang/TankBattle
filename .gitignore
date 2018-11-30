@@ -5,3 +5,4 @@ Temp/
 .vs/TankBattle/v14/.suo
 TankBattle.csproj
 TankBattle.CSharp.Editor.csproj
+TankBattle.Editor.csproj

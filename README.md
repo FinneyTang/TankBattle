@@ -36,7 +36,7 @@ By Jiaqi Tang
 
 ## 自定义Tank脚本说明
 
-- 自定义Tank脚本必须继承自Tank类，建议使用namespace以保证类名不会产生冲突
+- 自定义Tank脚本必须继承自Tank类，建议使用独立文件夹，并且加上namespace以保证类名不会产生冲突
 - 必须重载GetName方法，这个方法返回的名字，需要填写到Team参数中的Tank Name字段中
 - 自定义Tank脚本不要重写原来MonoBehaviour中的Awake，Start，Update，OnDrawGizmos函数，而是重载对应的OnAwake，OnStart，OnUpdate，OnOnDrawGizmos函数
 - OnReborn函数会在每次坦克重生的时候调用
