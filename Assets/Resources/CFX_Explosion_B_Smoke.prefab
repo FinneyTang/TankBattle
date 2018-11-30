@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4788036636591014}
   - component: {fileID: 198484196505431712}
   - component: {fileID: 199299638340247366}
-  m_Layer: 9
+  m_Layer: 1
   m_Name: Bubble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4210407442255640}
   - component: {fileID: 198382579107503914}
   - component: {fileID: 199199701051105568}
-  m_Layer: 9
+  m_Layer: 1
   m_Name: Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4754816930656422}
   - component: {fileID: 198961291988319864}
   - component: {fileID: 199829158121271582}
-  m_Layer: 9
+  m_Layer: 1
   m_Name: Lines
   m_TagString: FxTemporaire
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 198194127032045410}
   - component: {fileID: 199200332811060622}
   - component: {fileID: 114566962382578006}
-  m_Layer: 9
+  m_Layer: 1
   m_Name: CFX_Explosion_B_Smoke
   m_TagString: FxTemporaire
   m_Icon: {fileID: 0}
@@ -207,7 +207,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: -130402766
+  randomSeed: -1153566798
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -3455,7 +3455,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: 644460883
+  randomSeed: -1177434781
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -6625,7 +6625,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: -1810528523
+  randomSeed: 1431738188
   InitialModule:
     serializedVersion: 3
     enabled: 1
@@ -9951,7 +9951,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 0
-  randomSeed: -387050315
+  randomSeed: 1677023604
   InitialModule:
     serializedVersion: 3
     enabled: 1

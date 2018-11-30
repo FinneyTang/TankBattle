@@ -694,7 +694,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 2818
   m_Lightmapping: 4
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -890,7 +890,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 2818
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1434,7 +1434,12 @@ MonoBehaviour:
     FireInterval: 1
     MissileSpeed: 40
     MaxHP: 100
+    RebonCD: 10
     DamagePerHit: 25
+    ScoreForStar: 5
+    ScoreForKill: 10
+    StarAddInterval: 5
+    MaxStarCount: 2
 --- !u!4 &1691881704
 Transform:
   m_ObjectHideFlags: 0

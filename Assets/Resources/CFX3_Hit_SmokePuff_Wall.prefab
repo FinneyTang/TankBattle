@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 19800000}
   - component: {fileID: 19900000}
   - component: {fileID: 11400000}
-  m_Layer: 9
+  m_Layer: 1
   m_Name: CFX3_Hit_SmokePuff_Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 2
-  randomSeed: -814627748
+  randomSeed: -2016858527
   InitialModule:
     serializedVersion: 3
     enabled: 1

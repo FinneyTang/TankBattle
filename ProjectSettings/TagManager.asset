@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Fire
+  - FxTemporaire
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - Layer_StaticObject
   - Layer_Entity
   - Layer_Fire
-  - 
+  - Layer_Pickup
   - 
   - 
   - 

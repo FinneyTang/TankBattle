@@ -161,6 +161,11 @@ namespace Main
                 Dead();
             }
         }
+        internal void TakeStar()
+        {
+            AddScore(Match.instance.GlobalSetting.ScoreForStar);
+            Utils.PlayParticle(Team == ETeam.A ? "CFX2_PickupSmileyA" : "CFX2_PickupSmileyB", Position);
+        }
         internal string GetTankInfo()
         {
             string info = string.Format("{0}\nHP: {1}\nScore: {2}", GetName(), HP, m_Score);
@@ -192,7 +197,7 @@ namespace Main
             HP = Match.instance.GlobalSetting.MaxHP;
             transform.position = Match.instance.TeamSettings[(int)Team].Reborn.transform.position;
             gameObject.SetActive(true);
-            Utils.PlayParticle("CFX3_MagicAura_B_Runic", Position);
+            
             OnBorn();
         }
         protected int GetID()

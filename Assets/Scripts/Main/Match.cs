@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Main
 {
@@ -32,11 +33,15 @@ namespace Main
             public int DamagePerHit = 25;
             public int ScoreForStar = 5;
             public int ScoreForKill = 10;
+            public float StarAddInterval = 5;
+            public float MaxStarCount = 2;
         }
         public MatchSetting GlobalSetting = new MatchSetting();
 
         private List<Tank> m_Tanks;
         private List<Dictionary<int, Missile>> m_Missiles;
+        private Dictionary<int, Star> m_Stars;
+        private Timer m_TimerToAddStar;
 
         private float m_RemainingTime = 0;
         void Awake()
@@ -53,12 +58,14 @@ namespace Main
             }
             m_Tanks = new List<Tank>();
             m_Missiles = new List<Dictionary<int, Missile>>();
+            m_Stars = new Dictionary<int, Star>();
             AddTank(ETeam.A);
             if(TeamSettings.Count > 1)
             {
                 AddTank(ETeam.B);
             }
             m_RemainingTime = GlobalSetting.MatchTime;
+            m_TimerToAddStar = new Timer();
         }
         public Tank GetOppositeTank(ETeam myTeam)
         {
@@ -68,6 +75,10 @@ namespace Main
                 return null;
             }
             return m_Tanks[(int)oppTeam];
+        }
+        public Dictionary<int, Star> GetStars()
+        {
+            return m_Stars;
         }
         private void AddTank(ETeam team)
         {
@@ -90,6 +101,31 @@ namespace Main
             m_Tanks.Add(t);
             m_Missiles.Add(new Dictionary<int, Missile>());
         }
+        private void AddStar()
+        {
+            bool hasValidPos = false;
+            Vector3 targetPos = Vector3.zero;
+            NavMeshHit hit;
+            targetPos = new Vector3(UnityEngine.Random.Range(-40, 40), 0, UnityEngine.Random.Range(-40, 40));
+            targetPos.y = 3f;
+            if(NavMesh.SamplePosition(targetPos, out hit, 20f, 1 << NavMesh.GetAreaFromName("Walkable")))
+            {
+                targetPos = hit.position;
+                hasValidPos = true;
+            }
+            if(hasValidPos)
+            {
+                GameObject starGO = (GameObject)Instantiate(Resources.Load("Star"));
+                Star s = starGO.GetComponent<Star>();
+                s.Init(targetPos);
+                m_Stars.Add(s.ID, s);
+            }
+        }
+        internal void RemoveStar(Star s)
+        {
+            m_Stars.Remove(s.ID);
+            Destroy(s.gameObject);
+        }
         internal void AddMissile(Tank owner, Vector3 pos, Vector3 dir)
         {
             GameObject missileGO = (GameObject)Instantiate(Resources.Load("Missile"));
@@ -111,6 +147,11 @@ namespace Main
                 {
                     t.ReBorn();
                 }
+            }
+            if(m_TimerToAddStar.IsExpired(Time.time) && m_Stars.Count < GlobalSetting.MaxStarCount)
+            {
+                AddStar();
+                m_TimerToAddStar.SetExpiredTime(Time.time + GlobalSetting.StarAddInterval);
             }
             m_RemainingTime -= Time.deltaTime;
         }

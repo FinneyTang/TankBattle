@@ -10,11 +10,33 @@ namespace TJQ
         protected override void OnUpdate()
         {
             base.OnUpdate();
-            if (Time.time > m_LastTime)
+
+            bool hasStar = false;
+            float nearestDist = float.MaxValue;
+            Vector3 nearestStarPos = Vector3.zero;
+            foreach(var pair in Match.instance.GetStars())
             {
-                if (ApproachNextDestination())
+                Star s = pair.Value;
+                float dist = (s.transform.position - Position).sqrMagnitude;
+                if(dist < nearestDist)
                 {
-                    m_LastTime = Time.time + Random.Range(3, 8);
+                    hasStar = true;
+                    nearestDist = dist;
+                    nearestStarPos = s.transform.position;
+                }
+            }
+            if (hasStar == true)
+            {
+                Move(GetID(), nearestStarPos);
+            }
+            else
+            {
+                if (Time.time > m_LastTime)
+                {
+                    if (ApproachNextDestination())
+                    {
+                        m_LastTime = Time.time + Random.Range(3, 8);
+                    }
                 }
             }
             Tank oppTank = Match.instance.GetOppositeTank(Team);
