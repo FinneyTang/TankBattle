@@ -1,5 +1,5 @@
 # TankBattle
-一个用于游戏人工智能教学和联系的Demo
+一个用于游戏人工智能教学和练习的Demo
 
 By Jiaqi Tang
 
