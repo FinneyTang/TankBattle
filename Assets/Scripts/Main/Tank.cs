@@ -14,6 +14,8 @@ namespace Main
         private FireCollider m_FireCollider;
         private float m_NextFireTime;
         private int m_ID;
+        private Timer m_RebornTimer;
+        private int m_Score;
         public ETeam Team
         {
             get; internal set;
@@ -37,9 +39,12 @@ namespace Main
             }
             m_TurretTargetPos = targetPos;
         }
-        public Vector3 GetTurretAiming()
+        public Vector3 TurretAiming
         {
-            return m_TurretTF.forward;
+            get
+            {
+                return m_TurretTF.forward;
+            }
         }
         public void Move(int ownerID, NavMeshPath path)
         {
@@ -74,9 +79,7 @@ namespace Main
                 return;
             }
             m_NextFireTime = Time.time + Match.instance.GlobalSetting.FireInterval;
-            GameObject missileGO = (GameObject)Instantiate(Resources.Load("Missile"));
-            Missile missile = missileGO.GetComponent<Missile>();
-            missile.Init(Team, FirePos, GetTurretAiming() * Match.instance.GlobalSetting.MissileSpeed);
+            Match.instance.AddMissile(this, FirePos, TurretAiming);
         }
         public bool CanFire()
         {
@@ -141,7 +144,7 @@ namespace Main
         void Start()
         {
             OnStart();
-            Born();
+            ReBorn();
         }
         // Update is called once per frame
         void Update()
@@ -149,15 +152,42 @@ namespace Main
             OnUpdate();
             UpdateTurretRotation();
         }
-        internal void TakeDamage()
+        internal void TakeDamage(Tank damager)
         {
             HP -= Match.instance.GlobalSetting.DamagePerHit;
             if(HP == 0)
             {
+                damager.AddScore(Match.instance.GlobalSetting.ScoreForKill);
                 Dead();
             }
         }
-        internal void Born()
+        internal string GetTankInfo()
+        {
+            string info = string.Format("{0}\nHP: {1}\nScore: {2}", GetName(), HP, m_Score);
+            if (IsDead)
+            {
+                float rebornCD = GetRebornCD(Time.time);
+                info += string.Format("\nWaiting For Reborn: {0}", rebornCD.ToString("f3"));
+            }
+            return info;
+        }
+        internal float GetRebornCD(float gameTime)
+        {
+            if (m_RebornTimer == null)
+            {
+                return 0;
+            }
+            return m_RebornTimer.GetRemaingTime(gameTime);
+        }
+        internal bool CanReborn(float gameTime)
+        {
+            if(m_RebornTimer == null)
+            {
+                return false;
+            }
+            return m_RebornTimer.IsExpired(gameTime);
+        }
+        internal void ReBorn()
         {
             HP = Match.instance.GlobalSetting.MaxHP;
             transform.position = Match.instance.TeamSettings[(int)Team].Reborn.transform.position;
@@ -184,10 +214,19 @@ namespace Main
             }
             OnOnDrawGizmos();
         }
+        private void AddScore(int score)
+        {
+            m_Score += score;
+        }
         private void Dead()
         {
             Utils.PlayParticle("CFX_Explosion_B_Smoke", Position);
             gameObject.SetActive(false);
+            if(m_RebornTimer == null)
+            {
+                m_RebornTimer = new Timer();
+            }
+            m_RebornTimer.SetExpiredTime(Time.time + Match.instance.GlobalSetting.RebonCD);
         }
         private bool CheckOwner(int tankID)
         {

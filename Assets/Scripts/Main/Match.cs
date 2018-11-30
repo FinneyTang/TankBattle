@@ -24,15 +24,21 @@ namespace Main
         [Serializable]
         public class MatchSetting
         {
-            public float MatchTime = 180;
+            public int MatchTime = 180;
             public float FireInterval = 1f;
             public float MissileSpeed = 40f;
             public int MaxHP = 100;
+            public float RebonCD = 10f;
             public int DamagePerHit = 25;
+            public int ScoreForStar = 5;
+            public int ScoreForKill = 10;
         }
         public MatchSetting GlobalSetting = new MatchSetting();
 
         private List<Tank> m_Tanks;
+        private List<Dictionary<int, Missile>> m_Missiles;
+
+        private float m_RemainingTime = 0;
         void Awake()
         {
             Application.targetFrameRate = 60;
@@ -46,11 +52,13 @@ namespace Main
                 return;
             }
             m_Tanks = new List<Tank>();
+            m_Missiles = new List<Dictionary<int, Missile>>();
             AddTank(ETeam.A);
             if(TeamSettings.Count > 1)
             {
                 AddTank(ETeam.B);
             }
+            m_RemainingTime = GlobalSetting.MatchTime;
         }
         public Tank GetOppositeTank(ETeam myTeam)
         {
@@ -80,42 +88,74 @@ namespace Main
             Tank t = (Tank)tank.AddComponent(scriptType);
             t.Team = team;
             m_Tanks.Add(t);
+            m_Missiles.Add(new Dictionary<int, Missile>());
+        }
+        internal void AddMissile(Tank owner, Vector3 pos, Vector3 dir)
+        {
+            GameObject missileGO = (GameObject)Instantiate(Resources.Load("Missile"));
+            Missile missile = missileGO.GetComponent<Missile>();
+            missile.Init(owner, pos, dir.normalized * GlobalSetting.MissileSpeed);
+            m_Missiles[(int)missile.Team].Add(missile.ID, missile);
+        }
+        internal void RemoveMissile(Missile m)
+        {
+            m_Missiles[(int)m.Team].Remove(m.ID);
+            Destroy(m.gameObject);
         }
         void Update()
         {
             for(int i = 0; i < m_Tanks.Count; ++i)
             {
-                if(m_Tanks[i].IsDead)
+                Tank t = m_Tanks[i];
+                if(t.IsDead && t.CanReborn(Time.time))
                 {
-                    m_Tanks[i].Born();
+                    t.ReBorn();
                 }
             }
+            m_RemainingTime -= Time.deltaTime;
         }
+
+        private GUIStyle m_TeamAInfoStyle;
+        private GUIStyle m_TeamBInfoStyle;
+        private GUIStyle m_MatchInfoStyle;
         void OnGUI()
         {
             if(m_Tanks.Count > 0)
             {
-                GUIStyle AInfoStyle = new GUIStyle();
-                AInfoStyle.normal.textColor = Color.red;
-                AInfoStyle.fontSize = 25;
-                AInfoStyle.fontStyle = FontStyle.Bold;
-                AInfoStyle.alignment = TextAnchor.UpperLeft;
-
-                string ainfo = string.Format("{0}\nHP: {1}", m_Tanks[0].GetName(), m_Tanks[0].HP);
-                GUI.Label(new Rect(10, 10, Screen.width * 0.5f - 10, 100), ainfo, AInfoStyle);
+                if (m_TeamAInfoStyle == null)
+                {
+                    m_TeamAInfoStyle = new GUIStyle();
+                    m_TeamAInfoStyle.normal.textColor = Color.red;
+                    m_TeamAInfoStyle.fontSize = 25;
+                    m_TeamAInfoStyle.fontStyle = FontStyle.Bold;
+                    m_TeamAInfoStyle.alignment = TextAnchor.UpperLeft;
+                }
+                GUI.Label(new Rect(10, 10, Screen.width * 0.5f - 10, 100), m_Tanks[0].GetTankInfo(), m_TeamAInfoStyle);
             }
-
             if (m_Tanks.Count > 1)
             {
-                GUIStyle BInfoStyle = new GUIStyle();
-                BInfoStyle.normal.textColor = Color.cyan;
-                BInfoStyle.fontSize = 25;
-                BInfoStyle.fontStyle = FontStyle.Bold;
-                BInfoStyle.alignment = TextAnchor.UpperRight;
-
-                string binfo = string.Format("{0}\nHP: {1}", m_Tanks[0].GetName(), m_Tanks[1].HP);
-                GUI.Label(new Rect(Screen.width * 0.5f, 10, Screen.width * 0.5f - 10, 100), binfo, BInfoStyle);
+                if (m_TeamBInfoStyle == null)
+                {
+                    m_TeamBInfoStyle = new GUIStyle();
+                    m_TeamBInfoStyle.normal.textColor = Color.cyan;
+                    m_TeamBInfoStyle.fontSize = 25;
+                    m_TeamBInfoStyle.fontStyle = FontStyle.Bold;
+                    m_TeamBInfoStyle.alignment = TextAnchor.UpperRight;
+                }
+                GUI.Label(new Rect(Screen.width * 0.5f, 10, Screen.width * 0.5f - 10, 100), m_Tanks[1].GetTankInfo(), m_TeamBInfoStyle);
             }
+            if (m_MatchInfoStyle == null)
+            {
+                m_MatchInfoStyle = new GUIStyle();
+                m_MatchInfoStyle.normal.textColor = Color.black;
+                m_MatchInfoStyle.fontSize = 25;
+                m_MatchInfoStyle.fontStyle = FontStyle.Bold;
+                m_MatchInfoStyle.alignment = TextAnchor.UpperCenter;
+            }
+            int secounds = (int)m_RemainingTime % 60;
+            int minutes = (int)m_RemainingTime / 60;
+            string timeStr = string.Format("{0:00}:{1:00}", minutes, secounds);
+            GUI.Label(new Rect(0, 10, Screen.width, 100), timeStr, m_MatchInfoStyle);
         }
     }
 }

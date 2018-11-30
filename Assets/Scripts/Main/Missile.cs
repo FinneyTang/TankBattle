@@ -4,14 +4,28 @@ namespace Main
 {
     public class Missile : MonoBehaviour
     {
+        private static int IDGen = 0;
+        private static int GetNextID()
+        {
+            return IDGen++;
+        }
         public ETeam Team
+        {
+            get
+            {
+                return m_Owner.Team;
+            }
+        }
+        public int ID
         {
             get; private set;
         }
+        private Tank m_Owner;
         private Vector3 m_InitVelocity;
-        internal void Init(ETeam team, Vector3 initPos, Vector3 initVelocity)
+        internal void Init(Tank owner, Vector3 initPos, Vector3 initVelocity)
         {
-            Team = team;
+            ID = GetNextID();
+            m_Owner = owner;
             m_InitVelocity = initVelocity;
             transform.position = initPos;
         }
@@ -30,7 +44,7 @@ namespace Main
                     {
                         if(fc.Owner.Team != Team)
                         {
-                            fc.Owner.TakeDamage();
+                            fc.Owner.TakeDamage(m_Owner);
                         }
                         else
                         {
@@ -45,7 +59,7 @@ namespace Main
                 }
                 if(hitOwner == false)
                 {
-                    Destroy(this.gameObject);
+                    Match.instance.RemoveMissile(this);
                 }
             }
             else
