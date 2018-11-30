@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 199867684813283506}
   - component: {fileID: 114697505920312982}
   m_Layer: 1
-  m_Name: CFX2_PickupSmiley2
+  m_Name: CFX2_PickupSmileyA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -180,7 +180,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0.9411765, g: 0.88056314, b: 0.06228374, a: 1}
+      maxColor: {r: 1, g: 0, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
