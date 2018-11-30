@@ -31,6 +31,13 @@ namespace Main
                 return gameObject.activeSelf == false;
             }
         }
+        public int Score
+        {
+            get
+            {
+                return m_Score;
+            }
+        }
         public void TurretTurnTo(int ownerID, Vector3 targetPos)
         {
             if(CheckOwner(ownerID) == false)
@@ -168,11 +175,13 @@ namespace Main
         }
         internal string GetTankInfo()
         {
-            string info = string.Format("{0}\nHP: {1}\nScore: {2}", GetName(), HP, m_Score);
-            if (IsDead)
+            string info = Match.instance.IsMathEnd() == false ?
+                string.Format("{0}\nHP: {1}\nScore: {2}", GetName(), HP, m_Score) :
+                string.Format("{0}\nScore: {1}", GetName(), m_Score);
+            if (IsDead && Match.instance.IsMathEnd() == false)
             {
                 float rebornCD = GetRebornCD(Time.time);
-                info += string.Format("\nWaiting For Reborn: {0}", rebornCD.ToString("f3"));
+                info += string.Format("\nReborning: {0}", rebornCD.ToString("f3"));
             }
             return info;
         }

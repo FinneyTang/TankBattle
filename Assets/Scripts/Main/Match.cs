@@ -38,11 +38,15 @@ namespace Main
         }
         public MatchSetting GlobalSetting = new MatchSetting();
 
+        public Camera WinningCamera;
+        public GameObject WinnerShow;
+
         private List<Tank> m_Tanks;
         private List<Dictionary<int, Missile>> m_Missiles;
         private Dictionary<int, Star> m_Stars;
         private Timer m_TimerToAddStar;
-
+        private bool m_MatchEnd = false;
+        private Tank m_Winner;
         private float m_RemainingTime = 0;
         void Awake()
         {
@@ -66,6 +70,11 @@ namespace Main
             }
             m_RemainingTime = GlobalSetting.MatchTime;
             m_TimerToAddStar = new Timer();
+            if(WinningCamera != null)
+            {
+                WinningCamera.gameObject.SetActive(false);
+            }
+            m_MatchEnd = false;
         }
         public Tank GetOppositeTank(ETeam myTeam)
         {
@@ -79,6 +88,10 @@ namespace Main
         public Dictionary<int, Star> GetStars()
         {
             return m_Stars;
+        }
+        public bool IsMathEnd()
+        {
+            return m_MatchEnd;
         }
         private void AddTank(ETeam team)
         {
@@ -108,7 +121,7 @@ namespace Main
             NavMeshHit hit;
             targetPos = new Vector3(UnityEngine.Random.Range(-40, 40), 0, UnityEngine.Random.Range(-40, 40));
             targetPos.y = 3f;
-            if(NavMesh.SamplePosition(targetPos, out hit, 20f, 1 << NavMesh.GetAreaFromName("Walkable")))
+            if(NavMesh.SamplePosition(targetPos, out hit, 10f, 1 << NavMesh.GetAreaFromName("Walkable")))
             {
                 targetPos = hit.position;
                 hasValidPos = true;
@@ -138,8 +151,26 @@ namespace Main
             m_Missiles[(int)m.Team].Remove(m.ID);
             Destroy(m.gameObject);
         }
+        private Tank GetWinner()
+        {
+            if(m_Tanks.Count < 2)
+            {
+                return m_Tanks[0];
+            }
+            Tank tA = m_Tanks[0];
+            Tank tB = m_Tanks[1];
+            if(tA.Score == tB.Score)
+            {
+                return null;
+            }
+            return tA.Score > tB.Score ? tA : tB;
+        }
         void Update()
         {
+            if(m_MatchEnd)
+            {
+                return;
+            }
             for(int i = 0; i < m_Tanks.Count; ++i)
             {
                 Tank t = m_Tanks[i];
@@ -154,11 +185,37 @@ namespace Main
                 m_TimerToAddStar.SetExpiredTime(Time.time + GlobalSetting.StarAddInterval);
             }
             m_RemainingTime -= Time.deltaTime;
+            if(m_RemainingTime < 0)
+            {
+                m_MatchEnd = true;
+                m_Winner = GetWinner();
+                if(m_Winner != null)
+                {
+                    if (WinningCamera != null)
+                    {
+                        WinningCamera.gameObject.SetActive(true);
+                    }
+                    if (WinnerShow != null)
+                    {
+                        MeshRenderer[] mesh = WinnerShow.GetComponentsInChildren<MeshRenderer>();
+                        foreach (var m in mesh)
+                        {
+                            m.material.color = (m_Winner.Team == ETeam.A ? Color.red : Color.cyan);
+                        }
+                    }
+                }
+                for (int i = 0; i < m_Tanks.Count; ++i)
+                {
+                    Tank t = m_Tanks[i];
+                    t.gameObject.SetActive(false);
+                }
+            }
         }
 
         private GUIStyle m_TeamAInfoStyle;
         private GUIStyle m_TeamBInfoStyle;
         private GUIStyle m_MatchInfoStyle;
+        private GUIStyle m_WinningStyle;
         void OnGUI()
         {
             if(m_Tanks.Count > 0)
@@ -193,10 +250,34 @@ namespace Main
                 m_MatchInfoStyle.fontStyle = FontStyle.Bold;
                 m_MatchInfoStyle.alignment = TextAnchor.UpperCenter;
             }
-            int secounds = (int)m_RemainingTime % 60;
-            int minutes = (int)m_RemainingTime / 60;
-            string timeStr = string.Format("{0:00}:{1:00}", minutes, secounds);
-            GUI.Label(new Rect(0, 10, Screen.width, 100), timeStr, m_MatchInfoStyle);
+            if(m_MatchEnd == false)
+            {
+                int secounds = (int)m_RemainingTime % 60;
+                int minutes = (int)m_RemainingTime / 60;
+                string timeStr = string.Format("{0:00}:{1:00}", minutes, secounds);
+                GUI.Label(new Rect(0, 10, Screen.width, 100), timeStr, m_MatchInfoStyle);
+            }
+            else
+            {
+                if (m_WinningStyle == null)
+                {
+                    m_WinningStyle = new GUIStyle();
+                    m_WinningStyle.normal.textColor = Color.black;
+                    m_WinningStyle.fontSize = 50;
+                    m_WinningStyle.fontStyle = FontStyle.Bold;
+                    m_WinningStyle.alignment = TextAnchor.MiddleCenter;
+                }
+                if(m_Winner == null)
+                {
+                    GUI.Label(new Rect(0, 10, Screen.width, 200), "Draw", m_WinningStyle);
+                }
+                else
+                {
+                    m_WinningStyle.normal.textColor = m_Winner.Team == ETeam.A ? Color.red : Color.cyan;
+                    string winnerInfo = string.Format("Winner, {0}", m_Winner.GetName());
+                    GUI.Label(new Rect(0, 10, Screen.width, 200), winnerInfo, m_WinningStyle);
+                }
+            }
         }
     }
 }
