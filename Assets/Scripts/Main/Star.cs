@@ -14,6 +14,14 @@ namespace Main
         {
             get; private set;
         }
+        public Vector3 Position
+        {
+            get
+            {
+                return transform.position;
+            }
+        }
+
         private bool m_Taken = false;
         internal void Init(Vector3 pos)
         {

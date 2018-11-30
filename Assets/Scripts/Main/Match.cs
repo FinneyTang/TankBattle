@@ -102,6 +102,13 @@ namespace Main
         {
             return m_MatchEnd;
         }
+        public float RemainingTime
+        {
+            get
+            {
+                return m_RemainingTime;
+            }
+        }
         private void AddTank(ETeam team)
         {
             TeamSetting setting = TeamSettings[(int)team];

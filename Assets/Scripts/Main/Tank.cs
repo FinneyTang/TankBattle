@@ -53,13 +53,14 @@ namespace Main
                 return m_TurretTF.forward;
             }
         }
-        public void Move(int ownerID, NavMeshPath path)
+        public bool Move(int ownerID, NavMeshPath path)
         {
             if (CheckOwner(ownerID) == false)
             {
-                return;
+                return false;
             }
             m_NavAgent.path = path;
+            return true;
         }
         public bool Move(int ownerID, Vector3 targetPos)
         {
@@ -75,18 +76,19 @@ namespace Main
             }
             return false;
         }
-        public void Fire(int ownerID)
+        public bool Fire(int ownerID)
         {
             if (CheckOwner(ownerID) == false)
             {
-                return;
+                return false;
             }
             if (CanFire() == false)
             {
-                return;
+                return false;
             }
             m_NextFireTime = Time.time + Match.instance.GlobalSetting.FireInterval;
             Match.instance.AddMissile(this, FirePos, TurretAiming);
+            return true;
         }
         public bool CanFire()
         {
@@ -206,8 +208,8 @@ namespace Main
             HP = Match.instance.GlobalSetting.MaxHP;
             transform.position = Match.instance.TeamSettings[(int)Team].Reborn.transform.position;
             gameObject.SetActive(true);
-            
-            OnBorn();
+
+            OnReborn();
         }
         protected int GetID()
         {
@@ -285,15 +287,11 @@ namespace Main
         {
 
         }
-        protected virtual void OnOnDestroy()
-        {
-
-        }
         protected virtual void OnOnDrawGizmos()
         {
 
         }
-        protected virtual void OnBorn()
+        protected virtual void OnReborn()
         {
 
         }

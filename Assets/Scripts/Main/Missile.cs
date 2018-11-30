@@ -20,6 +20,20 @@ namespace Main
         {
             get; private set;
         }
+        public Vector3 Position
+        {
+            get
+            {
+                return transform.position;
+            }
+        }
+        public Vector3 Velocity
+        {
+            get
+            {
+                return m_InitVelocity;
+            }
+        }
         private Tank m_Owner;
         private Vector3 m_InitVelocity;
         internal void Init(Tank owner, Vector3 initPos, Vector3 initVelocity)
@@ -33,7 +47,7 @@ namespace Main
         {
             Vector3 newPos = transform.position + m_InitVelocity * Time.deltaTime;
             RaycastHit hitInfo;
-            if (Physics.Linecast(transform.position, newPos, out hitInfo, PhysicsUtils.LayerMask_Collsion))
+            if (Physics.Linecast(transform.position, newPos, out hitInfo, PhysicsUtils.LayerMaskCollsion))
             {
                 bool hitOwner = false;
                 if (PhysicsUtils.IsFireCollider(hitInfo.collider))

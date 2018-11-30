@@ -44,7 +44,7 @@ namespace TJQ
             {
                 bool seeOthers = false;
                 RaycastHit hitInfo;
-                if (Physics.Linecast(FirePos, oppTank.Position, out hitInfo, PhysicsUtils.LayerMask_Collsion))
+                if (Physics.Linecast(FirePos, oppTank.Position, out hitInfo, PhysicsUtils.LayerMaskCollsion))
                 {
                     if(PhysicsUtils.IsFireCollider(hitInfo.collider))
                     {
@@ -68,9 +68,9 @@ namespace TJQ
                 }
             }
         }
-        protected override void OnBorn()
+        protected override void OnReborn()
         {
-            base.OnBorn();
+            base.OnReborn();
             m_LastTime = 0;
         }
         private bool ApproachNextDestination()
