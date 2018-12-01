@@ -32,8 +32,9 @@ namespace Main
             public int DamagePerHit = 25;
             public int ScoreForStar = 5;
             public int ScoreForKill = 10;
+            public int ScoreForSuperStar = 30;
             public float StarAddInterval = 5;
-            public float MaxStarCount = 2;
+            public float MaxStarCount = 3;
         }
         public MatchSetting GlobalSetting = new MatchSetting();
 
@@ -47,6 +48,7 @@ namespace Main
         private bool m_MatchEnd = false;
         private Tank m_Winner;
         private float m_RemainingTime = 0;
+        private bool m_SuperStarAdded = false;
         void Awake()
         {
             Application.targetFrameRate = 60;
@@ -74,6 +76,7 @@ namespace Main
                 WinningCamera.gameObject.SetActive(false);
             }
             m_MatchEnd = false;
+            m_SuperStarAdded = false;
         }
         public Tank GetOppositeTank(ETeam myTeam)
         {
@@ -108,6 +111,19 @@ namespace Main
                 return m_RemainingTime;
             }
         }
+        public Vector3 GetRebornPos(ETeam t)
+        {
+            if((int)t < TeamSettings.Count)
+            {
+                return Vector3.zero;
+            }
+            GameObject rebornGO = TeamSettings[(int)t].Reborn;
+            if(rebornGO == null)
+            {
+                return Vector3.zero;
+            }
+            return rebornGO.transform.position;
+        }
         private void AddTank(ETeam team)
         {
             TeamSetting setting = TeamSettings[(int)team];
@@ -118,23 +134,26 @@ namespace Main
                 return;
             }
             GameObject tank = (GameObject)Instantiate(Resources.Load("Tank"));
-            tank.transform.position = setting.Reborn ? setting.Reborn.transform.position : Vector3.zero;
+            tank.transform.position = GetRebornPos(team);
             MeshRenderer[] mesh = tank.GetComponentsInChildren<MeshRenderer>();
             foreach (var m in mesh)
             {
-                m.material.color = (team == ETeam.A ? Color.red : Color.cyan);
+                m.material.color = GetTeamColor(team);
             }
             Tank t = (Tank)tank.AddComponent(scriptType);
             t.Team = team;
             m_Tanks.Add(t);
             m_Missiles.Add(new Dictionary<int, Missile>());
         }
-        private void AddStar()
+        private void AddStar(bool isSuperStar)
         {
             bool hasValidPos = false;
             Vector3 targetPos = Vector3.zero;
             NavMeshHit hit;
-            targetPos = new Vector3(UnityEngine.Random.Range(-40, 40), 0, UnityEngine.Random.Range(-40, 40));
+            if (isSuperStar == false)
+            {
+                targetPos = new Vector3(UnityEngine.Random.Range(-40, 40), 0, UnityEngine.Random.Range(-40, 40));
+            }
             targetPos.y = 3f;
             if(NavMesh.SamplePosition(targetPos, out hit, 10f, 1 << NavMesh.GetAreaFromName("Walkable")))
             {
@@ -143,11 +162,15 @@ namespace Main
             }
             if(hasValidPos)
             {
-                GameObject starGO = (GameObject)Instantiate(Resources.Load("Star"));
+                GameObject starGO = (GameObject)Instantiate(Resources.Load(isSuperStar ? "SuperStar" : "Star"));
                 Star s = starGO.GetComponent<Star>();
-                s.Init(targetPos);
+                s.Init(targetPos, isSuperStar);
                 m_Stars.Add(s.ID, s);
             }
+        }
+        private Color GetTeamColor(ETeam t)
+        {
+            return t == ETeam.A ? Color.red : Color.cyan;
         }
         internal void RemoveStar(Star s)
         {
@@ -196,8 +219,13 @@ namespace Main
             }
             if(m_TimerToAddStar.IsExpired(Time.time) && m_Stars.Count < GlobalSetting.MaxStarCount)
             {
-                AddStar();
+                AddStar(false);
                 m_TimerToAddStar.SetExpiredTime(Time.time + GlobalSetting.StarAddInterval);
+            }
+            if(m_SuperStarAdded == false && m_RemainingTime < Match.instance.GlobalSetting.MatchTime * 0.5f)
+            {
+                m_SuperStarAdded = true;
+                AddStar(true);
             }
             m_RemainingTime -= Time.deltaTime;
             if(m_RemainingTime < 0)
@@ -215,7 +243,7 @@ namespace Main
                         MeshRenderer[] mesh = WinnerShow.GetComponentsInChildren<MeshRenderer>();
                         foreach (var m in mesh)
                         {
-                            m.material.color = (m_Winner.Team == ETeam.A ? Color.red : Color.cyan);
+                            m.material.color = GetTeamColor(m_Winner.Team);
                         }
                     }
                 }
@@ -238,7 +266,7 @@ namespace Main
                 if (m_TeamAInfoStyle == null)
                 {
                     m_TeamAInfoStyle = new GUIStyle();
-                    m_TeamAInfoStyle.normal.textColor = Color.red;
+                    m_TeamAInfoStyle.normal.textColor = GetTeamColor(m_Tanks[0].Team);
                     m_TeamAInfoStyle.fontSize = 25;
                     m_TeamAInfoStyle.fontStyle = FontStyle.Bold;
                     m_TeamAInfoStyle.alignment = TextAnchor.UpperLeft;
@@ -250,7 +278,7 @@ namespace Main
                 if (m_TeamBInfoStyle == null)
                 {
                     m_TeamBInfoStyle = new GUIStyle();
-                    m_TeamBInfoStyle.normal.textColor = Color.cyan;
+                    m_TeamBInfoStyle.normal.textColor = GetTeamColor(m_Tanks[1].Team);
                     m_TeamBInfoStyle.fontSize = 25;
                     m_TeamBInfoStyle.fontStyle = FontStyle.Bold;
                     m_TeamBInfoStyle.alignment = TextAnchor.UpperRight;
@@ -288,7 +316,7 @@ namespace Main
                 }
                 else
                 {
-                    m_WinningStyle.normal.textColor = m_Winner.Team == ETeam.A ? Color.red : Color.cyan;
+                    m_WinningStyle.normal.textColor = GetTeamColor(m_Winner.Team);
                     string winnerInfo = string.Format("Winner, {0}", m_Winner.GetName());
                     GUI.Label(new Rect(0, 10, Screen.width, 200), winnerInfo, m_WinningStyle);
                 }

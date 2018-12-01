@@ -153,9 +153,11 @@ namespace Main
                 Dead();
             }
         }
-        internal void TakeStar()
+        internal void TakeStar(bool isSuperStar)
         {
-            AddScore(Match.instance.GlobalSetting.ScoreForStar);
+            AddScore(isSuperStar ? 
+                Match.instance.GlobalSetting.ScoreForSuperStar :
+                Match.instance.GlobalSetting.ScoreForStar);
             Utils.PlayParticle(Team == ETeam.A ? "CFX2_PickupSmileyA" : "CFX2_PickupSmileyB", Position);
         }
         internal string GetTankInfo()

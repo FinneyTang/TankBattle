@@ -21,13 +21,21 @@ namespace Main
                 return transform.position;
             }
         }
-
+        public bool IsSuperStar
+        {
+            get
+            {
+                return m_IsSuperStar;
+            }
+        }
         private bool m_Taken = false;
-        internal void Init(Vector3 pos)
+        private bool m_IsSuperStar = false;
+        internal void Init(Vector3 pos, bool isSuperStar)
         {
             ID = GetNextID();
             transform.position = pos;
             m_Taken = false;
+            m_IsSuperStar = isSuperStar;
         }
         void OnTriggerEnter(Collider other)
         {
@@ -43,7 +51,7 @@ namespace Main
             FireCollider fc = other.GetComponent<FireCollider>();
             if (fc != null && fc.Owner != null)
             {
-                fc.Owner.TakeStar();
+                fc.Owner.TakeStar(m_IsSuperStar);
                 Match.instance.RemoveStar(this);
             }
         }
