@@ -17,17 +17,17 @@ namespace TJQ
             foreach(var pair in Match.instance.GetStars())
             {
                 Star s = pair.Value;
-                float dist = (s.transform.position - Position).sqrMagnitude;
+                float dist = (s.Position - Position).sqrMagnitude;
                 if(dist < nearestDist)
                 {
                     hasStar = true;
                     nearestDist = dist;
-                    nearestStarPos = s.transform.position;
+                    nearestStarPos = s.Position;
                 }
             }
             if (hasStar == true)
             {
-                Move(GetID(), nearestStarPos);
+                Move(nearestStarPos);
             }
             else
             {
@@ -53,18 +53,18 @@ namespace TJQ
                 }
                 if(seeOthers)
                 {
-                    TurretTurnTo(GetID(), oppTank.Position);
+                    TurretTurnTo(oppTank.Position);
                     Vector3 toTarget = oppTank.Position - FirePos;
                     toTarget.y = 0;
                     toTarget.Normalize();
                     if(Vector3.Dot(TurretAiming, toTarget) > 0.98f)
                     {
-                        Fire(GetID());
+                        Fire();
                     }
                 }
                 else
                 {
-                    TurretTurnTo(GetID(), Position + Forward);
+                    TurretTurnTo(Position + Forward);
                 }
             }
         }
@@ -75,7 +75,8 @@ namespace TJQ
         }
         private bool ApproachNextDestination()
         {
-            return Move(GetID(), new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50)));
+            float halfSize = PhysicsUtils.MaxFieldSize * 0.5f;
+            return Move(new Vector3(Random.Range(-halfSize, halfSize), 0, Random.Range(-halfSize, halfSize)));
         }
         public override string GetName()
         {

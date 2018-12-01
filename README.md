@@ -5,6 +5,8 @@ By Jiaqi Tang
 
 [AI分享站 http://www.aisharing.com](http://www.aisharing.com)
 
+有时候为了练习或者演示一些AI的技术，总是找不到一个平台，为此写了一个小的Demo，可以用来作为AI的教学和练习。这个Demo是一个经典的坦克大战，可以支持自定义坦克脚本，进行两方对抗，不管是吃星星还是击毁对方都可以获取一定的分数，当比赛结束后，分数高的一方获胜。项目中默认已经添加了一个简单AI脚本，如果大家有兴趣写一下自己的Tank AI脚本，可以发给我（finneytang@gmail.com），我会添加到项目中，让更多的人参考。
+
 ## Unity版本
 
 2017.2.3p2
@@ -15,12 +17,17 @@ By Jiaqi Tang
 - 选中场景中的Match，在Inspector中进行Team和Global参数的设置，或者直接使用默认参数
 - 运行即可
 
+## 游戏规则
+
+- 吃星星可以获取分数
+- 击杀对手可以获取分数
+- 当比赛时间用尽时，分数高的一方赢得比赛
+
 ## 参数
 
 ### Team参数
 - Reborn：重生点
 - Tank Script：用户自定义Tank脚本的名字，namespace.classname的格式
-- Tank Name：Tank的名字，必须和Tank脚本中GetName的返回值相同，关于GetName可以参考Tank相关章节
 
 ### Global参数
 - Math Time：比赛时间
@@ -37,10 +44,9 @@ By Jiaqi Tang
 ## 自定义Tank脚本说明
 
 - 自定义Tank脚本必须继承自Tank类，建议使用独立文件夹，并且加上namespace以保证类名不会产生冲突
-- 必须重载GetName方法，这个方法返回的名字，需要填写到Team参数中的Tank Name字段中
+- 必须重载GetName方法，这个方法返回Tank的名字
 - 自定义Tank脚本不要重写原来MonoBehaviour中的Awake，Start，Update，OnDrawGizmos函数，而是重载对应的OnAwake，OnStart，OnUpdate，OnOnDrawGizmos函数
 - OnReborn函数会在每次坦克重生的时候调用
-- Tank的一些API中需要传入ownerID，这个参数可以通过Tank.GetID获取，设置它的目的主要是为了防止自定义Tank脚本误操作其他Tank。
 
 ## API
 
@@ -59,10 +65,10 @@ By Jiaqi Tang
 - CanFire()：返回是否可以开火
 - GetName()：返回坦克的名字
 - NavMeshPath CaculatePath(Vector3 targetPos)：获取到目标位置的路径
-- TurretTurnTo(int ownerID, Vector3 targetPos)：把炮管转向目标位置
-- Move(int ownerID, NavMeshPath path)：按照path移动，返回值表示是否成功
-- Move(int ownerID, Vector3 targetPos)：移动到目标点，返回值表示是否成功
-- Fire(int ownerID)：以当前炮塔朝向开火，返回值表示是否成功
+- TurretTurnTo(Vector3 targetPos)：把炮管转向目标位置
+- Move(NavMeshPath path)：按照path移动，返回值表示是否成功
+- Move(Vector3 targetPos)：移动到目标点，返回值表示是否成功
+- Fire()：以当前炮塔朝向开火，返回值表示是否成功
 
 ### Missile类
 - Team：返回导弹所属的坦克队伍

@@ -18,7 +18,6 @@ namespace Main
         {
             public GameObject Reborn;
             public string TankScript;
-            public string TankName;
         }
         public List<TeamSetting> TeamSettings;
 

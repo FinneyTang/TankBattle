@@ -38,12 +38,8 @@ namespace Main
                 return m_Score;
             }
         }
-        public void TurretTurnTo(int ownerID, Vector3 targetPos)
+        public void TurretTurnTo(Vector3 targetPos)
         {
-            if(CheckOwner(ownerID) == false)
-            {
-                return;
-            }
             m_TurretTargetPos = targetPos;
         }
         public Vector3 TurretAiming
@@ -53,35 +49,23 @@ namespace Main
                 return m_TurretTF.forward;
             }
         }
-        public bool Move(int ownerID, NavMeshPath path)
+        public bool Move(NavMeshPath path)
         {
-            if (CheckOwner(ownerID) == false)
-            {
-                return false;
-            }
             m_NavAgent.path = path;
             return true;
         }
-        public bool Move(int ownerID, Vector3 targetPos)
+        public bool Move(Vector3 targetPos)
         {
-            if (CheckOwner(ownerID) == false)
-            {
-                return false;
-            }
             NavMeshPath path = CaculatePath(targetPos);
             if (path != null)
             {
-                Move(GetID(), path);
+                Move(path);
                 return true;
             }
             return false;
         }
-        public bool Fire(int ownerID)
+        public bool Fire()
         {
-            if (CheckOwner(ownerID) == false)
-            {
-                return false;
-            }
             if (CanFire() == false)
             {
                 return false;
@@ -214,10 +198,6 @@ namespace Main
 
             OnReborn();
         }
-        protected int GetID()
-        {
-            return GetName().GetHashCode();
-        }
         private void OnDrawGizmos()
         {
             if (m_NavAgent != null)
@@ -246,10 +226,6 @@ namespace Main
                 m_RebornTimer = new Timer();
             }
             m_RebornTimer.SetExpiredTime(Time.time + Match.instance.GlobalSetting.RebonCD);
-        }
-        private bool CheckOwner(int tankID)
-        {
-            return GetID() == Match.instance.TeamSettings[(int)Team].TankName.GetHashCode();
         }
         private void UpdateTurretRotation()
         {
