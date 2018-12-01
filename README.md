@@ -27,6 +27,7 @@ By Jiaqi Tang
 ## 参数
 
 ### Team参数
+
 - Reborn：重生点
 - Tank Script：用户自定义Tank脚本的名字，namespace.classname的格式
 
@@ -72,14 +73,17 @@ By Jiaqi Tang
 - Fire()：以当前炮塔朝向开火，返回值表示是否成功
 
 ### Missile类
+
 - Team：返回导弹所属的坦克队伍
 - ID：返回导弹唯一ID
 - Velocity：返回导弹的速度
 - Position：返回导弹的位置
 
 ### Star类
+
 - ID：返回星星唯一ID
 - Position：返回星星的位置
+- IsSuperStar：是否是超级星星
 
 ### Match类
 
@@ -91,6 +95,7 @@ Match类为单例，可以通过Match.instance访问
 - GetOppositeMissiles(ETeam myTeam)：获取当前所有的敌方射出的导弹列表
 - IsMathEnd()：比赛是否结束
 - RemainingTime：获取比赛剩余时间
+- GetRebornPos(ETeam t)：获取队伍的重生位置
 
 ### PhysicsUtils类
 

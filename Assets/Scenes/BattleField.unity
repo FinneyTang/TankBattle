@@ -1718,10 +1718,8 @@ MonoBehaviour:
   TeamSettings:
   - Reborn: {fileID: 1305338028}
     TankScript: TJQ.MyTank
-    TankName: TJQ
   - Reborn: {fileID: 677785983}
     TankScript: TJQ.MyTank
-    TankName: TJQ
   GlobalSetting:
     MatchTime: 180
     FireInterval: 1
@@ -1731,6 +1729,7 @@ MonoBehaviour:
     DamagePerHit: 25
     ScoreForStar: 5
     ScoreForKill: 10
+    ScoreForSuperStar: 30
     StarAddInterval: 5
     MaxStarCount: 3
   WinningCamera: {fileID: 411876272}

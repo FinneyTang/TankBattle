@@ -113,7 +113,7 @@ namespace Main
         }
         public Vector3 GetRebornPos(ETeam t)
         {
-            if((int)t < TeamSettings.Count)
+            if((int)t >= TeamSettings.Count)
             {
                 return Vector3.zero;
             }
@@ -133,8 +133,7 @@ namespace Main
                 Debug.LogError("no tank script found");
                 return;
             }
-            GameObject tank = (GameObject)Instantiate(Resources.Load("Tank"));
-            tank.transform.position = GetRebornPos(team);
+            GameObject tank = (GameObject)Instantiate(Resources.Load("Tank"), GetRebornPos(team), Quaternion.identity);
             MeshRenderer[] mesh = tank.GetComponentsInChildren<MeshRenderer>();
             foreach (var m in mesh)
             {

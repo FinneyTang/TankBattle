@@ -191,7 +191,7 @@ namespace Main
         internal void ReBorn()
         {
             HP = Match.instance.GlobalSetting.MaxHP;
-            transform.position = Match.instance.TeamSettings[(int)Team].Reborn.transform.position;
+            transform.position = Match.instance.GetRebornPos(Team);
             transform.forward = (Vector3.zero - transform.position).normalized;
             m_TurretTF.forward = transform.forward;
             m_TurretTargetPos = m_TurretTF.position + m_TurretTF.forward;
@@ -210,7 +210,7 @@ namespace Main
 
                 Gizmos.color = Color.blue;
                 Vector3 aimTarget = m_TurretTargetPos;
-                aimTarget.y = m_FirePosTF.position.y;
+                aimTarget.y = FirePos.y;
                 Gizmos.DrawLine(m_FirePosTF.position, aimTarget);
             }
             OnOnDrawGizmos();
