@@ -147,7 +147,6 @@ namespace Main
             Transform tf = Find(transform, "FireCollider");
             m_FireCollider = tf.GetComponent<FireCollider>();
             m_FireCollider.Owner = this;
-            m_TurretTargetPos = m_TurretTF.position + m_TurretTF.forward;
             OnAwake();
         }
         void Start()
@@ -207,7 +206,11 @@ namespace Main
         {
             HP = Match.instance.GlobalSetting.MaxHP;
             transform.position = Match.instance.TeamSettings[(int)Team].Reborn.transform.position;
+            transform.forward = (Vector3.zero - transform.position).normalized;
+            m_TurretTF.forward = transform.forward;
+            m_TurretTargetPos = m_TurretTF.position + m_TurretTF.forward;
             gameObject.SetActive(true);
+            Utils.PlayParticle("CFX3_MagicAura_B_Runic", Position);
 
             OnReborn();
         }
