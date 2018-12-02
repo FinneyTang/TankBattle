@@ -35,6 +35,8 @@ namespace Main
             public int ScoreForSuperStar = 30;
             public float StarAddInterval = 5;
             public float MaxStarCount = 3;
+            public int HPRecoverySpeed = 5;
+            public float HomeZoneRadius = 10;
         }
         public MatchSetting GlobalSetting = new MatchSetting();
 
@@ -86,6 +88,14 @@ namespace Main
                 return null;
             }
             return m_Tanks[(int)oppTeam];
+        }
+        public Tank GetTank(ETeam t)
+        {
+            if (m_Tanks.Count < (int)t)
+            {
+                return null;
+            }
+            return m_Tanks[(int)t];
         }
         public Dictionary<int, Star> GetStars()
         {

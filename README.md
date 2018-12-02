@@ -22,6 +22,7 @@ By Jiaqi Tang
 - 吃星星可以获取分数
 - 击杀对手可以获取分数
 - 在时间还剩一半的时候在地图中央会产生一个分数更高的超级星星
+- 回到自己的重生点可以以一定速度回血
 - 当比赛时间用尽时，分数高的一方赢得比赛
 
 ## 参数
@@ -42,6 +43,8 @@ By Jiaqi Tang
 - Score For Kill：每次摧毁敌方坦克所得分数
 - Star Add Interval：生成星星的间隔
 - Max Star Count：同时存在的最大星星数量
+- HP Recovery Speed：每秒回血的速度
+- Home Zone Radius：以重生点为圆心，回血区域的半径
 
 ## 自定义Tank脚本说明
 
@@ -91,6 +94,7 @@ Match类为单例，可以通过Match.instance访问
 
 - GlobalSetting：获取比赛设置，其中参数见上面“参数”部分
 - GetOppositeTank(ETeam myTeam)：获取敌方坦克实例，参数是自己的队伍
+- GetTank(ETeam t)：获取坦克
 - GetStars()：获取当前的所有星星列表
 - GetOppositeMissiles(ETeam myTeam)：获取当前所有的敌方射出的导弹列表
 - IsMathEnd()：比赛是否结束
@@ -104,4 +108,10 @@ Match类为单例，可以通过Match.instance访问
 - LayerMaskScene：场景碰撞的Layer Mask
 - LayerMaskTank：坦克碰撞的Layer Mask
 - IsFireCollider(Collider col)：是否是Tank的碰撞体
+
+### 下一步
+
+- 增加4人模式的对抗，可以是2v2，或者4人混战，这样AI的策略就更有趣
+- 4人模式需要重新设计地图尺寸和一些比赛的参数
+- 组队AI的接口计划采用命令式的方式，比如Tank可以进行命令呼叫，队友对于这些命令注册响应函数，这样不同的人写的AI也能进行组队策略，命令的例子比如：求助，集火某个目标坦克，包抄，掩护等等
 

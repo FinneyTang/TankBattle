@@ -11,31 +11,46 @@ namespace TJQ
         {
             base.OnUpdate();
 
-            bool hasStar = false;
-            float nearestDist = float.MaxValue;
-            Vector3 nearestStarPos = Vector3.zero;
-            foreach(var pair in Match.instance.GetStars())
+            if(HP <= 50)
             {
-                Star s = pair.Value;
-                float dist = (s.Position - Position).sqrMagnitude;
-                if(dist < nearestDist)
-                {
-                    hasStar = true;
-                    nearestDist = dist;
-                    nearestStarPos = s.Position;
-                }
-            }
-            if (hasStar == true)
-            {
-                Move(nearestStarPos);
+                Move(Match.instance.GetRebornPos(Team));
             }
             else
             {
-                if (Time.time > m_LastTime)
+                bool hasStar = false;
+                float nearestDist = float.MaxValue;
+                Vector3 nearestStarPos = Vector3.zero;
+                foreach (var pair in Match.instance.GetStars())
                 {
-                    if (ApproachNextDestination())
+                    Star s = pair.Value;
+                    if(s.IsSuperStar)
                     {
-                        m_LastTime = Time.time + Random.Range(3, 8);
+                        hasStar = true;
+                        nearestStarPos = s.Position;
+                    }
+                    else
+                    {
+                        float dist = (s.Position - Position).sqrMagnitude;
+                        if (dist < nearestDist)
+                        {
+                            hasStar = true;
+                            nearestDist = dist;
+                            nearestStarPos = s.Position;
+                        }
+                    }
+                }
+                if (hasStar == true)
+                {
+                    Move(nearestStarPos);
+                }
+                else
+                {
+                    if (Time.time > m_LastTime)
+                    {
+                        if (ApproachNextDestination())
+                        {
+                            m_LastTime = Time.time + Random.Range(3, 8);
+                        }
                     }
                 }
             }

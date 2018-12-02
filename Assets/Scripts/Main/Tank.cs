@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 namespace Main
@@ -16,6 +14,8 @@ namespace Main
         private int m_ID;
         private Timer m_RebornTimer;
         private int m_Score;
+        private float m_HPRecoveryFraction;
+        private GameObject m_HPRecoveryEffectGO;
         public ETeam Team
         {
             get; internal set;
@@ -128,6 +128,9 @@ namespace Main
             m_NavAgent = GetComponent<NavMeshAgent>();
             m_TurretTF = Find(transform, "Turret");
             m_FirePosTF = Find(transform, "FirePos");
+            Transform hptf = Find(transform, "HPRecoveryEffect");
+            m_HPRecoveryEffectGO = hptf.gameObject;
+            m_HPRecoveryEffectGO.SetActive(false);
             Transform tf = Find(transform, "FireCollider");
             m_FireCollider = tf.GetComponent<FireCollider>();
             m_FireCollider.Owner = this;
@@ -147,10 +150,37 @@ namespace Main
         internal void TakeDamage(Tank damager)
         {
             HP -= Match.instance.GlobalSetting.DamagePerHit;
-            if(HP == 0)
+            if(HP <= 0)
             {
                 damager.AddScore(Match.instance.GlobalSetting.ScoreForKill);
                 Dead();
+            }
+        }
+        internal void HPRecovery(float v)
+        {
+            int maxHP = Match.instance.GlobalSetting.MaxHP;
+            bool inHomeZone = v > Mathf.Epsilon && HP < maxHP && IsDead == false;
+            if(inHomeZone)
+            {
+                m_HPRecoveryFraction += v;
+                int addHP = (int)m_HPRecoveryFraction;
+                if (addHP > 0)
+                {
+                    HP += addHP;
+                    if (HP > maxHP)
+                    {
+                        HP = maxHP;
+                    }
+                    m_HPRecoveryFraction -= addHP;
+                }
+            }
+            else
+            {
+                m_HPRecoveryFraction = 0;
+            }
+            if(m_HPRecoveryEffectGO.activeSelf != inHomeZone)
+            {
+                m_HPRecoveryEffectGO.SetActive(inHomeZone);
             }
         }
         internal void TakeStar(bool isSuperStar)
@@ -221,6 +251,7 @@ namespace Main
         }
         private void Dead()
         {
+            HP = 0;
             Utils.PlayParticle("CFX_Explosion_B_Smoke", Position);
             gameObject.SetActive(false);
             if(m_RebornTimer == null)
