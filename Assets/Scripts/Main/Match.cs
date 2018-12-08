@@ -83,7 +83,7 @@ namespace Main
         public Tank GetOppositeTank(ETeam myTeam)
         {
             ETeam oppTeam = myTeam == ETeam.A ? ETeam.B : ETeam.A;
-            if(m_Tanks.Count < (int)oppTeam)
+            if(m_Tanks.Count <= (int)oppTeam)
             {
                 return null;
             }
@@ -91,7 +91,7 @@ namespace Main
         }
         public Tank GetTank(ETeam t)
         {
-            if (m_Tanks.Count < (int)t)
+            if (m_Tanks.Count <= (int)t)
             {
                 return null;
             }
@@ -104,7 +104,7 @@ namespace Main
         public Dictionary<int, Missile> GetOppositeMissiles(ETeam myTeam)
         {
             ETeam oppTeam = myTeam == ETeam.A ? ETeam.B : ETeam.A;
-            if (m_Missiles.Count < (int)oppTeam)
+            if (m_Missiles.Count <= (int)oppTeam)
             {
                 return null;
             }

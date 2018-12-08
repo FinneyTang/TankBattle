@@ -4,7 +4,7 @@ namespace Main
 {
     class HomeZone : MonoBehaviour
     {
-        public ETeam Team;
+        public ETeam Team = ETeam.A;
 
         private float m_SqrRadius;
         void Start()
