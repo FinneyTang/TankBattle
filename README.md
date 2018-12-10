@@ -68,6 +68,7 @@ By Jiaqi Tang
 - FirePos：返回坦克炮口的位置
 - Forword：返回坦克车身的朝向
 - CanFire()：返回是否可以开火
+- CanSeeOthers(Tank t)：是否可以看到目标坦克，返回值表示是否成功
 - GetName()：返回坦克的名字
 - NavMeshPath CaculatePath(Vector3 targetPos)：获取到目标位置的路径
 - TurretTurnTo(Vector3 targetPos)：把炮管转向目标位置
