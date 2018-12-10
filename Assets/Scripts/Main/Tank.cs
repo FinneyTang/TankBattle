@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using AI.Base;
+using UnityEngine;
 using UnityEngine.AI;
 
 namespace Main
 {
-    abstract public class Tank : MonoBehaviour
+    abstract public class Tank : MonoBehaviour, IAgent
     {
         private Transform m_TurretTF;
         private Transform m_FirePosTF;
@@ -41,6 +42,23 @@ namespace Main
         public void TurretTurnTo(Vector3 targetPos)
         {
             m_TurretTargetPos = targetPos;
+        }
+        public bool CanSeeOthers(Tank t)
+        {
+            if(t.IsDead)
+            {
+                return false;
+            }
+            bool seeOthers = false;
+            RaycastHit hitInfo;
+            if (Physics.Linecast(FirePos, t.Position, out hitInfo, PhysicsUtils.LayerMaskCollsion))
+            {
+                if (PhysicsUtils.IsFireCollider(hitInfo.collider))
+                {
+                    seeOthers = true;
+                }
+            }
+            return seeOthers;
         }
         public Vector3 TurretAiming
         {
@@ -224,7 +242,7 @@ namespace Main
             transform.position = Match.instance.GetRebornPos(Team);
             transform.forward = (Vector3.zero - transform.position).normalized;
             m_TurretTF.forward = transform.forward;
-            m_TurretTargetPos = m_TurretTF.position + m_TurretTF.forward;
+            m_TurretTargetPos = Vector3.zero;//m_TurretTF.position + m_TurretTF.forward;
             gameObject.SetActive(true);
             Utils.PlayParticle("CFX3_MagicAura_B_Runic", Position);
 

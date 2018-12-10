@@ -57,16 +57,7 @@ namespace TJQ
             Tank oppTank = Match.instance.GetOppositeTank(Team);
             if(oppTank != null)
             {
-                bool seeOthers = false;
-                RaycastHit hitInfo;
-                if (Physics.Linecast(FirePos, oppTank.Position, out hitInfo, PhysicsUtils.LayerMaskCollsion))
-                {
-                    if(PhysicsUtils.IsFireCollider(hitInfo.collider))
-                    {
-                        seeOthers = true;
-                    }
-                }
-                if(seeOthers)
+                if(CanSeeOthers(oppTank))
                 {
                     TurretTurnTo(oppTank.Position);
                     Vector3 toTarget = oppTank.Position - FirePos;
