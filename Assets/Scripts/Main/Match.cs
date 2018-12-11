@@ -209,7 +209,7 @@ namespace Main
             m_Missiles[(int)m.Team].Remove(m.ID);
             Destroy(m.gameObject);
         }
-        internal void TriggerStim(Stimulus s)
+        internal void SendStim(Stimulus s)
         {
             if (IsMathEnd())
             {

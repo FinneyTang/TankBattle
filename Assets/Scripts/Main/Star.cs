@@ -43,8 +43,8 @@ namespace Main
         {
             if(Time.time >= m_NextJingleTime)
             {
-                Match.instance.TriggerStim(
-                    Stimulus.CreateStimulus((int)EStimulusType.StarJingle, ESensorType.Hearing, Position, this));
+                Match.instance.SendStim(
+                    Stimulus.CreateStimulus((int)EStimulusType.StarJingle, ESensorType.Hearing, Position, this, IsSuperStar ? 1f : 0.5f));
                 m_NextJingleTime = Time.time + 1f;
             }
         }
@@ -63,7 +63,7 @@ namespace Main
             if (fc != null && fc.Owner != null)
             {
                 fc.Owner.TakeStar(m_IsSuperStar);
-                Match.instance.TriggerStim(
+                Match.instance.SendStim(
                     Stimulus.CreateStimulus((int)EStimulusType.StarTaken, ESensorType.Hearing, Position, this));
                 Match.instance.RemoveStar(this);
             }
