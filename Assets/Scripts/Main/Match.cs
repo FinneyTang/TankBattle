@@ -12,7 +12,7 @@ namespace Main
     }
     public enum EStimulusType
     {
-        StarPopup, StarTaken
+        StarJingle, StarTaken
     }
     public class Match : MonoBehaviour
     {

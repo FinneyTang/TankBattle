@@ -44,7 +44,7 @@ namespace Main
             if(Time.time >= m_NextJingleTime)
             {
                 Match.instance.TriggerStim(
-                    Stimulus.CreateStimulus((int)EStimulusType.StarPopup, ESensorType.Hearing, Position, this));
+                    Stimulus.CreateStimulus((int)EStimulusType.StarJingle, ESensorType.Hearing, Position, this));
                 m_NextJingleTime = Time.time + 1f;
             }
         }

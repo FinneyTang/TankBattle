@@ -51,28 +51,20 @@ namespace SensorAI
         }
         private bool TrySightingTest(Vector3 pos)
         {
-            if (IsInSightingCone(pos) == false)
-            {
-                return false;
-            }
-            Tank t = (Tank)Agent;
-            if (t.CanSeeOthers(pos) == false)
-            {
-                return false;
-            }
-            return true;
-        }
-        private bool IsInSightingCone(Vector3 pos)
-        {
             Tank t = (Tank)Agent;
             Vector3 toTarget = pos - t.FirePos;
             //sighting dist
-            if(toTarget.sqrMagnitude > m_SightDistance * m_SightDistance)
+            if (toTarget.sqrMagnitude > m_SightDistance * m_SightDistance)
             {
                 return false;
             }
             //sighting angle
-            if(Vector3.Angle(t.TurretAiming, toTarget) > m_SightAngle)
+            if (Vector3.Angle(t.TurretAiming, toTarget) > m_SightAngle)
+            {
+                return false;
+            }
+            //line of sight
+            if (t.CanSeeOthers(pos) == false)
             {
                 return false;
             }
@@ -98,7 +90,8 @@ namespace SensorAI
             {
                 return;
             }
-            if(stim.StimulusType == (int)EStimulusType.StarPopup)
+            //star jingle
+            if(stim.StimulusType == (int)EStimulusType.StarJingle)
             {
                 bool needUpdateCachedStar = false;
                 int cachedStarKey = (int)EBBKey.CaredStar;
@@ -126,12 +119,14 @@ namespace SensorAI
                 }
                 if(needUpdateCachedStar)
                 {
+                    //update target to nearer one
                     sensorMemory.SetValue(cachedStarKey, star.ID);
                     sensorMemory.SetValue((int)EBBKey.TargetStarPos, star.Position);
                 }
             }
             else if(stim.StimulusType == (int)EStimulusType.StarTaken)
             {
+                //if hears star taken, remove it from memory
                 int cachedStarKey = (int)EBBKey.CaredStar;
                 Star star = (Star)stim.TargetObject;
                 int cachedStarID = sensorMemory.GetValue<int>(cachedStarKey, -1);
@@ -159,7 +154,7 @@ namespace SensorAI
         {
             base.OnStart();
             m_SensorManager = new SensorManager(this);
-            m_SensorManager.AddSensor(new SightingSensor(30, 60));
+            m_SensorManager.AddSensor(new SightingSensor(SightDist, SightAngle));
             m_SensorManager.AddSensor(new HearingSensor(HearingRadius));
         }
         protected override void OnUpdate()
@@ -184,7 +179,7 @@ namespace SensorAI
             int targetStarID = m_SensorManager.GetSensorMemory().GetValue<int>((int)EBBKey.CaredStar, -1);
             if (targetStarID >= 0) //has star
             {
-                //move to star position it heard
+                //move to star position it heard before
                 Vector3 starPos = m_SensorManager.GetSensorMemory().GetValue<Vector3>((int)EBBKey.TargetStarPos, default(Vector3));
                 Move(starPos);
             }
@@ -217,7 +212,7 @@ namespace SensorAI
             Matrix4x4 defaultMatrix = Gizmos.matrix;
             Gizmos.matrix = transform.localToWorldMatrix;
             Gizmos.color = Match.instance.GetTeamColor(Team);
-            // 绘制圆环
+            //draw hearing sensor
             Vector3 beginPoint = Vector3.zero;
             Vector3 firstPoint = Vector3.zero;
             for (float theta = 0; theta < 2 * Mathf.PI; theta += 2 * Mathf.PI / 32f)
@@ -237,7 +232,7 @@ namespace SensorAI
             }
             Gizmos.DrawLine(firstPoint, beginPoint);
             Gizmos.matrix = defaultMatrix;
-
+            //draw sighting sensor
             RaycastHit hitInfo;
             Vector3 v1 = Quaternion.AngleAxis(SightAngle, Vector3.up) * TurretAiming;
             Vector3 v1EndPos = FirePos + v1 * SightDist;
