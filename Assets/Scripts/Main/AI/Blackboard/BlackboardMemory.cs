@@ -31,13 +31,17 @@ namespace AI.Blackboard
                 return (T)m_Value;
             }
         }
-        private Dictionary<string, BlackboardItem> m_Items;
+        private Dictionary<int, BlackboardItem> m_Items;
 
         public BlackboardMemory()
         {
-            m_Items = new Dictionary<string, BlackboardItem>();
+            m_Items = new Dictionary<int, BlackboardItem>();
         }
-        public void SetValue(string key, object v, float expirdTime = -1f)
+        public void Clear()
+        {
+            m_Items.Clear();
+        }
+        public void SetValue(int key, object v, float expirdTime = -1f)
         {
             BlackboardItem item;
             if (m_Items.ContainsKey(key) == false)
@@ -51,7 +55,15 @@ namespace AI.Blackboard
             }
             item.SetValue(v, expirdTime);
         }
-        public T GetValue<T>(string key, T defaultValue)
+        public bool HasValue(int key)
+        {
+            return m_Items.ContainsKey(key);
+        }
+        public void DelValue(int key)
+        {
+            m_Items.Remove(key);
+        }
+        public T GetValue<T>(int key, T defaultValue)
         {
             if (m_Items.ContainsKey(key) == false)
             {

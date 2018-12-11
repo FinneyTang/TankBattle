@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AI.SensorSystem;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,6 +9,10 @@ namespace Main
     public enum ETeam
     {
         A, B, NB
+    }
+    public enum EStimulusType
+    {
+        StarPopup, StarTaken
     }
     public class Match : MonoBehaviour
     {
@@ -101,6 +106,12 @@ namespace Main
         {
             return m_Stars;
         }
+        public Star GetStarByID(int id)
+        {
+            Star s;
+            m_Stars.TryGetValue(id, out s);
+            return s;
+        }
         public Dictionary<int, Missile> GetOppositeMissiles(ETeam myTeam)
         {
             ETeam oppTeam = myTeam == ETeam.A ? ETeam.B : ETeam.A;
@@ -133,6 +144,10 @@ namespace Main
                 return Vector3.zero;
             }
             return rebornGO.transform.position;
+        }
+        public Color GetTeamColor(ETeam t)
+        {
+            return t == ETeam.A ? Color.red : Color.cyan;
         }
         private void AddTank(ETeam team)
         {
@@ -177,10 +192,6 @@ namespace Main
                 m_Stars.Add(s.ID, s);
             }
         }
-        private Color GetTeamColor(ETeam t)
-        {
-            return t == ETeam.A ? Color.red : Color.cyan;
-        }
         internal void RemoveStar(Star s)
         {
             m_Stars.Remove(s.ID);
@@ -197,6 +208,20 @@ namespace Main
         {
             m_Missiles[(int)m.Team].Remove(m.ID);
             Destroy(m.gameObject);
+        }
+        internal void TriggerStim(Stimulus s)
+        {
+            if (IsMathEnd())
+            {
+                return;
+            }
+            foreach (Tank t in m_Tanks)
+            {
+                if (t.IsDead == false)
+                {
+                    t.StimulusReceived(s);
+                }
+            }
         }
         private Tank GetWinner()
         {

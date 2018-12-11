@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using AI.SensorSystem;
+using UnityEngine;
 
 namespace Main
 {
@@ -30,12 +31,22 @@ namespace Main
         }
         private bool m_Taken = false;
         private bool m_IsSuperStar = false;
+        private float m_NextJingleTime;
         internal void Init(Vector3 pos, bool isSuperStar)
         {
             ID = GetNextID();
             transform.position = pos;
             m_Taken = false;
             m_IsSuperStar = isSuperStar;
+        }
+        public void Update()
+        {
+            if(Time.time >= m_NextJingleTime)
+            {
+                Match.instance.TriggerStim(
+                    Stimulus.CreateStimulus((int)EStimulusType.StarPopup, ESensorType.Hearing, Position, this));
+                m_NextJingleTime = Time.time + 1f;
+            }
         }
         void OnTriggerEnter(Collider other)
         {
@@ -52,6 +63,8 @@ namespace Main
             if (fc != null && fc.Owner != null)
             {
                 fc.Owner.TakeStar(m_IsSuperStar);
+                Match.instance.TriggerStim(
+                    Stimulus.CreateStimulus((int)EStimulusType.StarTaken, ESensorType.Hearing, Position, this));
                 Match.instance.RemoveStar(this);
             }
         }

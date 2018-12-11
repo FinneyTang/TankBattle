@@ -1,4 +1,5 @@
 ﻿using AI.Base;
+using AI.SensorSystem;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -43,15 +44,11 @@ namespace Main
         {
             m_TurretTargetPos = targetPos;
         }
-        public bool CanSeeOthers(Tank t)
+        public bool CanSeeOthers(Vector3 pos)
         {
-            if(t.IsDead)
-            {
-                return false;
-            }
             bool seeOthers = false;
             RaycastHit hitInfo;
-            if (Physics.Linecast(FirePos, t.Position, out hitInfo, PhysicsUtils.LayerMaskCollsion))
+            if (Physics.Linecast(FirePos, pos, out hitInfo, PhysicsUtils.LayerMaskCollsion))
             {
                 if (PhysicsUtils.IsFireCollider(hitInfo.collider))
                 {
@@ -59,6 +56,14 @@ namespace Main
                 }
             }
             return seeOthers;
+        }
+        public bool CanSeeOthers(Tank t)
+        {
+            if(t.IsDead)
+            {
+                return false;
+            }
+            return CanSeeOthers(t.Position);
         }
         public Vector3 TurretAiming
         {
@@ -165,6 +170,10 @@ namespace Main
             OnUpdate();
             UpdateTurretRotation();
         }
+        internal void StimulusReceived(Stimulus stim)
+        {
+            OnStimulusReceived(stim);
+        }
         internal void TakeDamage(Tank damager)
         {
             HP -= Match.instance.GlobalSetting.DamagePerHit;
@@ -252,7 +261,7 @@ namespace Main
         {
             if (m_NavAgent != null)
             {
-                Gizmos.color = Color.red;
+                Gizmos.color = Color.green;
                 Gizmos.DrawSphere(NextDestination, 0.5f);
                 Gizmos.DrawLine(Position, NextDestination);
 
@@ -322,6 +331,10 @@ namespace Main
 
         }
         protected virtual void OnReborn()
+        {
+
+        }
+        protected virtual void OnStimulusReceived(Stimulus stim)
         {
 
         }

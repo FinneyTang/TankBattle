@@ -13,6 +13,7 @@ namespace AI.SensorSystem
         {
             m_Agent = agent;
             m_SensorMemory = new BlackboardMemory();
+            m_Sensors = new List<Sensor>();
         }
         public void AddSensor(Sensor s)
         {
@@ -23,11 +24,26 @@ namespace AI.SensorSystem
         {
             return m_SensorMemory;
         }
+        public void ClearSensorMemory()
+        {
+            m_SensorMemory.Clear();
+        }
         public void Update()
         {
             foreach (Sensor s in m_Sensors)
             {
                 s.Update(m_SensorMemory);
+            }
+        }
+        public void StimulusReceived(Stimulus stim)
+        {
+            foreach (Sensor s in m_Sensors)
+            {
+                if(stim.TargetSensorType != s.GetSensorType())
+                {
+                    continue;
+                }
+                s.StimulusReceived(stim, m_SensorMemory);
             }
         }
     }

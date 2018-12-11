@@ -69,6 +69,7 @@ By Jiaqi Tang
 - Forword：返回坦克车身的朝向
 - CanFire()：返回是否可以开火
 - CanSeeOthers(Tank t)：是否可以看到目标坦克，返回值表示是否成功
+- CanSeeOthers(Vector3 pos)：是否可以看到目标位置，返回值表示是否成功
 - GetName()：返回坦克的名字
 - NavMeshPath CaculatePath(Vector3 targetPos)：获取到目标位置的路径
 - TurretTurnTo(Vector3 targetPos)：把炮管转向目标位置
@@ -101,6 +102,8 @@ Match类为单例，可以通过Match.instance访问
 - IsMathEnd()：比赛是否结束
 - RemainingTime：获取比赛剩余时间
 - GetRebornPos(ETeam t)：获取队伍的重生位置
+- GetTeamColor(ETeam t)：获取队伍的颜色
+- GetStarByID(int id)：根据星星的id获取星星
 
 ### PhysicsUtils类
 
