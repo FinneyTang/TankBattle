@@ -6,40 +6,35 @@ namespace AI.BehaviourTree
     public class SelectorNode : Node
     {
         private Node m_LastRunningNode;
-        protected override ERunningStatus OnUpdate(IAgent agent, BlackboardMemory workingMemroy)
+        protected override ERunningStatus OnUpdate(IAgent agent, BlackboardMemory workingMemory)
         {
-            ERunningStatus runningStatus = ERunningStatus.Failed;
-            Node curNode = null;
+            ERunningStatus runningStatus = ERunningStatus.Finished;
+            Node previousNode = m_LastRunningNode;
+            //select running node
+            m_LastRunningNode = null;
             foreach (Node c in m_Children)
             {
-                runningStatus = c.Update(agent, workingMemroy);
-                if(runningStatus == ERunningStatus.Failed)
+                runningStatus = c.Update(agent, workingMemory);
+                if(runningStatus != ERunningStatus.Failed)
                 {
-                    continue;
-                }
-                else
-                {
-                    curNode = c;
+                    m_LastRunningNode = c;
                     break;
                 }
             }
-            if (curNode != m_LastRunningNode)
+            //clear last running node
+            if (previousNode != m_LastRunningNode && previousNode != null)
             {
-                if(m_LastRunningNode != null)
-                {
-                    m_LastRunningNode.Transition(agent, workingMemroy);
-                }
-                m_LastRunningNode = curNode;
+                previousNode.Reset(agent, workingMemory);
             }
             return runningStatus;
         }
-        protected override void OnTransition(IAgent agent, BlackboardMemory workingMemroy)
+        protected override void OnReset(IAgent agent, BlackboardMemory workingMemory)
         {
             if (m_LastRunningNode != null)
             {
-                m_LastRunningNode.Transition(agent, workingMemroy);
-                m_LastRunningNode = null;
+                m_LastRunningNode.Reset(agent, workingMemory);
             }
+            m_LastRunningNode = null;
         }
     }
 }

@@ -11,26 +11,31 @@ namespace AI.BehaviourTree
     }
     public class Node
     {
+        //Tree Structure
         protected Node m_Parent;
         protected List<Node> m_Children = new List<Node>();
 
+        //Precondition
         private Condition m_Precondition;
-        public ERunningStatus Update(IAgent agent, BlackboardMemory workingMemroy)
+        public ERunningStatus Update(IAgent agent, BlackboardMemory workingMemory)
         {
             if(m_Precondition != null && m_Precondition.IsTrue(agent) == false)
             {
                 return ERunningStatus.Failed;
             }
-            return OnUpdate(agent, workingMemroy);
+            return OnUpdate(agent, workingMemory);
         }
-        public void Transition(IAgent agent, BlackboardMemory workingMemroy)
+        public void Reset(IAgent agent, BlackboardMemory workingMemory)
         {
-            OnTransition(agent, workingMemroy);
+            OnReset(agent, workingMemory);
         }
-        public Node AddChild(Node c)
+        public Node AddChild(params Node[] children)
         {
-            c.m_Parent = this;
-            m_Children.Add(c);
+            foreach(Node c in children)
+            {
+                c.m_Parent = this;
+                m_Children.Add(c);
+            }
             return this;
         }
         public Node SetPrecondition(Condition p)
@@ -38,11 +43,12 @@ namespace AI.BehaviourTree
             m_Precondition = p;
             return this;
         }
-        protected virtual ERunningStatus OnUpdate(IAgent agent, BlackboardMemory workingMemroy)
+        //implemented by inherited class
+        protected virtual ERunningStatus OnUpdate(IAgent agent, BlackboardMemory workingMemory)
         {
             return ERunningStatus.Finished;
         }
-        protected virtual void OnTransition(IAgent agent, BlackboardMemory workingMemroy)
+        protected virtual void OnReset(IAgent agent, BlackboardMemory workingMemory)
         {
         }
     }

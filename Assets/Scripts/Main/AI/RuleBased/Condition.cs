@@ -4,21 +4,21 @@ namespace AI.RuleBased
 {
     public class Condition
     {
-        public virtual bool IsTrue(IAgent owner)
+        public virtual bool IsTrue(IAgent agent)
         {
             return false;
         }
     }
     class TrueCondition : Condition
     {
-        public override bool IsTrue(IAgent owner)
+        public override bool IsTrue(IAgent agent)
         {
             return true;
         }
     }
     class FalseCondition : Condition
     {
-        public override bool IsTrue(IAgent owner)
+        public override bool IsTrue(IAgent agent)
         {
             return false;
         }
@@ -32,9 +32,9 @@ namespace AI.RuleBased
             m_LHS = lhs;
             m_RHS = rhs;
         }
-        public override bool IsTrue(IAgent owner)
+        public override bool IsTrue(IAgent agent)
         {
-            return m_LHS.IsTrue(owner) && m_RHS.IsTrue(owner);
+            return m_LHS.IsTrue(agent) && m_RHS.IsTrue(agent);
         }
     }
     class OrCondition : Condition
@@ -46,9 +46,9 @@ namespace AI.RuleBased
             m_LHS = lhs;
             m_RHS = rhs;
         }
-        public override bool IsTrue(IAgent owner)
+        public override bool IsTrue(IAgent agent)
         {
-            return m_LHS.IsTrue(owner) || m_RHS.IsTrue(owner);
+            return m_LHS.IsTrue(agent) || m_RHS.IsTrue(agent);
         }
     }
     class XorCondition : Condition
@@ -60,9 +60,9 @@ namespace AI.RuleBased
             m_LHS = lhs;
             m_RHS = rhs;
         }
-        public override bool IsTrue(IAgent owner)
+        public override bool IsTrue(IAgent agent)
         {
-            return m_LHS.IsTrue(owner) ^ m_RHS.IsTrue(owner);
+            return m_LHS.IsTrue(agent) ^ m_RHS.IsTrue(agent);
         }
     }
     class NotCondition : Condition
@@ -72,9 +72,9 @@ namespace AI.RuleBased
         {
             m_LHS = lhs;
         }
-        public override bool IsTrue(IAgent owner)
+        public override bool IsTrue(IAgent agent)
         {
-            return !m_LHS.IsTrue(owner);
+            return !m_LHS.IsTrue(agent);
         }
     }
 }

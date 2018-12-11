@@ -160,7 +160,7 @@ namespace SensorAI
         protected override void OnUpdate()
         {
             m_SensorManager.Update();
-            Tank oppTank = m_SensorManager.GetSensorMemory().GetValue<Tank>((int)EBBKey.TargetOppTank, null);
+            Tank oppTank = m_SensorManager.GetSensorMemory().GetValue<Tank>((int)EBBKey.TargetOppTank);
             if (oppTank != null)
             {
                 TurretTurnTo(oppTank.Position);
@@ -180,7 +180,7 @@ namespace SensorAI
             if (targetStarID >= 0) //has star
             {
                 //move to star position it heard before
-                Vector3 starPos = m_SensorManager.GetSensorMemory().GetValue<Vector3>((int)EBBKey.TargetStarPos, default(Vector3));
+                Vector3 starPos = m_SensorManager.GetSensorMemory().GetValue<Vector3>((int)EBBKey.TargetStarPos);
                 Move(starPos);
             }
             else

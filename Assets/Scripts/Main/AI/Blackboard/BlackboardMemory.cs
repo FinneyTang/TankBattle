@@ -63,7 +63,7 @@ namespace AI.Blackboard
         {
             m_Items.Remove(key);
         }
-        public T GetValue<T>(int key, T defaultValue)
+        public T GetValue<T>(int key, T defaultValue = default(T))
         {
             if (m_Items.ContainsKey(key) == false)
             {
