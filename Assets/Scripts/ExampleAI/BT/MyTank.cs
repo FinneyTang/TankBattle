@@ -103,10 +103,10 @@ namespace BT
     {
         protected override bool OnEvaluate(IAgent agent, BlackboardMemory workingMemory)
         {
-            if(workingMemory.HasValue((int)EBBKey.MovingTargetPos))
+            Vector3 targetPos;
+            if(workingMemory.TryGetValue((int)EBBKey.MovingTargetPos, out targetPos))
             {
                 Tank t = (Tank)agent;
-                Vector3 targetPos = workingMemory.GetValue<Vector3>((int)EBBKey.MovingTargetPos);
                 if(Vector3.Distance(targetPos, t.Position) >= 1f)
                 {
                     return false;
