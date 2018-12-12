@@ -113,6 +113,7 @@ namespace UtilityBasedAI
                         {
                             hasStar = true;
                             nearestStarPos = s.Position;
+                            break;
                         }
                         else
                         {

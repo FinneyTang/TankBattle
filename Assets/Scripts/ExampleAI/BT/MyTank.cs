@@ -79,6 +79,7 @@ namespace BT
                 {
                     hasStar = true;
                     nearestStarPos = s.Position;
+                    break;
                 }
                 else
                 {

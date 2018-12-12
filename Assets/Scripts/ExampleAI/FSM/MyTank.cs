@@ -71,6 +71,7 @@ namespace FSM
                 {
                     hasStar = true;
                     nearestStar = s;
+                    break;
                 }
                 else
                 {

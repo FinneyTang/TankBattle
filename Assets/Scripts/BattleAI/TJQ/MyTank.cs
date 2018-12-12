@@ -27,6 +27,7 @@ namespace TJQ
                     {
                         hasStar = true;
                         nearestStarPos = s.Position;
+                        break;
                     }
                     else
                     {
