@@ -6,7 +6,17 @@ namespace AI.UtilityBased
 {
     public class Utility
     {
-        public virtual float CalcU(IAgent agent)
+        private float m_LastScore = 0;
+        public float CalcU(IAgent agent)
+        {
+            m_LastScore = OnCalcU(agent);
+            return m_LastScore;
+        }
+        public float GetLastScore()
+        {
+            return m_LastScore;
+        }
+        protected virtual float OnCalcU(IAgent agent)
         {
             return 0;
         }
@@ -22,7 +32,7 @@ namespace AI.UtilityBased
     }
     public class AdditiveComposite : CompositeUtility
     {
-        public override float CalcU(IAgent agent)
+        protected override float OnCalcU(IAgent agent)
         {
             float v = 0;
             foreach (Utility u in m_Us)
@@ -34,7 +44,7 @@ namespace AI.UtilityBased
     }
     public class MultipleComposite : CompositeUtility
     {
-        public override float CalcU(IAgent agent)
+        protected override float OnCalcU(IAgent agent)
         {
             float v = 1;
             foreach (Utility u in m_Us)
@@ -59,7 +69,7 @@ namespace AI.UtilityBased
             m_WeightsDirty = true;
             return this;
         }
-        public override float CalcU(IAgent agent)
+        protected override float OnCalcU(IAgent agent)
         {
             if(m_WeightsDirty)
             {

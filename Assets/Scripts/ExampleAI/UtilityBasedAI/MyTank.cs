@@ -1,13 +1,16 @@
 ﻿using AI.Base;
 using AI.UtilityBased;
 using Main;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace UtilityBasedAI
 {
     class EnemyThreatenScore : Utility
     {
-        public override float CalcU(IAgent agent)
+        protected override float OnCalcU(IAgent agent)
         {
             Tank t = (Tank)agent;
             Tank oppTank = Match.instance.GetOppositeTank(t.Team);
@@ -19,33 +22,33 @@ namespace UtilityBasedAI
             {
                 return 0;
             }
-            return Mathf.Lerp(1f, 0f, Vector3.Distance(oppTank.Position, t.Position) / 50f);
+            return Mathf.Lerp(1f, 0f, Vector3.Distance(oppTank.Position, t.Position) / 100f);
         }
     }
     class StarScore : Utility
     {
-        public override float CalcU(IAgent agent)
+        protected override float OnCalcU(IAgent agent)
         {
             int maxStarCount = Match.instance.GlobalSetting.MaxStarCount;
             return Mathf.Clamp01((float)Match.instance.GetStars().Count / maxStarCount);
         }
     }
-    class EagerToWinScore : Utility
+    class EnoughToWinScore : Utility
     {
-        public override float CalcU(IAgent agent)
+        protected override float OnCalcU(IAgent agent)
         {
             Tank t = (Tank)agent;
             Tank oppTank = Match.instance.GetOppositeTank(t.Team);
             if (oppTank != null && oppTank.Score > t.Score)
             {
-                return 1f;
+                return 0.5f;
             }
-            return 0.5f;
+            return 1f;
         }
     }
     class HPScore : Utility
     {
-        public override float CalcU(IAgent agent)
+        protected override float OnCalcU(IAgent agent)
         {
             Tank t = (Tank)agent;
             if(t.HP > 50)
@@ -75,7 +78,7 @@ namespace UtilityBasedAI
             m_GetStar = new StarScore();
             m_BackToHome = new MultipleComposite().
                             AddUtility(new HPScore()).
-                            AddUtility(new EagerToWinScore());
+                            AddUtility(new EnoughToWinScore());
         }
         protected override void OnUpdate()
         {
@@ -144,6 +147,27 @@ namespace UtilityBasedAI
         {
             base.OnReborn();
             m_LastTime = 0;
+        }
+#if UNITY_EDITOR
+        private GUIStyle m_ScoreStyle;
+#endif
+        protected override void OnOnDrawGizmos()
+        {
+            base.OnOnDrawGizmos();
+#if UNITY_EDITOR
+            if(m_ScoreStyle == null)
+            {
+                m_ScoreStyle = new GUIStyle();
+                m_ScoreStyle.normal.textColor = Color.yellow;
+                m_ScoreStyle.fontSize = 16;
+                m_ScoreStyle.fontStyle = FontStyle.Bold;
+            }
+            string score = string.Format("{0}: {1}\n{2}: {3}\n{4}: {5}\n",
+                EAction.Fire, m_Fire.GetLastScore().ToString("f2"),
+                EAction.GetStar, m_GetStar.GetLastScore().ToString("f2"),
+                EAction.BackToHome, m_BackToHome.GetLastScore().ToString("f2"));
+            Handles.Label(Position + Forward * 5, score, m_ScoreStyle);
+#endif
         }
         public override string GetName()
         {
