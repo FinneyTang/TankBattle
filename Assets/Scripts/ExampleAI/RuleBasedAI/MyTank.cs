@@ -69,9 +69,13 @@ namespace RuleBasedAI
         {
             base.OnUpdate();
             Tank oppTank = Match.instance.GetOppositeTank(Team);
-            if (oppTank != null)
+            if (oppTank != null && oppTank.IsDead == false)
             {
                 TurretTurnTo(oppTank.Position);
+            }
+            else
+            {
+                TurretTurnTo(Position + Forward);
             }
             if (m_Fire.IsTrue(this))
             {

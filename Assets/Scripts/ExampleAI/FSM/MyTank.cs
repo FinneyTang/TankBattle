@@ -111,13 +111,17 @@ namespace FSM
         {
             //fire check
             Tank oppTank = Match.instance.GetOppositeTank(Team);
-            if (oppTank != null)
+            if (oppTank != null && oppTank.IsDead == false)
             {
                 TurretTurnTo(oppTank.Position);
-                if(CanSeeOthers(oppTank))
+                if (CanSeeOthers(oppTank))
                 {
                     Fire();
                 }
+            }
+            else
+            {
+                TurretTurnTo(Position + Forward);
             }
             //state update
             m_FSM.Update();

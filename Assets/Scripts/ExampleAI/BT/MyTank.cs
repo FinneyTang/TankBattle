@@ -39,6 +39,11 @@ namespace BT
     }
     class Fire : ActionNode
     {
+        protected override bool OnEvaluate(IAgent agent, BlackboardMemory workingMemory)
+        {
+            Tank t = (Tank)agent;
+            return t.CanFire();
+        }
         protected override ERunningStatus OnExecute(IAgent agent, BlackboardMemory workingMemroy)
         {
             Tank t = (Tank)agent;

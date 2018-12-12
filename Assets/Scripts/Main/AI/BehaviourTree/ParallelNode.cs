@@ -8,11 +8,11 @@ namespace AI.BehaviourTree
 {
     public class ParallelNode : Node
     {
-        private int m_TargetFinishedThreshold;
+        private int m_RequestFinishedCount;
         private List<ERunningStatus> m_ChildrenRunning = new List<ERunningStatus>();
         public ParallelNode(int threshold)
         {
-            m_TargetFinishedThreshold = threshold;
+            m_RequestFinishedCount = threshold;
         }
         protected override ERunningStatus OnUpdate(IAgent agent, BlackboardMemory workingMemory)
         {
@@ -20,7 +20,7 @@ namespace AI.BehaviourTree
             {
                 return ERunningStatus.Finished;
             }
-            m_TargetFinishedThreshold = Mathf.Clamp(m_TargetFinishedThreshold, 1, m_Children.Count);
+            m_RequestFinishedCount = Mathf.Clamp(m_RequestFinishedCount, 1, m_Children.Count);
             if (m_ChildrenRunning.Count != m_Children.Count)
             {
                 m_ChildrenRunning.AddRange(Enumerable.Repeat(ERunningStatus.Executing, m_Children.Count));
@@ -38,7 +38,7 @@ namespace AI.BehaviourTree
                 {
                     finishedCount++;
                     m_ChildrenRunning[i] = status;
-                    if(finishedCount == m_TargetFinishedThreshold)
+                    if(finishedCount == m_RequestFinishedCount)
                     {
                         return ERunningStatus.Finished;
                     }
@@ -46,7 +46,7 @@ namespace AI.BehaviourTree
                 else if(status == ERunningStatus.Failed)
                 {
                     failedCount++;
-                    if(failedCount > m_Children.Count - m_TargetFinishedThreshold)
+                    if(failedCount > m_Children.Count - m_RequestFinishedCount)
                     {
                         return ERunningStatus.Failed;
                     }

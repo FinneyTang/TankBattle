@@ -39,7 +39,7 @@ namespace Main
             public int ScoreForKill = 10;
             public int ScoreForSuperStar = 30;
             public float StarAddInterval = 5;
-            public float MaxStarCount = 3;
+            public int MaxStarCount = 3;
             public int HPRecoverySpeed = 5;
             public float HomeZoneRadius = 10;
         }
