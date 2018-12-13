@@ -45,9 +45,9 @@ namespace Main
         }
         void Update()
         {
-            Vector3 newPos = transform.position + m_InitVelocity * Time.deltaTime;
+            Vector3 newPos = Position + m_InitVelocity * Time.deltaTime;
             RaycastHit hitInfo;
-            if (Physics.Linecast(transform.position, newPos, out hitInfo, PhysicsUtils.LayerMaskCollsion))
+            if (Physics.Linecast(Position, newPos, out hitInfo, PhysicsUtils.LayerMaskCollsion))
             {
                 bool hitOwner = false;
                 if (PhysicsUtils.IsFireCollider(hitInfo.collider))
@@ -65,11 +65,11 @@ namespace Main
                             hitOwner = true;
                         }
                     }
-                    Utils.PlayParticle("CFX3_Hit_SmokePuff", transform.position);
+                    Utils.PlayParticle("CFX3_Hit_SmokePuff", Position);
                 }
                 else
                 {
-                    Utils.PlayParticle("CFX3_Hit_SmokePuff_Wall", transform.position);
+                    Utils.PlayParticle("CFX3_Hit_SmokePuff_Wall", Position);
                 }
                 if(hitOwner == false)
                 {
