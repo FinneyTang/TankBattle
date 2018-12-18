@@ -34,12 +34,16 @@ namespace AI.UtilityBased
     {
         protected override float OnCalcU(IAgent agent)
         {
+            if(m_Us.Count == 0)
+            {
+                return 0;
+            }
             float v = 0;
             foreach (Utility u in m_Us)
             {
                 v += u.CalcU(agent);
             }
-            return v;
+            return v / m_Us.Count;
         }
     }
     public class MultipleComposite : CompositeUtility
