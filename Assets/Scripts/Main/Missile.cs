@@ -45,38 +45,56 @@ namespace Main
         }
         void Update()
         {
-            Vector3 newPos = Position + m_InitVelocity * Time.deltaTime;
-            RaycastHit hitInfo;
-            if (Physics.Linecast(Position, newPos, out hitInfo, PhysicsUtils.LayerMaskCollsion))
+            bool hitOthers = false;
+            //check if missile is within a tank's collider
+            Tank oppTank = Match.instance.GetOppositeTank(Team);
+            if(oppTank != null && oppTank.IsDead == false)
             {
-                bool hitOwner = false;
-                if (PhysicsUtils.IsFireCollider(hitInfo.collider))
+                if(oppTank.IsInFireCollider(Position))
                 {
-                    //hit player
-                    FireCollider fc = hitInfo.collider.GetComponent<FireCollider>();
-                    if(fc != null && fc.Owner != null)
-                    {
-                        if(fc.Owner.Team != Team)
-                        {
-                            fc.Owner.TakeDamage(m_Owner);
-                        }
-                        else
-                        {
-                            hitOwner = true;
-                        }
-                    }
+                    hitOthers = true;
+                    oppTank.TakeDamage(m_Owner);
                     Utils.PlayParticle("CFX3_Hit_SmokePuff", Position);
-                }
-                else
-                {
-                    Utils.PlayParticle("CFX3_Hit_SmokePuff_Wall", Position);
-                }
-                if(hitOwner == false)
-                {
                     Match.instance.RemoveMissile(this);
                 }
             }
-            else
+            Vector3 newPos = Position + m_InitVelocity * Time.deltaTime;
+            if (hitOthers == false)
+            {
+                //check if missile will hit some collider
+                RaycastHit hitInfo;
+                if (Physics.Linecast(Position, newPos, out hitInfo, PhysicsUtils.LayerMaskCollsion))
+                {
+                    bool hitOwner = false;
+                    if (PhysicsUtils.IsFireCollider(hitInfo.collider))
+                    {
+                        //hit player
+                        FireCollider fc = hitInfo.collider.GetComponent<FireCollider>();
+                        if (fc != null && fc.Owner != null)
+                        {
+                            if (fc.Owner.Team != Team)
+                            {
+                                fc.Owner.TakeDamage(m_Owner);
+                            }
+                            else
+                            {
+                                hitOwner = true;
+                            }
+                        }
+                        Utils.PlayParticle("CFX3_Hit_SmokePuff", hitInfo.point);
+                    }
+                    else
+                    {
+                        Utils.PlayParticle("CFX3_Hit_SmokePuff_Wall", hitInfo.point);
+                    }
+                    if (hitOwner == false)
+                    {
+                        Match.instance.RemoveMissile(this);
+                        hitOthers = true;
+                    }
+                }
+            }
+            if(hitOthers == false)
             {
                 transform.position = newPos;
             }

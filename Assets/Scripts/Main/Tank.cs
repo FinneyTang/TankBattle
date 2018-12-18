@@ -257,6 +257,10 @@ namespace Main
 
             OnReborn();
         }
+        internal bool IsInFireCollider(Vector3 pos)
+        {
+            return m_FireCollider.Col.bounds.Contains(pos);
+        }
         private void OnDrawGizmos()
         {
             if (m_NavAgent != null)

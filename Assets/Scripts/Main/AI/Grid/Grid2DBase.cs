@@ -58,7 +58,7 @@ namespace AI.Grid
             float gridPosY = pos.z - m_GridOrig.z;
             x = (int)(gridPosX / m_GridWidth);
             y = (int)(gridPosY / m_GridLength);
-            return x < 0 || y < 0;
+            return IsCoordValid(x, y);
         }
         public delegate void IteratorAction(T arg1, int centerX, int centerY, int curX, int curY);
         public bool IteratorGrid(Vector3 pos, int range, IteratorAction action)

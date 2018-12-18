@@ -207,7 +207,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1551343369248534}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0.95}
+  m_LocalPosition: {x: 0, y: 0, z: 0.554}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children:
   - {fileID: 4012184816648420}
@@ -402,8 +402,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 4.31082, y: 5.629422, z: 5.864647}
-  m_Center: {x: 0.0022962093, y: 2.6016097, z: 0.17922783}
+  m_Size: {x: 3.4423742, y: 4.243137, z: 5.3994102}
+  m_Center: {x: 0.0022964478, y: 2.1415684, z: 0.008640289}
 --- !u!114 &114298273307107476
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -415,6 +415,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a60bd99279316be4c91aae2a3411cf3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Col: {fileID: 65040160951269916}
   Owner: {fileID: 0}
 --- !u!195 &195382471718283584
 NavMeshAgent:
