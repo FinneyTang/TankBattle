@@ -1,8 +1,6 @@
 ﻿using AI.SensorSystem;
-using Network.UDP;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -58,36 +56,10 @@ namespace Main
         private Tank m_Winner;
         private float m_RemainingTime = 0;
         private bool m_SuperStarAdded = false;
-
-        private UDPListener m_ServerSession = new UDPListener();
-        private UDPUser m_ClientSession = new UDPUser();
         void Awake()
         {
             Application.targetFrameRate = 60;
             Match.instance = this;
-            if(m_ServerSession.Init("127.0.0.1", 30000))
-            {
-                m_ServerSession.SetDataHandler((data, addr) =>
-                {
-                    Debug.Log("Hello, User from " + addr.ToString());
-                });
-                m_ServerSession.Start();
-            }
-            if(m_ClientSession.Init("127.0.0.1", 30000))
-            {
-                m_ClientSession.SetEchoHandler(delegate ()
-                {
-                    string msg = "Hello, Server";
-                    Debug.Log(msg);
-                    return Encoding.ASCII.GetBytes(msg);
-                });
-                m_ClientSession.Start();
-            }
-        }
-        private void OnApplicationQuit()
-        {
-            m_ServerSession.Close();
-            m_ClientSession.Close();
         }
         void Start()
         {
