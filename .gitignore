@@ -6,3 +6,4 @@ Temp/
 TankBattle.csproj
 TankBattle.CSharp.Editor.csproj
 TankBattle.Editor.csproj
+*.stackdump

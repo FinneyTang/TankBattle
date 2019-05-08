@@ -60,17 +60,27 @@ namespace AI.Grid
             y = (int)(gridPosY / m_GridLength);
             return IsCoordValid(x, y);
         }
+        public bool GridCoordToPos(int x, int y, ref Vector3 pos)
+        {
+            if(IsCoordValid(x, y) == false)
+            {
+                return false;
+            }
+            pos.x = x * m_GridWidth + 0.5f * m_GridWidth  + m_GridOrig.x;
+            pos.z = y * m_GridWidth + 0.5f * m_GridLength + m_GridOrig.z;
+            return true;
+        }
         public delegate void IteratorAction(T arg1, int centerX, int centerY, int curX, int curY);
-        public bool IteratorGrid(Vector3 pos, int range, IteratorAction action)
+        public bool IteratorGrid(Vector3 pos, int rangeX, int rangeY, IteratorAction action)
         {
             int centerX, centerY;
             if(PosToGridCoord(pos, out centerX, out centerY) == false)
             {
                 return false;
             }
-            for (int i = -range; i <= range; i++)
+            for (int i = -rangeX; i <= rangeX; i++)
             {
-                for (int j = -range; j <= range; j++)
+                for (int j = -rangeY; j <= rangeY; j++)
                 {
                     int curX = centerX + i;
                     int curY = centerY + j;
@@ -87,7 +97,7 @@ namespace AI.Grid
         {
             return x >= 0 && x < m_Column && y >= 0 && y < m_Row;
         }
-        protected abstract void Clear();
+        public abstract void Clear();
         protected abstract T GetInternal(int x, int y);
         protected abstract void SetInternal(int x, int y, T value);
     }

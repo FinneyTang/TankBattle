@@ -19,7 +19,7 @@ namespace AI.Grid
         {
             return m_Grids[x, y];
         }
-        protected override void Clear()
+        public override void Clear()
         {
             Array.Clear(m_Grids, 0, m_Grids.Length);
         }
