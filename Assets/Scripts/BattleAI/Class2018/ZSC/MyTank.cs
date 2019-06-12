@@ -82,7 +82,7 @@ namespace ZSC
     {
         public float preDis=2;
 
-        private float m_MovInterval = 0;
+        //private float m_MovInterval = 0;
         private float m_LastTime = 0;
         private Star star;
         private int prestarID;

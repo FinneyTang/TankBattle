@@ -115,7 +115,7 @@ namespace YoumuMoe
             }
         }
 
-        private bool CanSeeOthers(Tank oppTank)
+        private new bool CanSeeOthers(Tank oppTank)
         {
             RaycastHit[] hits = Physics.RaycastAll(transform.position, transform.Find("Turret").forward, 100);
             for (int i = 0; i < hits.Length; i++)

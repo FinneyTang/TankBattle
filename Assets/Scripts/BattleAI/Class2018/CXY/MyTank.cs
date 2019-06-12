@@ -11,10 +11,10 @@ namespace CXY
         
         Tank m_oppTank;
         Vector3 m_oppTankPos;
-        Vector3 m_targetPos;
-        NavMeshAgent m_navMeshAgent;
+        //Vector3 m_targetPos = Vector3.zero;
+        //NavMeshAgent m_navMeshAgent;
         float time;
-        Vector3 m_oppTankTargetPos;//敌方坦克目标点
+        //Vector3 m_oppTankTargetPos;//敌方坦克目标点
         Vector3 m_nearStarPos;
         bool hasStar = false;
         float nearestDist = float.MaxValue;
@@ -29,7 +29,7 @@ namespace CXY
         {
             base.OnStart();
             //m_oppTank = Match.instance.GetOppositeTank(Team);//获得敌方坦克
-            m_navMeshAgent = GetComponent<NavMeshAgent>();
+            //m_navMeshAgent = GetComponent<NavMeshAgent>();
         }
         //----------------------------------------------
         protected override void OnUpdate()
@@ -102,7 +102,7 @@ namespace CXY
         /// <summary>
         /// 预测敌方坦克的目标
         /// </summary>
-        void CalculateOppTankTargetPos()
+        /*void CalculateOppTankTargetPos()
         {
             foreach (var s in Match.instance.GetStars())
             {
@@ -122,7 +122,7 @@ namespace CXY
                     m_oppTankTargetPos = Vector3.up;
                 }
             }
-        }
+        }*/
         ///// <summary>
         ///// 比较敌方坦克与我方坦克据目标星星路径的距离(前提是双方目标相同)
         ///// </summary>

@@ -103,8 +103,8 @@ namespace LTY
     class HasSuperStar : Condition
     {
         
-        int m_score = 0;
-        int m_oppScore = 0;
+        //int m_score = 0;
+        //int m_oppScore = 0;
         bool m_isSuperEaten = false;
         public override bool IsTrue(Tank owner)
         {
@@ -223,8 +223,8 @@ namespace LTY
     {
         private Condition m_getStar;
         private Condition m_getSuperStar;
-        private Condition m_fire;
-        private Condition m_backToHome;
+        //private Condition m_fire;
+        //private Condition m_backToHome;
         private Condition m_oppTankDead;
         private Condition m_oppMissileNear;
 
@@ -239,8 +239,8 @@ namespace LTY
         protected override void OnStart()
         {
             base.OnStart();
-            m_backToHome = new AndCondition(new HPBelow(50), new AndCondition(new NotCondition(new HasSuperStar()), new HasBackHome()));
-            m_fire = new HasSeeEnemy();
+            //m_backToHome = new AndCondition(new HPBelow(50), new AndCondition(new NotCondition(new HasSuperStar()), new HasBackHome()));
+            //m_fire = new HasSeeEnemy();
             m_getSuperStar = new HasSuperStar();
             m_oppTankDead = new HasEnemyDead();
             m_oppMissileNear = new AndCondition(new HasSeeEnemy(), new HasOppMissileNear(missileDetectRadius));

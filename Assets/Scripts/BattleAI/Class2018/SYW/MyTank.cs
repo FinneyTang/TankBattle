@@ -42,7 +42,7 @@ namespace SYW
             Tank t = (Tank)agent;
             Tank oppTank = Match.instance.GetOppositeTank(t.Team);
    
-            Vector3 targetPos;
+            //Vector3 targetPos;
             float distance;
             distance = (oppTank.Position - lastPos).sqrMagnitude;
             if (oppTank != null && oppTank.IsDead == false)
@@ -53,12 +53,12 @@ namespace SYW
                 }
                 else if (distance < 2000)
                 {
-                    targetPos = 5 * oppTank.Position - lastPos;
+                    //targetPos = 5 * oppTank.Position - lastPos;
                     t.TurretTurnTo(oppTank.Position);
                 }
                 else
                 {
-                    targetPos = 10 * oppTank.Position - lastPos;
+                    //targetPos = 10 * oppTank.Position - lastPos;
                     t.TurretTurnTo(oppTank.Position);
                 }
                 lastPos = oppTank.Position;
@@ -143,7 +143,7 @@ namespace SYW
     {
         protected override bool OnEvaluate(IAgent agent, BlackboardMemory workingMemory)
         {
-            Tank t = (Tank)agent;
+            //Tank t = (Tank)agent;
             foreach (var pair in Match.instance.GetStars())
             {
                 Star s = pair.Value;

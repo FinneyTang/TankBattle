@@ -110,7 +110,7 @@ namespace LCTank
                     toTarget.y = 0;
                     toTarget.Normalize();
                     
-                    Vector3 tar = GetVerticalDir(toTarget);
+                    //Vector3 tar = GetVerticalDir(toTarget);
                     if (Vector3.Distance(oppTank.Position, Position) > 50)
                     {
                         Move(Position + GetVerticalDir(toTarget) * 5);
