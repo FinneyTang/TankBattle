@@ -28,7 +28,7 @@ namespace AI.Grid
         {
             return y * m_Column + x;
         }
-        protected override void Clear()
+        public override void Clear()
         {
             m_Grids.Clear();
         }
