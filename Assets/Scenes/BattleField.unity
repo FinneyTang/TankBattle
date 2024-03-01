@@ -2044,8 +2044,7 @@ MonoBehaviour:
     HPRecoverySpeed: 25
     HomeZoneRadius: 10
   FieldSetting:
-    Length: 100
-    Width: 100
+    FieldSize: 100
     RebornAreas:
     - Team: 0
       RebornArea: {fileID: 1305338028}

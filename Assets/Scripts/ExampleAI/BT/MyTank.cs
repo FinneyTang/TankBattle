@@ -117,7 +117,7 @@ namespace BT
         }
         private Vector3 GetNextDestination()
         {
-            float halfSize = PhysicsUtils.MaxFieldSize * 0.5f;
+            float halfSize = Match.instance.FieldSize * 0.5f;
             return new Vector3(Random.Range(-halfSize, halfSize), 0, Random.Range(-halfSize, halfSize));
         }
     }

@@ -18,7 +18,7 @@ namespace THL
             return t.CanSeeOthers(oppTank);
         }
     }
-    class EnemyInHome                                       //ÅÐ¶Ï¶ÔÃæÊÇ·ñÔÚ¼Ò»ØÑª
+    class EnemyInHome                                       //ï¿½Ð¶Ï¶ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Ú¼Ò»ï¿½Ñª
     {
         
         public bool IsTrue(Tank tank)
@@ -39,7 +39,7 @@ namespace THL
 
 
 
-    class nearStar                                 //µÃµ½×î½üµÄÐÇÐÇ
+    class nearStar                                 //ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     {
        public Vector3 Pos = new Vector3();
     }
@@ -50,7 +50,7 @@ namespace THL
         Condition CanSeeEnemy = new HasSeenEnemy();
         nearStar nearStar = new nearStar();
         bool canGetStar = false;
-        float deadTime = 0;                              //¶ÔµÐÈËµÄËÀÍöÊ±¼ä½øÐÐ¼ÆÊ±
+        float deadTime = 0;                              //ï¿½Ôµï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½Ê±
         //Missile escapeWay = new Missile();
         protected override void OnStart()
         {
@@ -63,24 +63,24 @@ namespace THL
             Tank selfTank = this;
             float AftOppTankHP = OppTank.HP;
             base.OnUpdate();
-            double DisToStar = PhysicsUtils.MaxFieldSize * 1.4;
+            double DisToStar = Match.instance.FieldSize * 1.4;
             if (!canGetStar)
             {
-                Move(Match.instance.GetRebornPos(this.Team));                 //ÒÔ³ÔÐÇÐÇÎªÖ÷ÒªÄ¿±ê¹æ»®ÐÐ¶¯
+                Move(Match.instance.GetRebornPos(this.Team));                 //ï¿½Ô³ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ÒªÄ¿ï¿½ï¿½æ»®ï¿½Ð¶ï¿½
             }
             if (canGetStar)
             {
                 Move(nearStar.Pos);
             }
-            if (OppTank.IsDead)                                             //Èô¶Ô·½ËÀÍö£¬Ôò¿ªÊ¼¼ÆÊ±£¬¸ù¾ÝÊ±¼ä¹æ»®ÐÐ¶¯
+            if (OppTank.IsDead)                                             //ï¿½ï¿½ï¿½Ô·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½æ»®ï¿½Ð¶ï¿½
             {
                 deadTime += Time.fixedDeltaTime;
                 if (deadTime<=6)
                 {
-                    if (selfTank.HP > 40||Vector3.Magnitude(selfTank.Position-Match.instance.GetRebornPos(this.Team))< PhysicsUtils.MaxFieldSize)
+                    if (selfTank.HP > 40||Vector3.Magnitude(selfTank.Position-Match.instance.GetRebornPos(this.Team))< Match.instance.FieldSize)
                     {
                         canGetStar = true;
-                        foreach (var st in Match.instance.GetStars())   //Èç¹û¶Ô·½ËÀÍö£¬ÇÒÊ±¼ä³ä×ã£¬ÔòÒ»Ö±³ÔÐÇÐÇ
+                        foreach (var st in Match.instance.GetStars())   //ï¿½ï¿½ï¿½ï¿½Ô·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ã£¬ï¿½ï¿½Ò»Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         {
                             if (st.Value != null)
                             {
@@ -93,7 +93,7 @@ namespace THL
                         Move(Match.instance.GetRebornPos(this.Team));                     
                     }
                 }
-                if (deadTime > 6&&selfTank.HP<93)      //µ±¶Ô·½¿ìÒª¸´»îÊ±»Ø¼Ò²¹Ñª
+                if (deadTime > 6&&selfTank.HP<93)      //ï¿½ï¿½ï¿½Ô·ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ø¼Ò²ï¿½Ñª
                 {
                     canGetStar = false;
                 }
@@ -105,7 +105,7 @@ namespace THL
             }
             else
             {
-                deadTime = 0;                                           //ÖØÖÃËÀÍö¼ÆÊ±
+                deadTime = 0;                                           //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±
                 if (EinHome.IsTrue(OppTank) == false)
                 {
                     if (CanSeeEnemy.IsTrue(OppTank))
@@ -150,23 +150,23 @@ namespace THL
                 {
                     if (s.Value != null)
                     {
-                        if (s.Value.IsSuperStar || selfTank.HP - OppTank.HP >= -20)                   //ÈôÎª³¬¼¶ÐÇÐÇ£¬ÇÒÎÒ·½ÁÓÊÆ²»´ó£¬ÔòÈ¥Õù¶á³¬¼¶ÐÇÐÇ£»
+                        if (s.Value.IsSuperStar || selfTank.HP - OppTank.HP >= -20)                   //ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½ï¿½Ò·ï¿½ï¿½ï¿½ï¿½Æ²ï¿½ï¿½ï¿½ï¿½ï¿½È¥ï¿½ï¿½ï¿½á³¬ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½
                         {
                             canGetStar = true;
                             nearStar.Pos = s.Value.Position;
                         }
-                        if (Vector3.Magnitude(s.Value.Position - selfTank.Position) < DisToStar)      //²»ÊÇ³¬¼¶ÐÇÐÇ£¬Ôò¸ù¾ÝÑªÁ¿Ñ¡Ôñ»Ø¼Ò»¹ÊÇ³Ô×î½üµÄÐÇÐÇ
+                        if (Vector3.Magnitude(s.Value.Position - selfTank.Position) < DisToStar)      //ï¿½ï¿½ï¿½Ç³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñªï¿½ï¿½Ñ¡ï¿½ï¿½Ø¼Ò»ï¿½ï¿½Ç³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         {
                             nearStar.Pos = s.Value.Position;
                             if (selfTank.HP >= 50)
                             {
                                 canGetStar = true;
                             }
-                            else if (selfTank.HP >= 25 && Vector3.Magnitude(s.Value.Position - selfTank.Position) < 5f)  //Èç¹ûÔÚ»Ø¼ÒµÄÂ·ÉÏÓöµ½ÀëµÃ·Ç³£½üµÄÐÇÐÇ£¬ÔòË³ÊÖ³Ôµô
+                            else if (selfTank.HP >= 25 && Vector3.Magnitude(s.Value.Position - selfTank.Position) < 5f)  //ï¿½ï¿½ï¿½ï¿½Ú»Ø¼Òµï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã·Ç³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½Ë³ï¿½Ö³Ôµï¿½
                             {
                                 canGetStar = true;
                             }
-                            else if (selfTank.HP < 50)        //ÑªÁ¿µÍÔò»Ø¼Ò
+                            else if (selfTank.HP < 50)        //Ñªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½
                             {
                                 canGetStar = false;
                             }
@@ -176,13 +176,13 @@ namespace THL
                     }
                     else if (s.Value == null)
                     {
-                        if (selfTank.HP <=60)      //Èç¹û³¡ÉÏÃ»ÓÐÐÇÐÇ£¬×Ô¼ºµÄÑªÁ¿µÍÓÚ50£¬Ôò»Ø¼Ò
+                        if (selfTank.HP <=60)      //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½Ñªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½50ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½
                         {
                             canGetStar = false;
                         }
                         else
                         {
-                            Move(new Vector3(Random.Range(-PhysicsUtils.MaxFieldSize/2, PhysicsUtils.MaxFieldSize / 2), 0, Random.Range(-PhysicsUtils.MaxFieldSize / 2, PhysicsUtils.MaxFieldSize / 2)));
+                            Move(new Vector3(Random.Range(-Match.instance.FieldSize/2, Match.instance.FieldSize / 2), 0, Random.Range(-Match.instance.FieldSize / 2, Match.instance.FieldSize / 2)));
                         }
                     }
                 }
@@ -192,7 +192,7 @@ namespace THL
                 
             }
         }
-        protected override void OnReborn() //ÖØÉú
+        protected override void OnReborn() //ï¿½ï¿½ï¿½ï¿½
         {
             base.OnReborn();
         }

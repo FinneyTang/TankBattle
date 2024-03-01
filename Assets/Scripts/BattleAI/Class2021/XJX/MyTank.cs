@@ -156,7 +156,7 @@ namespace XJX
         }
         private bool ApproachNextDestination()//保底移动
         {
-            float halfSize = PhysicsUtils.MaxFieldSize * 0.5f;
+            float halfSize = Match.instance.FieldSize * 0.5f;
             return Move(new Vector3(Random.Range(-halfSize, halfSize), 0, Random.Range(-halfSize, halfSize)));
         }
         public override string GetName()

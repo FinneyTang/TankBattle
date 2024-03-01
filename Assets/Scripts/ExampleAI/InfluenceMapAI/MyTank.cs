@@ -1,6 +1,7 @@
 ﻿using AI.InfluenceMap;
 using Main;
 using System.Collections.Generic;
+using Sable;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -53,7 +54,7 @@ namespace InfluenceMap
         }
         private bool ApproachNextDestination()
         {
-            float halfSize = PhysicsUtils.MaxFieldSize * 0.5f;
+            float halfSize = Match.instance.FieldSize * 0.5f;
             return Move(new Vector3(Random.Range(-halfSize, halfSize), 0, Random.Range(-halfSize, halfSize)));
         }
 #if UNITY_EDITOR

@@ -59,13 +59,14 @@ namespace Main
         [Serializable]
         public class FieldSettingData
         {
-            public float Length = 100f;
-            public float Width = 100f;
+            public float FieldSize = 100f;
             public List<RebornAreaSetting> RebornAreas;
         }
         
         public MatchSettingData GlobalSetting = new MatchSettingData();
         public FieldSettingData FieldSetting = new FieldSettingData();
+
+        public float FieldSize => FieldSetting.FieldSize;
 
         public Camera WinningCamera;
         public GameObject WinnerShow;
@@ -249,15 +250,13 @@ namespace Main
         {
             bool hasValidPos = false;
             Vector3 targetPos = Vector3.zero;
-            NavMeshHit hit;
             if (isSuperStar == false)
             {
-                var l = FieldSetting.Length * 0.5f - 10;
-                var w = FieldSetting.Width * 0.5f - 10;
-                targetPos = new Vector3(UnityEngine.Random.Range(-l, l), 0, UnityEngine.Random.Range(-w, w));
+                var l = FieldSize * 0.5f;
+                targetPos = new Vector3(UnityEngine.Random.Range(-l, l), 0, UnityEngine.Random.Range(-l, l));
             }
             targetPos.y = 3f;
-            if(NavMesh.SamplePosition(targetPos, out hit, 10f, 1 << NavMesh.GetAreaFromName("Walkable")))
+            if(NavMesh.SamplePosition(targetPos, out var hit, 10f, 1 << NavMesh.GetAreaFromName("Walkable")))
             {
                 targetPos = hit.position;
                 hasValidPos = true;

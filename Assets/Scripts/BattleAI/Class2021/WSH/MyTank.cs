@@ -121,7 +121,7 @@ namespace WSH
         }
         private bool ApproachNextDestination()
         {
-            float halfSize = PhysicsUtils.MaxFieldSize * 0.5f;
+            float halfSize = Match.instance.FieldSize * 0.5f;
             return Move(new Vector3(0, 0, 0));
         }
         public override string GetName()

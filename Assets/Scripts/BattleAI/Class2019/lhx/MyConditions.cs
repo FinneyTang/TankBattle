@@ -226,7 +226,7 @@ namespace lhx
 			{
 				Star s = pair.Value;
 				float dist = Functions.CalculatePathLength(t.CaculatePath(s.Position), t.Position, s.Position);
-				if (dist <= (PhysicsUtils.MaxFieldSize * 0.05 * PhysicsUtils.MaxFieldSize * 0.05))
+				if (dist <= (Match.instance.FieldSize * 0.05 * Match.instance.FieldSize * 0.05))
 				{
 					return true;
 				}
@@ -244,7 +244,7 @@ namespace lhx
 			{
 				Star s = pair.Value;
 				float dist = Functions.CalculatePathLength(t.CaculatePath(s.Position), t.Position, s.Position);
-				if (dist <= (PhysicsUtils.MaxFieldSize * 0.03 * PhysicsUtils.MaxFieldSize * 0.03))
+				if (dist <= (Match.instance.FieldSize * 0.03 * Match.instance.FieldSize * 0.03))
 				{
 					return true;
 				}
@@ -259,7 +259,7 @@ namespace lhx
 		{
 			Tank t = (Tank)agent;
 			float dist = (Match.instance.GetRebornPos(t.Team) - t.Position).sqrMagnitude;
-			return dist <= (PhysicsUtils.MaxFieldSize * 0.07 * PhysicsUtils.MaxFieldSize * 0.07);
+			return dist <= (Match.instance.FieldSize * 0.07 * Match.instance.FieldSize * 0.07);
 		}
 	}
 
@@ -269,7 +269,7 @@ namespace lhx
 		{
 			Tank t = (Tank)agent;
 			float dist = (Match.instance.GetRebornPos(t.Team) - t.Position).sqrMagnitude;
-			return dist <= (PhysicsUtils.MaxFieldSize * 0.05 * PhysicsUtils.MaxFieldSize * 0.05);
+			return dist <= (Match.instance.FieldSize * 0.05 * Match.instance.FieldSize * 0.05);
 		}
 	}
 

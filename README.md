@@ -47,8 +47,7 @@ By Jiaqi Tang
 - Home Zone Radius：以重生点为圆心，回血区域的半径
 
 ### Field参数
-- Length: 场景尺寸长
-- Width: 场景尺寸宽
+- FieldSize: 场景尺寸
 
 ## 自定义Tank脚本说明
 

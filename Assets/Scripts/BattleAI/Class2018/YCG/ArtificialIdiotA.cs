@@ -133,7 +133,7 @@ namespace YCG
         }
         private bool ApproachNextDestination()
         {
-            float halfSize = PhysicsUtils.MaxFieldSize * 0.25f;
+            float halfSize = Match.instance.FieldSize * 0.25f;
             return Move(new Vector3(Random.Range(-halfSize, halfSize), 0, Random.Range(-halfSize, halfSize)));
         }
 
