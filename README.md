@@ -52,6 +52,7 @@ By Jiaqi Tang
 - 必须重载GetName方法，这个方法返回Tank的名字
 - 自定义Tank脚本不要重写原来MonoBehaviour中的Awake，Start，Update，OnDrawGizmos函数，而是重载对应的OnAwake，OnStart，OnUpdate，OnOnDrawGizmos函数
 - OnReborn函数会在每次坦克重生的时候调用
+- OnHandleSendTeamStratedgy函数会在队友发送团队策略的时候调用，目前通过ETeamStrategy预定义了一些枚举Help（求助）, FocusFire（集火）, StaySafe（苟住）等，也可以自定义策略类型。如果需要传递参数，可以通过坦克上的SetTeamStratedgyParam和GetTeamStratedgyParam来设置和获取，具体用法，可以参考BattleAI\TJQ\MyTank.cs脚本
 
 ## API
 
@@ -76,6 +77,7 @@ By Jiaqi Tang
 - Move(NavMeshPath path)：按照path移动，返回值表示是否成功
 - Move(Vector3 targetPos)：移动到目标点，返回值表示是否成功
 - Fire()：以当前炮塔朝向开火，返回值表示是否成功
+- SendTeamStratedgy(int teamStrategy)：发送团队指令
 
 ### Missile类
 
@@ -118,7 +120,7 @@ Match类为单例，可以通过Match.instance访问
 
 ### 下一步
 
-- ~~增加4人模式的对抗，可以是2v2，或者4人混战，这样AI的策略就更有趣~~(已完成)
-- ~~4人模式需要重新设计地图尺寸和一些比赛的参数~~(已完成)
-- 组队AI的接口计划采用命令式的方式，比如Tank可以进行命令呼叫，队友对于这些命令注册响应函数，这样不同的人写的AI也能进行组队策略，命令的例子比如：求助，集火某个目标坦克，包抄，掩护等等
+- (已完成)~~增加4人模式的对抗，可以是2v2，或者4人混战，这样AI的策略就更有趣~~
+- (已完成)~~4人模式需要重新设计地图尺寸和一些比赛的参数~~
+- (已完成)~~组队AI的接口计划采用命令式的方式，比如Tank可以进行命令呼叫，队友对于这些命令注册响应函数，这样不同的人写的AI也能进行组队策略，命令的例子比如：求助，集火某个目标坦克，包抄，掩护等等~~
 

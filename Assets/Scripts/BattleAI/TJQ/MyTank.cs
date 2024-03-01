@@ -7,11 +7,55 @@ namespace TJQ
     class MyTank : Tank
     {
         private float m_LastTime = 0;
+        private float m_HelpExpiredTime = 0;
+        private Vector3 m_HelpPos;
         private readonly List<Tank> m_CachedOppTanks = new List<Tank>();
         protected override void OnUpdate()
         {
             base.OnUpdate();
 
+            if (TeamStrategy == (int)ETeamStrategy.Help && 
+                HP > 30 &&
+                Time.time < m_HelpExpiredTime)
+            {
+                Move(m_HelpPos);
+            }
+            else
+            {
+                //reset
+                m_HelpExpiredTime = 0;
+                
+                if (HP < 50)
+                {
+                    SetTeamStratedgyParam((int)TeamStrategyBBKey.HelpPos, Position);
+                    SendTeamStratedgy((int)ETeamStrategy.Help);
+                }
+                GeneralMovementStrategy();
+            }
+            var oppTanks = Match.instance.GetOppositeTanks(Team, m_CachedOppTanks);
+            if(oppTanks != null && oppTanks.Count > 0)
+            {
+                var oppTank = GetBetterTarget(oppTanks);
+                if(oppTank != null)
+                {
+                    TurretTurnTo(oppTank.Position);
+                    Vector3 toTarget = oppTank.Position - FirePos;
+                    toTarget.y = 0;
+                    toTarget.Normalize();
+                    if(Vector3.Dot(TurretAiming, toTarget) > 0.98f)
+                    {
+                        Fire();
+                    }
+                }
+                else
+                {
+                    TurretTurnTo(Position + Forward);
+                }
+            }
+        }
+
+        private void GeneralMovementStrategy()
+        {
             if(HP <= 30)
             {
                 Move(Match.instance.GetRebornPos(Team));
@@ -56,26 +100,6 @@ namespace TJQ
                     }
                 }
             }
-            var oppTanks = Match.instance.GetOppositeTanks(Team, m_CachedOppTanks);
-            if(oppTanks != null && oppTanks.Count > 0)
-            {
-                var oppTank = GetBetterTarget(oppTanks);
-                if(oppTank != null)
-                {
-                    TurretTurnTo(oppTank.Position);
-                    Vector3 toTarget = oppTank.Position - FirePos;
-                    toTarget.y = 0;
-                    toTarget.Normalize();
-                    if(Vector3.Dot(TurretAiming, toTarget) > 0.98f)
-                    {
-                        Fire();
-                    }
-                }
-                else
-                {
-                    TurretTurnTo(Position + Forward);
-                }
-            }
         }
         private Tank GetBetterTarget(List<Tank> tanks)
         {
@@ -102,6 +126,20 @@ namespace TJQ
             }
             return targetTank;
         }
+
+        protected override void OnHandleSendTeamStratedgy(Tank sender, int teamStrategy)
+        {
+            if (teamStrategy == (int)ETeamStrategy.Help)
+            {
+                //Approach teammate within 1 secs
+                m_HelpExpiredTime = Time.time + 1f;
+                //In this case, we can also retrieve sender's position by Position attribute directly.
+                //m_HelpPos = sender.Position;
+                //It's an example to show how to get team strategy param
+                m_HelpPos = sender.GetTeamStratedgyParam<Vector3>((int)TeamStrategyBBKey.HelpPos);
+            }
+        }
+
         protected override void OnReborn()
         {
             base.OnReborn();

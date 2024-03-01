@@ -2035,7 +2035,7 @@ MonoBehaviour:
     MissileSpeed: 40
     MaxHP: 100
     RebonCD: 10
-    DamagePerHit: 25
+    DamagePerHit: 20
     ScoreForStar: 5
     ScoreForKill: 15
     ScoreForSuperStar: 30

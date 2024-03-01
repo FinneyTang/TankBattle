@@ -1,11 +1,22 @@
 ﻿using System;
 using AI.Base;
+using AI.Blackboard;
 using AI.SensorSystem;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace Main
 {
+    public enum ETeamStrategy
+    {
+        None, Help, FocusFire, StaySafe, UserDefine
+    }
+
+    public enum TeamStrategyBBKey
+    {
+        HelpPos, AttackTarget
+    }
+    
     public abstract class Tank : MonoBehaviour, IAgent
     {
         private Transform m_TurretTF;
@@ -19,6 +30,7 @@ namespace Main
         private int m_Score;
         private float m_HPRecoveryFraction;
         private GameObject m_HPRecoveryEffectGO;
+        private BlackboardMemory m_TeamStratedgyBB = new BlackboardMemory();
         public ETeam Team
         {
             get; internal set;
@@ -40,6 +52,12 @@ namespace Main
             {
                 return m_Score;
             }
+        }
+
+        public int TeamStrategy
+        {
+            get;
+            internal set;
         }
         public void TurretTurnTo(Vector3 targetPos)
         {
@@ -117,6 +135,39 @@ namespace Main
             }
             return null;
         }
+        
+        //----------------------------------------------
+        //team stratedgy
+        public void SendTeamStratedgy(int teamStrategy)
+        {
+            var teammates = Match.instance.GetTanks(Team);
+            if (teammates.Count <= 1)
+            {
+                return; //no teammate
+            }
+            foreach (var t in teammates)
+            {
+                if (t == this)
+                {
+                    continue; //skip self
+                }
+                t.HandleSendTeamStratedgy(this, teamStrategy);
+            }
+        }
+        public void SetTeamStratedgyParam(int bbKey, object value)
+        {
+            m_TeamStratedgyBB.SetValue(bbKey, value);
+        }
+        public T GetTeamStratedgyParam<T>(int bbKey)
+        {
+            return m_TeamStratedgyBB.GetValue<T>(bbKey);
+        }
+        private void HandleSendTeamStratedgy(Tank sender, int teamStrategy)
+        {
+            TeamStrategy = teamStrategy;
+            OnHandleSendTeamStratedgy(sender, teamStrategy);
+        }
+        //----------------------------------------------
         public Vector3 NextDestination
         {
             get
@@ -153,7 +204,8 @@ namespace Main
             }
         }
         public abstract string GetName();
-        void Awake()
+
+        private void Awake()
         {
             m_NavAgent = GetComponent<NavMeshAgent>();
             m_TurretTF = Find(transform, "Turret");
@@ -166,13 +218,14 @@ namespace Main
             m_FireCollider.Owner = this;
             OnAwake();
         }
-        void Start()
+
+        private void Start()
         {
             OnStart();
             ReBorn();
         }
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             OnUpdate();
             UpdateTurretRotation();
@@ -374,6 +427,10 @@ namespace Main
 
         }
         protected virtual void OnStimulusReceived(Stimulus stim)
+        {
+
+        }
+        protected virtual void OnHandleSendTeamStratedgy(Tank sender, int teamStrategy)
         {
 
         }
