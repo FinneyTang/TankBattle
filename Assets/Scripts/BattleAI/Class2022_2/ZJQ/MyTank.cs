@@ -13,7 +13,6 @@ namespace ZJQ {
         public attackState attack = new attackState();
         public FiniteStateMachine curState;
         public Tank enemy = null;
-        public Main.Match.MatchSetting gameSetting;
         public blackBoard treeBoard = new blackBoard();
         public override string GetName()
         {
@@ -24,7 +23,6 @@ namespace ZJQ {
         {
             base.OnAwake();
             switchState(idle);
-            gameSetting = new Main.Match.MatchSetting();
         }
 
         protected override void OnUpdate()

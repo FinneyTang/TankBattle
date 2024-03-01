@@ -1,11 +1,12 @@
-﻿using AI.Base;
+﻿using System;
+using AI.Base;
 using AI.SensorSystem;
 using UnityEngine;
 using UnityEngine.AI;
 
 namespace Main
 {
-    abstract public class Tank : MonoBehaviour, IAgent
+    public abstract class Tank : MonoBehaviour, IAgent
     {
         private Transform m_TurretTF;
         private Transform m_FirePosTF;
@@ -47,12 +48,18 @@ namespace Main
         public bool CanSeeOthers(Vector3 pos)
         {
             bool seeOthers = false;
-            RaycastHit hitInfo;
-            if (Physics.Linecast(FirePos, pos, out hitInfo, PhysicsUtils.LayerMaskCollsion))
+            if (Physics.Linecast(FirePos, pos, out var hitInfo, PhysicsUtils.LayerMaskCollsion))
             {
                 if (PhysicsUtils.IsFireCollider(hitInfo.collider))
                 {
-                    seeOthers = true;
+                    FireCollider fc = hitInfo.collider.GetComponent<FireCollider>();
+                    if (fc != null && fc.Owner != null)
+                    {
+                        if (fc.Owner.Team != Team)
+                        {
+                            seeOthers = true;
+                        }
+                    }
                 }
             }
             return seeOthers;
@@ -215,17 +222,45 @@ namespace Main
             AddScore(isSuperStar ? 
                 Match.instance.GlobalSetting.ScoreForSuperStar :
                 Match.instance.GlobalSetting.ScoreForStar);
-            Utils.PlayParticle(Team == ETeam.A ? "CFX2_PickupSmileyA" : "CFX2_PickupSmileyB", Position);
+            var resName = string.Empty;
+            switch (Team)
+            {
+                case ETeam.A:
+                    resName = "CFX2_PickupSmileyA";
+                    break;
+                case ETeam.B:
+                    resName = "CFX2_PickupSmileyB";
+                    break;
+                case ETeam.C:
+                    resName = "CFX2_PickupSmileyC";
+                    break;
+                case ETeam.D:
+                    resName = "CFX2_PickupSmileyD";
+                    break;
+            }
+            if (string.IsNullOrEmpty(resName))
+            {
+                return;
+            }
+            Utils.PlayParticle(resName, Position);
         }
-        internal string GetTankInfo()
+        internal string GetTankInfo(bool usingTeamScore = false)
         {
-            string info = Match.instance.IsMathEnd() == false ?
-                string.Format("{0}\nHP: {1}\nScore: {2}", GetName(), HP, m_Score) :
-                string.Format("{0}\nScore: {1}", GetName(), m_Score);
+            string info;
+            if (usingTeamScore)
+            {
+                info = Match.instance.IsMathEnd() == false ? $"{GetName()}\nHP: {HP}"
+                    : $"{GetName()}";
+            }
+            else
+            {
+                info = Match.instance.IsMathEnd() == false ? $"{GetName()}\nHP: {HP}\nScore: {m_Score}"
+                    : $"{GetName()}\nScore: {m_Score}";
+            }
             if (IsDead && Match.instance.IsMathEnd() == false)
             {
                 float rebornCD = GetRebornCD(Time.time);
-                info += string.Format("\nReborning: {0}", rebornCD.ToString("f3"));
+                info += $"\nReborning: {rebornCD:f3}";
             }
             return info;
         }

@@ -4,7 +4,7 @@ namespace Main
 {
     public class Timer
     {
-        protected float m_ExpiredTime = 0;
+        private float m_ExpiredTime = 0;
         public void Reset()
         {
             m_ExpiredTime = -1;

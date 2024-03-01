@@ -11,11 +11,26 @@ namespace Main
             {
                 return;
             }
-            GameObject effect = (GameObject)GameObject.Instantiate(obj);
+            GameObject effect = (GameObject)Object.Instantiate(obj);
             if(effect != null)
             {
                 effect.transform.position = pos;
             }
+        }
+        public static Color GetTeamColor(ETeam t)
+        {
+            switch (t)
+            {
+                case ETeam.A:
+                    return Color.red;
+                case ETeam.B:
+                    return Color.cyan;
+                case ETeam.C:
+                    return Color.green;
+                case ETeam.D:
+                    return Color.magenta;
+            }
+            return Color.white;
         }
     }
 }

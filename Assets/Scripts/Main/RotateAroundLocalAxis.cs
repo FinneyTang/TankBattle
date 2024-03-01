@@ -13,7 +13,8 @@ namespace Main
         public float Speed = 1f;
 
         private Vector3 m_RotationAxis;
-        void Start()
+
+        private void Start()
         {
             switch (Axis)
             {
@@ -31,7 +32,8 @@ namespace Main
                     break;
             }
         }
-        void Update()
+
+        private void Update()
         {
             transform.Rotate(m_RotationAxis, Speed * Time.deltaTime, Space.Self);
         }

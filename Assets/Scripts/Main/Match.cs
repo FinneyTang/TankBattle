@@ -1,6 +1,7 @@
 ﻿using AI.SensorSystem;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,7 +9,7 @@ namespace Main
 {
     public enum ETeam
     {
-        A, B, NB
+        A, B, C, D, NB
     }
     public enum EStimulusType
     {
@@ -21,14 +22,20 @@ namespace Main
         [Serializable]
         public class TeamSetting
         {
-            public GameObject Reborn;
+            public ETeam Team;
             public string TankScript;
         }
         public List<TeamSetting> TeamSettings;
 
-        [Serializable]
-        public class MatchSetting
+        public enum EGameMode
         {
+            FreeForAll, TeamBattle,
+        }
+        
+        [Serializable]
+        public class MatchSettingData
+        {
+            //public EGameMode GameMode = EGameMode.FreeForAll;
             public int MatchTime = 180;
             public float FireInterval = 1f;
             public float MissileSpeed = 40f;
@@ -43,38 +50,67 @@ namespace Main
             public int HPRecoverySpeed = 5;
             public float HomeZoneRadius = 10;
         }
-        public MatchSetting GlobalSetting = new MatchSetting();
+        [Serializable]
+        public class RebornAreaSetting
+        {
+            public ETeam Team;
+            public GameObject RebornArea;
+        }
+        [Serializable]
+        public class FieldSettingData
+        {
+            public float Length = 100f;
+            public float Width = 100f;
+            public List<RebornAreaSetting> RebornAreas;
+        }
+        
+        public MatchSettingData GlobalSetting = new MatchSettingData();
+        public FieldSettingData FieldSetting = new FieldSettingData();
 
         public Camera WinningCamera;
         public GameObject WinnerShow;
 
-        private List<Tank> m_Tanks;
-        private List<Dictionary<int, Missile>> m_Missiles;
+        private Dictionary<ETeam, List<Tank>> m_Tanks;
+        private Dictionary<ETeam, GameObject> m_RebornAreas;
+        private Dictionary<ETeam, Dictionary<int, Missile>> m_Missiles;
         private Dictionary<int, Star> m_Stars;
         private Timer m_TimerToAddStar;
         private bool m_MatchEnd = false;
-        private Tank m_Winner;
+        private ETeam m_WinnerTeam;
         private float m_RemainingTime = 0;
         private bool m_SuperStarAdded = false;
-        void Awake()
+
+        private void Awake()
         {
             Application.targetFrameRate = 60;
             Match.instance = this;
         }
-        void Start()
+
+        private void Start()
         {
+            //init reborn area
+            m_RebornAreas = new Dictionary<ETeam, GameObject>();
+            foreach (var setting in FieldSetting.RebornAreas)
+            {
+                if (setting.RebornArea == null)
+                {
+                    continue;
+                }
+                m_RebornAreas[setting.Team] = setting.RebornArea;
+                setting.RebornArea.GetComponentInChildren<HomeZone>().Team = setting.Team;
+            }
+            
             if(TeamSettings.Count < 1)
             {
                 Debug.LogError("must have 1 team settings");
                 return;
             }
-            m_Tanks = new List<Tank>();
-            m_Missiles = new List<Dictionary<int, Missile>>();
+            m_Tanks = new Dictionary<ETeam, List<Tank>>();
+            m_Missiles = new Dictionary<ETeam, Dictionary<int, Missile>>();
             m_Stars = new Dictionary<int, Star>();
-            AddTank(ETeam.A);
-            if(TeamSettings.Count > 1)
+            foreach (var tankSetting in TeamSettings)
             {
-                AddTank(ETeam.B);
+                AddTank(tankSetting.Team, tankSetting.TankScript);
             }
             m_RemainingTime = GlobalSetting.MatchTime;
             m_TimerToAddStar = new Timer();
@@ -88,19 +124,40 @@ namespace Main
         public Tank GetOppositeTank(ETeam myTeam)
         {
             ETeam oppTeam = myTeam == ETeam.A ? ETeam.B : ETeam.A;
-            if(m_Tanks.Count <= (int)oppTeam)
+            if (!m_Tanks.TryGetValue(oppTeam, out var tanks) || tanks.Count == 0)
             {
                 return null;
             }
-            return m_Tanks[(int)oppTeam];
+            return tanks[0];
+        }
+        public List<Tank> GetOppositeTanks(ETeam myTeam, List<Tank> outputs = null)
+        {
+            outputs ??= new List<Tank>();
+            outputs.Clear();
+            foreach (var pair in m_Tanks)
+            {
+                if (pair.Key != myTeam)
+                {
+                    outputs.AddRange(pair.Value);
+                }
+            }
+            return outputs;
         }
         public Tank GetTank(ETeam t)
         {
-            if (m_Tanks.Count <= (int)t)
+            if (!m_Tanks.TryGetValue(t, out var tanks) || tanks.Count == 0)
             {
                 return null;
             }
-            return m_Tanks[(int)t];
+            return tanks[0];
+        }
+        public List<Tank> GetTanks(ETeam t)
+        {
+            if (m_Tanks.TryGetValue(t, out var tanks))
+            {
+                return tanks;
+            }
+            return null;
         }
         public Dictionary<int, Star> GetStars()
         {
@@ -108,18 +165,34 @@ namespace Main
         }
         public Star GetStarByID(int id)
         {
-            Star s;
-            m_Stars.TryGetValue(id, out s);
+            m_Stars.TryGetValue(id, out var s);
             return s;
         }
         public Dictionary<int, Missile> GetOppositeMissiles(ETeam myTeam)
         {
             ETeam oppTeam = myTeam == ETeam.A ? ETeam.B : ETeam.A;
-            if (m_Missiles.Count <= (int)oppTeam)
+            if (!m_Missiles.TryGetValue(oppTeam, out var missiles))
             {
                 return null;
             }
-            return m_Missiles[(int)oppTeam];
+            return missiles;
+        }
+        public Dictionary<int, Missile> GetOppositeMissilesEx(ETeam myTeam, Dictionary<int, Missile> outputs = null)
+        {
+            outputs ??= new Dictionary<int, Missile>();
+            outputs.Clear();
+            foreach (var pair in m_Missiles)
+            {
+                if (pair.Key == myTeam)
+                {
+                    continue;
+                }
+                foreach (var missilePair in pair.Value)
+                {
+                    outputs.Add(missilePair.Key, missilePair.Value);
+                }
+            }
+            return outputs;
         }
         public bool IsMathEnd()
         {
@@ -138,21 +211,19 @@ namespace Main
             {
                 return Vector3.zero;
             }
-            GameObject rebornGO = TeamSettings[(int)t].Reborn;
+            if (!m_RebornAreas.TryGetValue(t, out var rebornGO))
+            {
+                return Vector3.zero;
+            }
             if(rebornGO == null)
             {
                 return Vector3.zero;
             }
             return rebornGO.transform.position;
         }
-        public Color GetTeamColor(ETeam t)
+        private void AddTank(ETeam team, string scriptName)
         {
-            return t == ETeam.A ? Color.red : Color.cyan;
-        }
-        private void AddTank(ETeam team)
-        {
-            TeamSetting setting = TeamSettings[(int)team];
-            Type scriptType = Type.GetType(setting.TankScript);
+            Type scriptType = Type.GetType(scriptName);
             if(scriptType == null || scriptType.IsSubclassOf(Type.GetType("Main.Tank")) == false)
             {
                 Debug.LogError("no tank script found");
@@ -162,12 +233,17 @@ namespace Main
             MeshRenderer[] mesh = tank.GetComponentsInChildren<MeshRenderer>();
             foreach (var m in mesh)
             {
-                m.material.color = GetTeamColor(team);
+                m.material.color = Utils.GetTeamColor(team);
             }
             Tank t = (Tank)tank.AddComponent(scriptType);
             t.Team = team;
-            m_Tanks.Add(t);
-            m_Missiles.Add(new Dictionary<int, Missile>());
+            //add to tank list
+            if (!m_Tanks.TryGetValue(team, out var tanks))
+            {
+                tanks = new List<Tank>();
+                m_Tanks.Add(team, tanks);
+            }
+            tanks.Add(t);
         }
         private void AddStar(bool isSuperStar)
         {
@@ -176,7 +252,9 @@ namespace Main
             NavMeshHit hit;
             if (isSuperStar == false)
             {
-                targetPos = new Vector3(UnityEngine.Random.Range(-40, 40), 0, UnityEngine.Random.Range(-40, 40));
+                var l = FieldSetting.Length * 0.5f - 10;
+                var w = FieldSetting.Width * 0.5f - 10;
+                targetPos = new Vector3(UnityEngine.Random.Range(-l, l), 0, UnityEngine.Random.Range(-w, w));
             }
             targetPos.y = 3f;
             if(NavMesh.SamplePosition(targetPos, out hit, 10f, 1 << NavMesh.GetAreaFromName("Walkable")))
@@ -202,11 +280,20 @@ namespace Main
             GameObject missileGO = (GameObject)Instantiate(Resources.Load("Missile"));
             Missile missile = missileGO.GetComponent<Missile>();
             missile.Init(owner, pos, dir.normalized * GlobalSetting.MissileSpeed);
-            m_Missiles[(int)missile.Team].Add(missile.ID, missile);
+            if (!m_Missiles.TryGetValue(missile.Team, out var missiles))
+            {
+                missiles = new Dictionary<int, Missile>();
+                m_Missiles.Add(missile.Team, missiles);
+            }
+            missiles.Add(missile.ID, missile);
         }
         internal void RemoveMissile(Missile m)
         {
-            m_Missiles[(int)m.Team].Remove(m.ID);
+            if (!m_Missiles.TryGetValue(m.Team, out var missiles))
+            {
+                return;
+            }
+            missiles.Remove(m.ID);
             Destroy(m.gameObject);
         }
         internal void SendStim(Stimulus s)
@@ -215,27 +302,39 @@ namespace Main
             {
                 return;
             }
-            foreach (Tank t in m_Tanks)
+            foreach (var pair in m_Tanks)
             {
-                if (t.IsDead == false)
+                foreach (var t in pair.Value)
                 {
-                    t.StimulusReceived(s);
+                    if (t.IsDead == false)
+                    {
+                        t.StimulusReceived(s);
+                    }
                 }
             }
         }
-        private Tank GetWinner()
+        private ETeam GetWinner()
         {
             if(m_Tanks.Count < 2)
             {
-                return m_Tanks[0];
+                return ETeam.A;
             }
-            Tank tA = m_Tanks[0];
-            Tank tB = m_Tanks[1];
-            if(tA.Score == tB.Score)
+            ETeam winner = ETeam.A;
+            int maxScore = -1;
+            foreach (var pair in m_Tanks)
             {
-                return null;
+                int totalScore = 0;
+                foreach (var t in pair.Value)
+                {
+                    totalScore += t.Score;
+                }
+                if (totalScore > maxScore)
+                {
+                    maxScore = totalScore;
+                    winner = pair.Key;
+                }
             }
-            return tA.Score > tB.Score ? tA : tB;
+            return winner;
         }
         void Update()
         {
@@ -243,12 +342,14 @@ namespace Main
             {
                 return;
             }
-            for(int i = 0; i < m_Tanks.Count; ++i)
+            foreach (var pair in m_Tanks)
             {
-                Tank t = m_Tanks[i];
-                if(t.IsDead && t.CanReborn(Time.time))
+                foreach (var t in pair.Value)
                 {
-                    t.ReBorn();
+                    if(t.IsDead && t.CanReborn(Time.time))
+                    {
+                        t.ReBorn();
+                    }
                 }
             }
             if(m_TimerToAddStar.IsExpired(Time.time) && m_Stars.Count < GlobalSetting.MaxStarCount)
@@ -265,60 +366,116 @@ namespace Main
             if(m_RemainingTime < 0)
             {
                 m_MatchEnd = true;
-                m_Winner = GetWinner();
-                if(m_Winner != null)
+                m_WinnerTeam = GetWinner();
+                if (WinningCamera != null)
                 {
-                    if (WinningCamera != null)
-                    {
-                        WinningCamera.gameObject.SetActive(true);
-                    }
+                    WinningCamera.gameObject.SetActive(true);
+                }
+                var winnerTanks = GetTanks(m_WinnerTeam);
+                for (int i = 0; i < winnerTanks.Count; ++i)
+                {
                     if (WinnerShow != null)
                     {
-                        MeshRenderer[] mesh = WinnerShow.GetComponentsInChildren<MeshRenderer>();
+                        var winnerTank = GameObject.Instantiate(WinnerShow, WinnerShow.transform.parent);
+                        MeshRenderer[] mesh = winnerTank.GetComponentsInChildren<MeshRenderer>();
                         foreach (var m in mesh)
                         {
-                            m.material.color = GetTeamColor(m_Winner.Team);
+                            m.material.color = Utils.GetTeamColor(m_WinnerTeam);
                         }
+                        var localPos = winnerTank.transform.localPosition;
+                        localPos.x = (winnerTanks.Count == 1) ? 0 : (i == 0) ? -6 : 6;
+                        winnerTank.transform.localPosition = localPos;
                     }
                 }
-                for (int i = 0; i < m_Tanks.Count; ++i)
+                WinnerShow.SetActive(false);
+                foreach (var pair in m_Tanks)
                 {
-                    Tank t = m_Tanks[i];
-                    t.gameObject.SetActive(false);
+                    foreach (var t in pair.Value)
+                    {
+                        t.gameObject.SetActive(false);
+                    }
                 }
             }
         }
 
-        private GUIStyle m_TeamAInfoStyle;
+        private readonly GUIStyle[] m_TeamInfoStyle = new GUIStyle[(int)ETeam.NB];
         private GUIStyle m_TeamBInfoStyle;
         private GUIStyle m_MatchInfoStyle;
         private GUIStyle m_WinningStyle;
-        void OnGUI()
+        private StringBuilder m_SB = new StringBuilder();
+
+        private void UpdateTeamInfo(ETeam team)
         {
-            if(m_Tanks.Count > 0)
+            if(m_Tanks.TryGetValue(team, out var tanks))
             {
-                if (m_TeamAInfoStyle == null)
+                var teamInfoStyle = m_TeamInfoStyle[(int)team];
+                if (teamInfoStyle == null)
                 {
-                    m_TeamAInfoStyle = new GUIStyle();
-                    m_TeamAInfoStyle.normal.textColor = GetTeamColor(m_Tanks[0].Team);
-                    m_TeamAInfoStyle.fontSize = 25;
-                    m_TeamAInfoStyle.fontStyle = FontStyle.Bold;
-                    m_TeamAInfoStyle.alignment = TextAnchor.UpperLeft;
+                    teamInfoStyle = new GUIStyle();
+                    m_TeamInfoStyle[(int)team] = teamInfoStyle;
+                    teamInfoStyle.normal.textColor = Utils.GetTeamColor(team);
+                    teamInfoStyle.fontSize = 20;
+                    teamInfoStyle.fontStyle = FontStyle.Bold;
+                    switch (team)
+                    {
+                        case ETeam.A:
+                            teamInfoStyle.alignment = TextAnchor.UpperLeft;
+                            break;
+                        case ETeam.B:
+                            teamInfoStyle.alignment = TextAnchor.UpperRight;
+                            break;
+                        case ETeam.C:
+                            teamInfoStyle.alignment = TextAnchor.LowerLeft;
+                            break;
+                        case ETeam.D:
+                            teamInfoStyle.alignment = TextAnchor.LowerRight;
+                            break;
+                    }
                 }
-                GUI.Label(new Rect(10, 10, Screen.width * 0.5f - 10, 100), m_Tanks[0].GetTankInfo(), m_TeamAInfoStyle);
+
+                int tankCount = tanks.Count;
+                Rect rect = new Rect();
+                switch (team)
+                {
+                    case ETeam.A:
+                        rect = new Rect(10, 10, Screen.width * 0.5f - 10, 100 * tankCount);
+                        break;
+                    case ETeam.B:
+                        rect = new Rect(Screen.width * 0.5f, 10, Screen.width * 0.5f - 10, 100 * tankCount);
+                        break;
+                    case ETeam.C:
+                        rect = new Rect(10, Screen.height - 100 * tankCount - 10, Screen.width * 0.5f - 10, 100 * tankCount);
+                        break;
+                    case ETeam.D:
+                        rect = new Rect(Screen.width * 0.5f, Screen.height - 100 * tankCount - 10, Screen.width * 0.5f - 10, 100 * tankCount);
+                        break;
+                }
+                if (tankCount == 1)
+                {
+                    GUI.Label(rect, tanks[0].GetTankInfo(), teamInfoStyle);
+                }
+                else
+                {
+                    m_SB.Clear();
+                    int teamScore = 0;
+                    for (int i = 0; i < tankCount; ++i)
+                    {
+                        teamScore += tanks[i].Score;
+                        m_SB.Append(tanks[i].GetTankInfo(true));
+                        m_SB.Append("\n\n");
+                    }
+                    m_SB.Append($"Score: {teamScore}");
+                    GUI.Label(rect, m_SB.ToString(), teamInfoStyle);
+                }
             }
-            if (m_Tanks.Count > 1)
+        }
+        private void OnGUI()
+        {
+            for (int i = 0; i < (int)ETeam.NB; ++i)
             {
-                if (m_TeamBInfoStyle == null)
-                {
-                    m_TeamBInfoStyle = new GUIStyle();
-                    m_TeamBInfoStyle.normal.textColor = GetTeamColor(m_Tanks[1].Team);
-                    m_TeamBInfoStyle.fontSize = 25;
-                    m_TeamBInfoStyle.fontStyle = FontStyle.Bold;
-                    m_TeamBInfoStyle.alignment = TextAnchor.UpperRight;
-                }
-                GUI.Label(new Rect(Screen.width * 0.5f, 10, Screen.width * 0.5f - 10, 100), m_Tanks[1].GetTankInfo(), m_TeamBInfoStyle);
+                UpdateTeamInfo((ETeam)i);
             }
+
             if (m_MatchInfoStyle == null)
             {
                 m_MatchInfoStyle = new GUIStyle();
@@ -331,7 +488,7 @@ namespace Main
             {
                 int secounds = (int)m_RemainingTime % 60;
                 int minutes = (int)m_RemainingTime / 60;
-                string timeStr = string.Format("{0:00}:{1:00}", minutes, secounds);
+                string timeStr = $"{minutes:00}:{secounds:00}";
                 GUI.Label(new Rect(0, 10, Screen.width, 100), timeStr, m_MatchInfoStyle);
             }
             else
@@ -344,16 +501,22 @@ namespace Main
                     m_WinningStyle.fontStyle = FontStyle.Bold;
                     m_WinningStyle.alignment = TextAnchor.MiddleCenter;
                 }
-                if(m_Winner == null)
+                m_WinningStyle.normal.textColor = Utils.GetTeamColor(m_WinnerTeam);
+                string winnerInfo = string.Empty;
+                if (m_Tanks.TryGetValue(m_WinnerTeam, out var tanks))
                 {
-                    GUI.Label(new Rect(0, 10, Screen.width, 200), "Draw", m_WinningStyle);
+                    string winnerName = string.Empty;
+                    for(int i = 0; i < tanks.Count; ++i)
+                    {
+                        winnerName += tanks[i].GetName();
+                        if (i != tanks.Count - 1)
+                        {
+                            winnerName += " & ";
+                        }
+                    }
+                    winnerInfo = $"Winner, {winnerName}";
                 }
-                else
-                {
-                    m_WinningStyle.normal.textColor = GetTeamColor(m_Winner.Team);
-                    string winnerInfo = string.Format("Winner, {0}", m_Winner.GetName());
-                    GUI.Label(new Rect(0, 10, Screen.width, 200), winnerInfo, m_WinningStyle);
-                }
+                GUI.Label(new Rect(0, 10, Screen.width, 200), winnerInfo, m_WinningStyle);
             }
         }
     }

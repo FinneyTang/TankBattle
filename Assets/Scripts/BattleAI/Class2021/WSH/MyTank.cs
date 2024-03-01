@@ -30,7 +30,7 @@ namespace WSH
             }
             else
             {
-                //if (HP <= 25 && (!oppTank.IsDead))//ÉÙÓÚ25ÑªÇÒ¶Ô·½´æ»îÊ±
+                //if (HP <= 25 && (!oppTank.IsDead))//å°‘äºŽ25è¡€ä¸”å¯¹æ–¹å­˜æ´»æ—¶
                 //{
                 //    Move(Match.instance.GetRebornPos(Team));
                 //}
@@ -38,35 +38,35 @@ namespace WSH
                 //{
                     bool hasStar = false;
                     float nearestDist = float.MaxValue;
-                    Vector3 nearestStarPos = Vector3.zero;//³õÊ¼»¯ ³¡ÉÏÃ»ÓÐÐÇÐÇ ×î½üµÄ¾àÀëÎª×îÔ¶Öµ ×î½üµÄÐÇÐÇÔÚ£¨0£¬0£©µã
-                    foreach (var pair in Match.instance.GetStars())//foreach³¡ÉÏÃ¿¿ÅÐÇÐÇ
+                    Vector3 nearestStarPos = Vector3.zero;//åˆå§‹åŒ– åœºä¸Šæ²¡æœ‰æ˜Ÿæ˜Ÿ æœ€è¿‘çš„è·ç¦»ä¸ºæœ€è¿œå€¼ æœ€è¿‘çš„æ˜Ÿæ˜Ÿåœ¨ï¼ˆ0ï¼Œ0ï¼‰ç‚¹
+                    foreach (var pair in Match.instance.GetStars())//foreachåœºä¸Šæ¯é¢—æ˜Ÿæ˜Ÿ
                     {
                         Star s = pair.Value; //unknown
-                        if (s.IsSuperStar)//Èç¹ûÐÇÐÇÊÇ³¬¼¶ÐÇÐÇ
+                        if (s.IsSuperStar)//å¦‚æžœæ˜Ÿæ˜Ÿæ˜¯è¶…çº§æ˜Ÿæ˜Ÿ
                         {
-                            hasStar = true;//ÐÇÐÇÅÐ¶Ï¸ÄÎªtrue
-                            nearestStarPos = s.Position;//×î½üÐÇÐÇÎ»ÖÃ¸ÄÎª³¬¼¶ÐÇÐÇ£¬ÒâÎ¶×Å³¬¼¶ÐÇÐÇÓÅÏÈ¼¶¸ßÓÚÆÕÍ¨ÐÇÐÇ
+                            hasStar = true;//æ˜Ÿæ˜Ÿåˆ¤æ–­æ”¹ä¸ºtrue
+                            nearestStarPos = s.Position;//æœ€è¿‘æ˜Ÿæ˜Ÿä½ç½®æ”¹ä¸ºè¶…çº§æ˜Ÿæ˜Ÿï¼Œæ„å‘³ç€è¶…çº§æ˜Ÿæ˜Ÿä¼˜å…ˆçº§é«˜äºŽæ™®é€šæ˜Ÿæ˜Ÿ
                             break;
                         }
                         else
                         {
-                            float dist = (s.Position - Position).sqrMagnitude;//dist±£´æ¸ÃÐÇÐÇµ½Ì¹¿ËµÄ¾àÀë
-                            if (dist < nearestDist)//µ±ÐÇÐÇ¾àÀë¹»Ð¡Ê±
+                            float dist = (s.Position - Position).sqrMagnitude;//distä¿å­˜è¯¥æ˜Ÿæ˜Ÿåˆ°å¦å…‹çš„è·ç¦»
+                            if (dist < nearestDist)//å½“æ˜Ÿæ˜Ÿè·ç¦»å¤Ÿå°æ—¶
                             {
                                 hasStar = true;
                                 nearestDist = dist;
-                                nearestStarPos = s.Position;//½«µ±Ç°ÐÇÐÇÓëÌ¹¿Ë¾àÀë¸ÄÎªnearestDist²¢ÇÒ½´×î½üµÄÐÇÐÇÎ»ÖÃ¸ÄÎªµ±Ç°ÐÇÐÇ
+                                nearestStarPos = s.Position;//å°†å½“å‰æ˜Ÿæ˜Ÿä¸Žå¦å…‹è·ç¦»æ”¹ä¸ºnearestDistå¹¶ä¸”é…±æœ€è¿‘çš„æ˜Ÿæ˜Ÿä½ç½®æ”¹ä¸ºå½“å‰æ˜Ÿæ˜Ÿ
                             }
                         }
-                    }//±éÀú³¡ÉÏÐÇÐÇ½áÊø
-                    if (hasStar == true)//µ±³¡ÉÏÓÐÐÇÐÇÊ±£¬ÅÐ¶ÏÑªÁ¿ÒÔ¼°µ½ÐÇÐÇºÍ¼ÒµÄ¾àÀë½øÐÐÒÆ¶¯
+                    }//éåŽ†åœºä¸Šæ˜Ÿæ˜Ÿç»“æŸ
+                    if (hasStar == true)//å½“åœºä¸Šæœ‰æ˜Ÿæ˜Ÿæ—¶ï¼Œåˆ¤æ–­è¡€é‡ä»¥åŠåˆ°æ˜Ÿæ˜Ÿå’Œå®¶çš„è·ç¦»è¿›è¡Œç§»åŠ¨
                     {
                         if((HP<=50 && Vector3.Distance(Position,Match.instance.GetRebornPos(Team))<=nearestDist) ||
                            (HP<=25 && Vector3.Distance(Position, Match.instance.GetRebornPos(Team)) * 0.7f <= nearestDist))
                         {
                             Move(Match.instance.GetRebornPos(Team));
                         }
-                        else Move(nearestStarPos);//ÒÆ¶¯ÖÁnearestStar
+                        else Move(nearestStarPos);//ç§»åŠ¨è‡³nearestStar
                     }
                     else
                     {
@@ -87,14 +87,14 @@ namespace WSH
             {
                 float distance = Vector3.Distance(oppTank.Position, Match.instance.GetOppositeTank(oppTank.Team).Position);
                 float pTime = distance / Match.instance.GlobalSetting.MissileSpeed;
-                preTarget = oppTank.Position + oppTank.Velocity * pTime;//°´ÕÕ×Óµ¯µÄËÙ¶ÈÒÔ¼°µÐ·½Ì¹¿ËÒÆ¶¯µÄËÙ¶È¼ÆËã×Óµ¯µÄÂäµã
+                preTarget = oppTank.Position + oppTank.Velocity * pTime;//æŒ‰ç…§å­å¼¹çš„é€Ÿåº¦ä»¥åŠæ•Œæ–¹å¦å…‹ç§»åŠ¨çš„é€Ÿåº¦è®¡ç®—å­å¼¹çš„è½ç‚¹
                 for (int i = 0; i < 2; i++)
                 {
                     distance = Vector3.Distance(Match.instance.GetOppositeTank(oppTank.Team).Position, preTarget);
                     pTime = distance / Match.instance.GlobalSetting.MissileSpeed;
                     preTarget = oppTank.Position + oppTank.Velocity * pTime;
                 }
-                TurretTurnTo(preTarget);//×ªÏòÔ¤Ãéµã
+                TurretTurnTo(preTarget);//è½¬å‘é¢„çž„ç‚¹
                 Vector3 direction = (preTarget - Position).normalized;
                 if (Vector3.Dot(TurretAiming, direction) > 0.99f && !Physics.Linecast(Position, preTarget, PhysicsUtils.LayerMaskCollsion))
                 {

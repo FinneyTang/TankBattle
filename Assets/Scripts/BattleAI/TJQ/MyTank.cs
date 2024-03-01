@@ -1,17 +1,18 @@
-﻿using Main;
+﻿using System.Collections.Generic;
+using Main;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace TJQ
 {
     class MyTank : Tank
     {
         private float m_LastTime = 0;
+        private readonly List<Tank> m_CachedOppTanks = new List<Tank>();
         protected override void OnUpdate()
         {
             base.OnUpdate();
 
-            if(HP <= 50)
+            if(HP <= 30)
             {
                 Move(Match.instance.GetRebornPos(Team));
             }
@@ -55,10 +56,11 @@ namespace TJQ
                     }
                 }
             }
-            Tank oppTank = Match.instance.GetOppositeTank(Team);
-            if(oppTank != null)
+            var oppTanks = Match.instance.GetOppositeTanks(Team, m_CachedOppTanks);
+            if(oppTanks != null && oppTanks.Count > 0)
             {
-                if(CanSeeOthers(oppTank))
+                var oppTank = GetBetterTarget(oppTanks);
+                if(oppTank != null)
                 {
                     TurretTurnTo(oppTank.Position);
                     Vector3 toTarget = oppTank.Position - FirePos;
@@ -74,6 +76,31 @@ namespace TJQ
                     TurretTurnTo(Position + Forward);
                 }
             }
+        }
+        private Tank GetBetterTarget(List<Tank> tanks)
+        {
+            float minDist = float.MaxValue;
+            Tank targetTank = null;
+            foreach (var t in tanks)
+            {
+                if (t.IsDead)
+                {
+                    continue;
+                }
+
+                if (!CanSeeOthers(t))
+                {
+                    continue;
+                }
+
+                var dist = (Position - t.Position).sqrMagnitude;
+                if (dist < minDist)
+                {
+                    targetTank = t;
+                    minDist = dist;
+                }
+            }
+            return targetTank;
         }
         protected override void OnReborn()
         {

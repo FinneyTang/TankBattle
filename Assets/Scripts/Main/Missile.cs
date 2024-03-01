@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Main
 {
@@ -42,28 +43,33 @@ namespace Main
             m_Owner = owner;
             m_InitVelocity = initVelocity;
             transform.position = initPos;
+            var mesh = this.GetComponentInChildren<MeshRenderer>();
+            mesh.material.color = Utils.GetTeamColor(owner.Team);
         }
-        void Update()
+
+        private void Update()
         {
             bool hitOthers = false;
             //check if missile is within a tank's collider
-            Tank oppTank = Match.instance.GetOppositeTank(Team);
-            if(oppTank != null && oppTank.IsDead == false)
+            List<Tank> oppTanks = Match.instance.GetOppositeTanks(Team);
+            foreach (var oppTank in oppTanks)
             {
-                if(oppTank.IsInFireCollider(Position))
+                if(oppTank != null && oppTank.IsDead == false)
                 {
-                    hitOthers = true;
-                    oppTank.TakeDamage(m_Owner);
-                    Utils.PlayParticle("CFX3_Hit_SmokePuff", Position);
-                    Match.instance.RemoveMissile(this);
+                    if(oppTank.IsInFireCollider(Position))
+                    {
+                        hitOthers = true;
+                        oppTank.TakeDamage(m_Owner);
+                        Utils.PlayParticle("CFX3_Hit_SmokePuff", Position);
+                        Match.instance.RemoveMissile(this);
+                    }
                 }
             }
             Vector3 newPos = Position + m_InitVelocity * Time.deltaTime;
             if (hitOthers == false)
             {
                 //check if missile will hit some collider
-                RaycastHit hitInfo;
-                if (Physics.Linecast(Position, newPos, out hitInfo, PhysicsUtils.LayerMaskCollsion))
+                if (Physics.Linecast(Position, newPos, out var hitInfo, PhysicsUtils.LayerMaskCollsion))
                 {
                     bool hitOwner = false;
                     if (PhysicsUtils.IsFireCollider(hitInfo.collider))

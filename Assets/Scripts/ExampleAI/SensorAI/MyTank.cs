@@ -211,7 +211,7 @@ namespace SensorAI
             base.OnOnDrawGizmos();
             Matrix4x4 defaultMatrix = Gizmos.matrix;
             Gizmos.matrix = transform.localToWorldMatrix;
-            Gizmos.color = Match.instance.GetTeamColor(Team);
+            Gizmos.color = Utils.GetTeamColor(Team);
             //draw hearing sensor
             Vector3 beginPoint = Vector3.zero;
             Vector3 firstPoint = Vector3.zero;
