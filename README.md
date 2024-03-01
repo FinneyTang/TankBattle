@@ -95,12 +95,12 @@ By Jiaqi Tang
 Match类为单例，可以通过Match.instance访问
 
 - GlobalSetting：获取比赛设置，其中参数见上面“参数”部分
-- GetOppositeTank(ETeam myTeam)：获取敌方坦克实例，参数是自己的队伍，<font color=#FF0000><strong>为兼容以前坦克脚本，仅能拿到A队或者B队的第一个坦克</strong></font>
+- GetOppositeTank(ETeam myTeam)：获取敌方坦克实例，参数是自己的队伍，_**为兼容以前坦克脚本，仅能拿到A队或者B队的第一个坦克**_
 - GetOppositeTanks(ETeam myTeam, List<Tank> outputs)：获取敌方所有坦克
-- GetTank(ETeam t)：获取己方坦克，<font color=#FF0000><strong>为兼容以前坦克脚本，仅能拿到本队的第一个坦克</strong></font>
+- GetTank(ETeam t)：获取己方坦克，_**为兼容以前坦克脚本，仅能拿到本队的第一个坦克**_
 - GetTanks(ETeam myTeam, List<Tank> outputs)：获取己方所有坦克
 - GetStars()：获取当前的所有星星列表
-- GetOppositeMissiles(ETeam myTeam)：获取当前所有敌方射出的导弹列表，<font color=#FF0000><strong>为兼容以前坦克脚本，仅能拿到A队或者B队的导弹列表</strong></font>
+- GetOppositeMissiles(ETeam myTeam)：获取当前所有敌方射出的导弹列表，_**为兼容以前坦克脚本，仅能拿到A队或者B队的导弹列表**_
 - GetOppositeMissilesEx(ETeam myTeam, Dictionary<int, Missile> outputs = null)：获取当前所有敌方射出的导弹列表
 - IsMathEnd()：比赛是否结束
 - RemainingTime：获取比赛剩余时间
