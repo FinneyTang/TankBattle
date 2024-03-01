@@ -13,7 +13,7 @@ By Jiaqi Tang
 
 ## 游戏启动方式
 
-- 打开BattleField（2人），打开BattleField2X（4人）
+- 打开BattleField（2队），或者打开BattleField2X（4队）
 - 选中场景中的Match，在Inspector中进行Team和Global参数的设置，或者直接使用默认参数
 - 运行即可
 
@@ -45,6 +45,10 @@ By Jiaqi Tang
 - Max Star Count：同时存在的最大星星数量
 - HP Recovery Speed：每秒回血的速度
 - Home Zone Radius：以重生点为圆心，回血区域的半径
+
+### Field参数
+- Length: 场景尺寸长
+- Width: 场景尺寸宽
 
 ## 自定义Tank脚本说明
 
@@ -112,7 +116,6 @@ Match类为单例，可以通过Match.instance访问
 
 ### PhysicsUtils类
 
-- MaxFieldSize：比赛场地的边长
 - LayerMaskCollsion：所有带碰撞的Layer Mask
 - LayerMaskScene：场景碰撞的Layer Mask
 - LayerMaskTank：坦克碰撞的Layer Mask
