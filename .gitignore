@@ -11,3 +11,6 @@ Assets/Plugins/Editor/JetBrains/
 Assets/Plugins/Editor/JetBrains.meta
 .idea/
 Logs/
+obj/
+UserSettings/
+TankBattle.sln.DotSettings.user
