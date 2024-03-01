@@ -14,3 +14,4 @@ Logs/
 obj/
 UserSettings/
 TankBattle.sln.DotSettings.user
+*.csproj
