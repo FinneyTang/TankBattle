@@ -52,7 +52,7 @@ By Jiaqi Tang
 - 必须重载GetName方法，这个方法返回Tank的名字
 - 自定义Tank脚本不要重写原来MonoBehaviour中的Awake，Start，Update，OnDrawGizmos函数，而是重载对应的OnAwake，OnStart，OnUpdate，OnOnDrawGizmos函数
 - OnReborn函数会在每次坦克重生的时候调用
-- OnHandleSendTeamStratedgy函数会在队友发送团队策略的时候调用，目前通过ETeamStrategy预定义了一些枚举Help（求助）, FocusFire（集火）, StaySafe（苟住）等，也可以自定义策略类型。如果需要传递参数，可以通过坦克上的SetTeamStratedgyParam和GetTeamStratedgyParam来设置和获取，具体用法，可以参考BattleAI\TJQ\MyTank.cs脚本
+- OnHandleSendTeamStrategy函数会在队友发送团队策略的时候调用，目前通过ETeamStrategy预定义了一些枚举Help（求助）, FocusFire（集火）, StaySafe（苟住）等，也可以自定义策略类型。如果需要传递参数，可以通过坦克上的SetTeamStrategyParam和GetTeamStrategyParam来设置和获取，具体用法，可以参考BattleAI\TJQ\MyTank.cs脚本
 
 ## API
 

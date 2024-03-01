@@ -27,8 +27,8 @@ namespace TJQ
                 
                 if (HP < 50)
                 {
-                    SetTeamStratedgyParam((int)TeamStrategyBBKey.HelpPos, Position);
-                    SendTeamStratedgy((int)ETeamStrategy.Help);
+                    SetTeamStrategyParam((int)TeamStrategyBBKey.HelpPos, Position);
+                    SendTeamStrategy((int)ETeamStrategy.Help);
                 }
                 GeneralMovementStrategy();
             }
@@ -127,7 +127,7 @@ namespace TJQ
             return targetTank;
         }
 
-        protected override void OnHandleSendTeamStratedgy(Tank sender, int teamStrategy)
+        protected override void OnHandleSendTeamStrategy(Tank sender, int teamStrategy)
         {
             if (teamStrategy == (int)ETeamStrategy.Help)
             {

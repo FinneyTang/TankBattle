@@ -30,7 +30,7 @@ namespace Main
         private int m_Score;
         private float m_HPRecoveryFraction;
         private GameObject m_HPRecoveryEffectGO;
-        private BlackboardMemory m_TeamStratedgyBB = new BlackboardMemory();
+        private readonly BlackboardMemory m_TeamStrategyBB = new BlackboardMemory();
         public ETeam Team
         {
             get; internal set;
@@ -137,8 +137,8 @@ namespace Main
         }
         
         //----------------------------------------------
-        //team stratedgy
-        public void SendTeamStratedgy(int teamStrategy)
+        //team strategy
+        public void SendTeamStrategy(int teamStrategy)
         {
             var teammates = Match.instance.GetTanks(Team);
             if (teammates.Count <= 1)
@@ -151,21 +151,21 @@ namespace Main
                 {
                     continue; //skip self
                 }
-                t.HandleSendTeamStratedgy(this, teamStrategy);
+                t.HandleSendTeamStrategy(this, teamStrategy);
             }
         }
-        public void SetTeamStratedgyParam(int bbKey, object value)
+        public void SetTeamStrategyParam(int bbKey, object value)
         {
-            m_TeamStratedgyBB.SetValue(bbKey, value);
+            m_TeamStrategyBB.SetValue(bbKey, value);
         }
         public T GetTeamStratedgyParam<T>(int bbKey)
         {
-            return m_TeamStratedgyBB.GetValue<T>(bbKey);
+            return m_TeamStrategyBB.GetValue<T>(bbKey);
         }
-        private void HandleSendTeamStratedgy(Tank sender, int teamStrategy)
+        private void HandleSendTeamStrategy(Tank sender, int teamStrategy)
         {
             TeamStrategy = teamStrategy;
-            OnHandleSendTeamStratedgy(sender, teamStrategy);
+            OnHandleSendTeamStrategy(sender, teamStrategy);
         }
         //----------------------------------------------
         public Vector3 NextDestination
@@ -430,7 +430,7 @@ namespace Main
         {
 
         }
-        protected virtual void OnHandleSendTeamStratedgy(Tank sender, int teamStrategy)
+        protected virtual void OnHandleSendTeamStrategy(Tank sender, int teamStrategy)
         {
 
         }

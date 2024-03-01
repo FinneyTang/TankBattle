@@ -243,6 +243,7 @@
      <Folder Include="Assets\Scripts\BattleAI\Class2018\LGQ" />
      <Folder Include="Assets\JMO Assets\Cartoon FX\Materials\Misc" />
      <Folder Include="Assets\JMO Assets\Cartoon FX\CFX3 Prefabs\Magic Misc" />
+     <Folder Include="Assets\Scenes\BattleField2X" />
      <Folder Include="Assets\Scripts\BattleAI\Class2022\ZYH" />
      <Folder Include="Assets\Scripts\BattleAI\TJQ" />
      <Folder Include="Assets\Scripts\Main" />
