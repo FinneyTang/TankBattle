@@ -313,14 +313,18 @@ namespace Main
                 }
             }
         }
-        private ETeam GetWinner()
+
+        public ETeam WinnerTeam => m_WinnerTeam;
+
+        private int m_MaxScore = -1;
+        private void UpdateWinner()
         {
             if(m_Tanks.Count < 2)
             {
-                return ETeam.A;
+                m_WinnerTeam = ETeam.A;
+                return;
             }
-            ETeam winner = ETeam.A;
-            int maxScore = -1;
+            ETeam winner = m_WinnerTeam;
             foreach (var pair in m_Tanks)
             {
                 int totalScore = 0;
@@ -328,13 +332,13 @@ namespace Main
                 {
                     totalScore += t.Score;
                 }
-                if (totalScore > maxScore)
+                if (totalScore > m_MaxScore)
                 {
-                    maxScore = totalScore;
+                    m_MaxScore = totalScore;
                     winner = pair.Key;
                 }
             }
-            return winner;
+            m_WinnerTeam = winner;
         }
         void Update()
         {
@@ -363,10 +367,12 @@ namespace Main
                 AddStar(true);
             }
             m_RemainingTime -= Time.deltaTime;
+            //caculate winner each frame
+            UpdateWinner();
+            //check if match end
             if(m_RemainingTime < 0)
             {
                 m_MatchEnd = true;
-                m_WinnerTeam = GetWinner();
                 if (WinningCamera != null)
                 {
                     WinningCamera.gameObject.SetActive(true);
@@ -396,6 +402,11 @@ namespace Main
                     }
                 }
             }
+        }
+        
+        public string GetWinningIndicater(ETeam team)
+        {
+            return WinnerTeam == team ? "★" : "";
         }
 
         private readonly GUIStyle[] m_TeamInfoStyle = new GUIStyle[(int)ETeam.NB];
@@ -464,7 +475,7 @@ namespace Main
                         m_SB.Append(tanks[i].GetTankInfo(true));
                         m_SB.Append("\n\n");
                     }
-                    m_SB.Append($"Score: {teamScore}");
+                    m_SB.Append($"Score: {teamScore} {GetWinningIndicater(team)}");
                     GUI.Label(rect, m_SB.ToString(), teamInfoStyle);
                 }
             }

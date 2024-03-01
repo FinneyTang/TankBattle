@@ -317,8 +317,8 @@ namespace Main
             }
             else
             {
-                info = Match.instance.IsMathEnd() == false ? $"{GetName()}\nHP: {HP}\nScore: {m_Score}"
-                    : $"{GetName()}\nScore: {m_Score}";
+                info = Match.instance.IsMathEnd() == false ? $"{GetName()}\nHP: {HP}\nScore: {m_Score} {Match.instance.GetWinningIndicater(Team)}"
+                    : $"{GetName()}\nScore: {m_Score} {Match.instance.GetWinningIndicater(Team)}";
             }
             if (IsDead && Match.instance.IsMathEnd() == false)
             {
