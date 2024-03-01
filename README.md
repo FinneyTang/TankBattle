@@ -9,11 +9,11 @@ By Jiaqi Tang
 
 ## Unity版本
 
-2017.2.3p2
+2021.3.27f1
 
 ## 游戏启动方式
 
-- 打开BattleField，
+- 打开BattleField（2人），打开BattleField2X（4人）
 - 选中场景中的Match，在Inspector中进行Team和Global参数的设置，或者直接使用默认参数
 - 运行即可
 
@@ -29,7 +29,7 @@ By Jiaqi Tang
 
 ### Team参数
 
-- Reborn：重生点
+- Team：坦克所属队伍
 - Tank Script：用户自定义Tank脚本的名字，namespace.classname的格式
 
 ### Global参数
@@ -95,10 +95,13 @@ By Jiaqi Tang
 Match类为单例，可以通过Match.instance访问
 
 - GlobalSetting：获取比赛设置，其中参数见上面“参数”部分
-- GetOppositeTank(ETeam myTeam)：获取敌方坦克实例，参数是自己的队伍
-- GetTank(ETeam t)：获取坦克
+- GetOppositeTank(ETeam myTeam)：获取敌方坦克实例，参数是自己的队伍，<font color=#FF0000><strong>为兼容以前坦克脚本，仅能拿到A队或者B队的第一个坦克</strong></font>
+- GetOppositeTanks(ETeam myTeam, List<Tank> outputs)：获取敌方所有坦克
+- GetTank(ETeam t)：获取己方坦克，<font color=#FF0000><strong>为兼容以前坦克脚本，仅能拿到本队的第一个坦克</strong></font>
+- GetTanks(ETeam myTeam, List<Tank> outputs)：获取己方所有坦克
 - GetStars()：获取当前的所有星星列表
-- GetOppositeMissiles(ETeam myTeam)：获取当前所有的敌方射出的导弹列表
+- GetOppositeMissiles(ETeam myTeam)：获取当前所有敌方射出的导弹列表，<font color=#FF0000><strong>为兼容以前坦克脚本，仅能拿到A队或者B队的导弹列表</strong></font>
+- GetOppositeMissilesEx(ETeam myTeam, Dictionary<int, Missile> outputs = null)：获取当前所有敌方射出的导弹列表
 - IsMathEnd()：比赛是否结束
 - RemainingTime：获取比赛剩余时间
 - GetRebornPos(ETeam t)：获取队伍的重生位置
@@ -115,7 +118,7 @@ Match类为单例，可以通过Match.instance访问
 
 ### 下一步
 
-- 增加4人模式的对抗，可以是2v2，或者4人混战，这样AI的策略就更有趣
-- 4人模式需要重新设计地图尺寸和一些比赛的参数
+- ~~增加4人模式的对抗，可以是2v2，或者4人混战，这样AI的策略就更有趣~~
+- ~~4人模式需要重新设计地图尺寸和一些比赛的参数~~
 - 组队AI的接口计划采用命令式的方式，比如Tank可以进行命令呼叫，队友对于这些命令注册响应函数，这样不同的人写的AI也能进行组队策略，命令的例子比如：求助，集火某个目标坦克，包抄，掩护等等
 
