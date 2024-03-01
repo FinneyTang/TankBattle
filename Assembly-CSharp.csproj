@@ -167,6 +167,7 @@
      <Compile Include="Assets\Scripts\Main\AI\BehaviourTree\ActionNode.cs" />
      <Compile Include="Assets\Scripts\BattleAI\Class2021\TSH\TSH.cs" />
      <Compile Include="Assets\Scripts\BattleAI\Class2019\lhx\MyConditions.cs" />
+     <Compile Include="Assets\Scripts\Main\Billboard.cs" />
      <Folder Include="Assets" />
      <Folder Include="Assets\Scripts\BattleAI\Class2021" />
      <Folder Include="Assets\JMO Assets\Cartoon FX\CFX3 Prefabs\Magic Dark" />

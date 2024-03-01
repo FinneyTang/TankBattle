@@ -236,7 +236,7 @@ namespace Main
                 m.material.color = Utils.GetTeamColor(team);
             }
             Tank t = (Tank)tank.AddComponent(scriptType);
-            t.Team = team;
+            t.Init(team);
             //add to tank list
             if (!m_Tanks.TryGetValue(team, out var tanks))
             {

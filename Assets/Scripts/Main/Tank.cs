@@ -2,6 +2,7 @@
 using AI.Base;
 using AI.Blackboard;
 using AI.SensorSystem;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -33,7 +34,7 @@ namespace Main
         private readonly BlackboardMemory m_TeamStrategyBB = new BlackboardMemory();
         public ETeam Team
         {
-            get; internal set;
+            get; private set;
         }
         public int HP
         {
@@ -217,6 +218,15 @@ namespace Main
             m_FireCollider = tf.GetComponent<FireCollider>();
             m_FireCollider.Owner = this;
             OnAwake();
+        }
+
+        public void Init(ETeam team)
+        {
+            Team = team;
+            Transform nameTF = Find(transform, "Name");
+            var tm = nameTF.GetComponent<TextMesh>();
+            tm.text = GetName();
+            tm.color = Utils.GetTeamColor(Team);
         }
 
         private void Start()

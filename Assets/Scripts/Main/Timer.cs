@@ -15,7 +15,7 @@ namespace Main
         }
         public bool IsExpired(float gameTime)
         {
-            return m_ExpiredTime >= 0 && gameTime >= m_ExpiredTime;
+            return m_ExpiredTime < 0 || gameTime >= m_ExpiredTime;
         }
         public float GetRemaingTime(float gameTime)
         {

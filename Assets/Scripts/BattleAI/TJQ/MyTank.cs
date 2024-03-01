@@ -7,7 +7,7 @@ namespace TJQ
     class MyTank : Tank
     {
         private float m_LastTime = 0;
-        private float m_HelpExpiredTime = 0;
+        private readonly Timer m_HelpResponseTime = new Timer();
         private Vector3 m_HelpPos;
         private readonly List<Tank> m_CachedOppTanks = new List<Tank>();
         protected override void OnUpdate()
@@ -16,14 +16,14 @@ namespace TJQ
 
             if (TeamStrategy == (int)ETeamStrategy.Help && 
                 HP > 30 &&
-                Time.time < m_HelpExpiredTime)
+                !m_HelpResponseTime.IsExpired(Time.time))
             {
                 Move(m_HelpPos);
             }
             else
             {
                 //reset
-                m_HelpExpiredTime = 0;
+                m_HelpResponseTime.Reset();
                 
                 if (HP < 50)
                 {
@@ -132,7 +132,7 @@ namespace TJQ
             if (teamStrategy == (int)ETeamStrategy.Help)
             {
                 //Approach teammate within 1 secs
-                m_HelpExpiredTime = Time.time + 1f;
+                m_HelpResponseTime.SetExpiredTime(Time.time + 1f);
                 //In this case, we can also retrieve sender's position by Position attribute directly.
                 //m_HelpPos = sender.Position;
                 //It's an example to show how to get team strategy param
