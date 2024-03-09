@@ -20,8 +20,7 @@ namespace AI.FiniteStateMachine
         }
         public State Transition(int t)
         {
-            State s;
-            m_States.TryGetValue(t, out s);
+            m_States.TryGetValue(t, out var s);
             return s;
         }
         public void SetDefaultState(int t)

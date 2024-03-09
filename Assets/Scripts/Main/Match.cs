@@ -245,6 +245,12 @@ namespace Main
                 m_Tanks.Add(team, tanks);
             }
             tanks.Add(t);
+            //init team missiles list
+            if(!m_Missiles.TryGetValue(team, out var missiles) || missiles == null)
+            {
+                missiles = new Dictionary<int, Missile>();
+                m_Missiles[team] = missiles;
+            }
         }
         private void AddStar(bool isSuperStar)
         {
