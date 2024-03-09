@@ -252,7 +252,7 @@ namespace Main
             Vector3 targetPos = Vector3.zero;
             if (isSuperStar == false)
             {
-                var l = FieldSize * 0.5f;
+                var l = FieldSize * 0.5f - 10;
                 targetPos = new Vector3(UnityEngine.Random.Range(-l, l), 0, UnityEngine.Random.Range(-l, l));
             }
             targetPos.y = 3f;
