@@ -55,7 +55,7 @@ namespace UtilityBasedAI
             {
                 return 0f;
             }
-            return Mathf.Lerp(1f, 0f, t.HP / Match.instance.GlobalSetting.MaxHP);
+            return Mathf.Lerp(1f, 0f, (float)t.HP / Match.instance.GlobalSetting.MaxHP);
         }
     }
 
