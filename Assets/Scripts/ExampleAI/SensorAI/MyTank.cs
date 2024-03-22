@@ -159,7 +159,10 @@ namespace SensorAI
         }
         protected override void OnUpdate()
         {
+            //update
             m_SensorManager.Update();
+            
+            //bev
             Tank oppTank = m_SensorManager.GetSensorMemory().GetValue<Tank>((int)EBBKey.TargetOppTank);
             if (oppTank != null)
             {
