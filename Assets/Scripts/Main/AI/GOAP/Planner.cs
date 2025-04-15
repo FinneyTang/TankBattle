@@ -37,7 +37,6 @@ namespace AI.GOAP
         }
         
         private readonly Stack<PlanNode> m_OpenNodes = new Stack<PlanNode>();
-        private readonly HashSet<WorldState> m_VisitedState = new HashSet<WorldState>();
         private readonly List<PlanNode> m_CandidatePlans = new List<PlanNode>();
             
         public List<GOAPAction> Plan(WorldState currentState, WorldState goalState, List<GOAPAction> plan = null)
@@ -47,7 +46,6 @@ namespace AI.GOAP
             
             m_OpenNodes.Clear();
             m_CandidatePlans.Clear();
-            m_VisitedState.Clear();
             
             //add the goal state to the open nodes
             m_OpenNodes.Push(new PlanNode(null, 0, goalState, null));
@@ -61,13 +59,6 @@ namespace AI.GOAP
                     m_CandidatePlans.Add(node); //plan found
                     continue;
                 }
-                
-                //check if the same state has been visited
-                if(m_VisitedState.Contains(node.GoalState))
-                {
-                    continue;
-                }
-                m_VisitedState.Add(node.GoalState);
                 
                 //check all available actions to see if they can satisfy the preconditions of the node
                 foreach (var action in m_AvailableActions)

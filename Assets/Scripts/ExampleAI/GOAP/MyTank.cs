@@ -101,6 +101,7 @@ namespace GOAP
     {
         public BackHomeAction()
         {
+            AddPrecondition(WorldStateKey.HasFullHP, false);
             AddEffect(WorldStateKey.HasFullHP, true);
         }
 
