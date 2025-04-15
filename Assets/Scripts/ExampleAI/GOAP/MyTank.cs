@@ -33,6 +33,10 @@ namespace GOAP
             {
                 return true;
             }
+            if (t.HP < 30)
+            {
+                return true;
+            }
             t.Move(oppTank.Position);
             return false;
         }
@@ -229,7 +233,7 @@ namespace GOAP
             else if (m_CurrentState.GetState<bool>(WorldStateKey.HasEnemy))
             {
                 var oppTank = Match.instance.GetOppositeTank(Team);
-                if (oppTank == null || oppTank.IsDead || !CanSeeOthers(oppTank))
+                if (oppTank == null || oppTank.IsDead)
                 {
                     m_NextGoal.SetState(WorldStateKey.ScoreIncreased, true);
                 }
