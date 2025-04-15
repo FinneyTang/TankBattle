@@ -75,7 +75,7 @@ namespace AI.GOAP
             return clone;
         }
         
-        public bool IsContains(WorldState other)
+        public bool IsSatisfied(WorldState other)
         {
             if (other == null)
             {
@@ -83,7 +83,7 @@ namespace AI.GOAP
             }
             foreach (var pair in other.m_State)
             {
-                object currentValue = GetState(pair.Key);
+                var currentValue = GetState(pair.Key);
                 if (currentValue == null || !currentValue.Equals(pair.Value))
                 {
                     return false;

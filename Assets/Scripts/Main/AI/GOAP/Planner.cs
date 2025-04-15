@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using AI.Base;
+using UnityEngine;
 
 namespace AI.GOAP
 {
@@ -22,21 +23,21 @@ namespace AI.GOAP
         private class PlanNode
         {
             public PlanNode Parent;
-            public WorldState State;
+            public WorldState GoalState;
             public float Cost;
             public GOAPAction Action;
 
-            public PlanNode(PlanNode parent, float cost, WorldState state, GOAPAction action)
+            public PlanNode(PlanNode parent, float cost, WorldState goalState, GOAPAction action)
             {
                 this.Parent = parent;
                 this.Cost = cost;
-                this.State = state;
+                this.GoalState = goalState;
                 this.Action = action;
             }
         }
         
-        private readonly List<GOAPAction> m_WorkingAvailableActions = new List<GOAPAction>();
-        private readonly Queue<PlanNode> m_OpenNodes = new Queue<PlanNode>();
+        private readonly Stack<PlanNode> m_OpenNodes = new Stack<PlanNode>();
+        private readonly HashSet<WorldState> m_VisitedState = new HashSet<WorldState>();
         private readonly List<PlanNode> m_CandidatePlans = new List<PlanNode>();
             
         public List<GOAPAction> Plan(WorldState currentState, WorldState goalState, List<GOAPAction> plan = null)
@@ -44,41 +45,55 @@ namespace AI.GOAP
             plan ??= new List<GOAPAction>();
             plan.Clear();
             
-            m_WorkingAvailableActions.Clear();
-            m_WorkingAvailableActions.AddRange(m_AvailableActions);
             m_OpenNodes.Clear();
             m_CandidatePlans.Clear();
+            m_VisitedState.Clear();
             
             //add the goal state to the open nodes
-            m_OpenNodes.Enqueue(new PlanNode(null, 0, goalState, null));
+            m_OpenNodes.Push(new PlanNode(null, 0, goalState, null));
             
             //use dfs to find a plan
             while (m_OpenNodes.Count > 0)
             {
-                var node = m_OpenNodes.Dequeue();
-                if (currentState.IsContains(node.State))
+                var node = m_OpenNodes.Pop();
+                if (currentState.IsSatisfied(node.GoalState))
                 { 
                     m_CandidatePlans.Add(node); //plan found
                     continue;
                 }
-                //check all available actions to see if they can satisfy the preconditions of the node
-                for (int i = m_WorkingAvailableActions.Count - 1; i >= 0; i--)
+                
+                //check if the same state has been visited
+                if(m_VisitedState.Contains(node.GoalState))
                 {
-                    var action = m_WorkingAvailableActions[i];
-                    var newCurrentState = currentState.Clone().Merge(action.Effects);
-                    if (newCurrentState.IsContains(node.State))
+                    continue;
+                }
+                m_VisitedState.Add(node.GoalState);
+                
+                //check all available actions to see if they can satisfy the preconditions of the node
+                foreach (var action in m_AvailableActions)
+                {
+                    //check if the action is already in the plan
+                    if (IsActionExisted(node, action))
                     {
-                        m_OpenNodes.Enqueue(
+                        continue;
+                    }
+                    var newCurrentState = currentState.Clone().Merge(action.Effects);
+                    if (newCurrentState.IsSatisfied(node.GoalState))
+                    {
+                        m_OpenNodes.Push(
                             new PlanNode(node, node.Cost + action.Cost, action.Preconditions, action));
-                        m_WorkingAvailableActions.Remove(action);
                     }
                 }
             }
-            
+            return SelectCheapestPlan(plan, m_CandidatePlans);
+        }
+
+        private List<GOAPAction> SelectCheapestPlan(List<GOAPAction> plan, List<PlanNode> candidatePlans)
+        {
             //find the cheapest plan
             PlanNode cheapestNode = null;
-            float cheapestCost = float.MaxValue;
-            foreach (var candidate in m_CandidatePlans)
+            var cheapestCost = float.MaxValue;
+            foreach (var candidate in candidatePlans)
             {
                 if (candidate.Cost < cheapestCost)
                 {
@@ -97,6 +112,23 @@ namespace AI.GOAP
                 cheapestNode = cheapestNode.Parent;
             }
             return plan;
+        }
+        private bool IsActionExisted(PlanNode node, GOAPAction action)
+        {
+            var actionExisted = false;
+            while (node != null)
+            {
+                if (node.Action != action)
+                {
+                    node = node.Parent;
+                }
+                else
+                {
+                    actionExisted = true;
+                    break;
+                }
+            }
+            return actionExisted;
         }
     }
 }
