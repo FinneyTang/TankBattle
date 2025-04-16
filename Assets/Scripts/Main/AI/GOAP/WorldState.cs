@@ -46,7 +46,8 @@ namespace AI.GOAP
             }
             foreach (var pair in m_State)
             {
-                if (!other.m_State.TryGetValue(pair.Key, out var otherValue) || !pair.Value.Equals(otherValue))
+                if (!other.m_State.TryGetValue(pair.Key, out var otherValue) || 
+                    !pair.Value.Equals(otherValue))
                 {
                     return false;
                 }
@@ -56,13 +57,7 @@ namespace AI.GOAP
         
         public override int GetHashCode()
         {
-            int hash = 0;
-            foreach (var pair in m_State)
-            {
-                hash ^= pair.Key.GetHashCode();
-                hash ^= pair.Value.GetHashCode();
-            }
-            return hash;
+            return m_State.GetHashCode();
         }
 
         public WorldState Clone()
