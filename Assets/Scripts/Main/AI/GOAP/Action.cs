@@ -19,11 +19,11 @@ namespace AI.GOAP
         } = 1;
         
         //helper methods for preconditions and effects
-        protected void AddPrecondition(string key, object value)
+        protected void AddPrecondition(string key, bool value)
         {
             m_Preconditions.SetState(key, value);
         }
-        protected void AddEffect(string key, object value)
+        protected void AddEffect(string key, bool value)
         {
             m_Effects.SetState(key, value);
         }

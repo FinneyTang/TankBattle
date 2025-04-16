@@ -5,26 +5,17 @@ namespace AI.GOAP
 {
     public class WorldState
     {
-        private readonly Dictionary<string, object> m_State = new Dictionary<string, object>();
-        public void SetState(string key, object value)
+        private readonly Dictionary<string, bool> m_State = new Dictionary<string, bool>();
+        public void SetState(string key, bool value)
         {
             m_State[key] = value;
         }
 
-        public object GetState(string key)
+        public bool GetState(string key, bool defaultValue = false)
         {
             if (m_State.TryGetValue(key, out var state))
             {
                 return state;
-            }
-            return null;
-        }
-
-        public T GetState<T>(string key, T defaultValue = default(T))
-        {
-            if (m_State.TryGetValue(key, out var state))
-            {
-                return (T)state;
             }
             return defaultValue;
         }
@@ -36,7 +27,7 @@ namespace AI.GOAP
 
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is WorldState other))
+            if (obj is not WorldState other)
             {
                 return false;
             }
@@ -47,7 +38,7 @@ namespace AI.GOAP
             foreach (var pair in m_State)
             {
                 if (!other.m_State.TryGetValue(pair.Key, out var otherValue) || 
-                    !pair.Value.Equals(otherValue))
+                    pair.Value != otherValue)
                 {
                     return false;
                 }
@@ -62,7 +53,7 @@ namespace AI.GOAP
 
         public WorldState Clone()
         {
-            WorldState clone = new WorldState();
+            var clone = new WorldState();
             foreach (var pair in m_State)
             {
                 clone.SetState(pair.Key, pair.Value);
@@ -78,8 +69,8 @@ namespace AI.GOAP
             }
             foreach (var pair in other.m_State)
             {
-                var currentValue = GetState(pair.Key);
-                if (currentValue == null || !currentValue.Equals(pair.Value))
+                if (!m_State.TryGetValue(pair.Key, out var currentValue) || 
+                    currentValue != pair.Value)
                 {
                     return false;
                 }

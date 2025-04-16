@@ -197,7 +197,7 @@ namespace GOAP
         {
             var stars = Match.instance.GetStars();
             m_CurrentState.SetState(WorldStateKey.StarAvailable, stars.Count > 0);
-            bool hasSuperStar = false;
+            var hasSuperStar = false;
             foreach (var pair in stars)
             {
                 if (pair.Value.IsSuperStar)
@@ -223,7 +223,7 @@ namespace GOAP
         {
             m_NextGoal.Clear();
             //select goal
-            if (m_CurrentState.GetState<bool>(WorldStateKey.SuperStarAvailable))
+            if (m_CurrentState.GetState(WorldStateKey.SuperStarAvailable))
             {
                 m_NextGoal.SetState(WorldStateKey.ScoreIncreased, true);
             }
@@ -231,7 +231,7 @@ namespace GOAP
             {
                 m_NextGoal.SetState(WorldStateKey.HasFullHP, true);
             }
-            else if (m_CurrentState.GetState<bool>(WorldStateKey.HasEnemy))
+            else if (m_CurrentState.GetState(WorldStateKey.HasEnemy))
             {
                 var oppTank = Match.instance.GetOppositeTank(Team);
                 if (oppTank == null || oppTank.IsDead)
