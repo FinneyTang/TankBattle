@@ -2,9 +2,11 @@
 using AI.Base;
 using AI.Blackboard;
 using AI.SensorSystem;
+using Newtonsoft.Json;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 namespace Main
 {
@@ -32,6 +34,9 @@ namespace Main
         private float m_HPRecoveryFraction;
         private GameObject m_HPRecoveryEffectGO;
         private readonly BlackboardMemory m_TeamStrategyBB = new BlackboardMemory();
+        private Match.UtteranceData m_Utterance;
+        private Timer m_UtteranceTimer = new Timer();
+        private TextMesh m_NameTextMesh;
         public ETeam Team
         {
             get; private set;
@@ -223,20 +228,26 @@ namespace Main
         public void Init(ETeam team)
         {
             Team = team;
-            Transform nameTF = Find(transform, "Name");
-            var tm = nameTF.GetComponent<TextMesh>();
-            tm.text = GetName();
-            tm.color = Utils.GetTeamColor(Team);
+            var nameTF = Find(transform, "Name");
+            m_NameTextMesh = nameTF.GetComponent<TextMesh>();
+            m_NameTextMesh.text = GetName();
+            m_NameTextMesh.color = Utils.GetTeamColor(Team);
         }
 
         private void Start()
         {
             OnStart();
-            ReBorn();
+            ReBorn(true);
         }
         // Update is called once per frame
         private void Update()
         {
+            //clear utterance
+            if (m_Utterance != null && m_UtteranceTimer.IsExpired(Time.time))
+            {
+                m_Utterance = null;
+                UpdateUtterance();
+            }
             OnUpdate();
             UpdateTurretRotation();
         }
@@ -249,7 +260,7 @@ namespace Main
             HP -= Match.instance.GlobalSetting.DamagePerHit;
             if(HP <= 0)
             {
-                damager.AddScore(Match.instance.GlobalSetting.ScoreForKill);
+                damager.Kill();
                 Dead();
             }
         }
@@ -282,6 +293,19 @@ namespace Main
         }
         internal void TakeStar(bool isSuperStar)
         {
+            if (isSuperStar)
+            {
+                Utils.LLMUserPrompt(
+                    Match.instance.LLMSettingData.GetSuperStarPrompt, OnLLMResponse);   
+            }
+            else
+            {
+                if (Random.Range(0, 100) > 70)
+                {
+                    Utils.LLMUserPrompt(
+                        Match.instance.LLMSettingData.GetStarPrompt, OnLLMResponse);   
+                }
+            }
             AddScore(isSuperStar ? 
                 Match.instance.GlobalSetting.ScoreForSuperStar :
                 Match.instance.GlobalSetting.ScoreForStar);
@@ -343,8 +367,13 @@ namespace Main
             }
             return m_RebornTimer.IsExpired(gameTime);
         }
-        internal void ReBorn()
+        internal void ReBorn(bool firstTime)
         {
+            if (!firstTime)
+            {
+                Utils.LLMUserPrompt(
+                    Match.instance.LLMSettingData.RebornPrompt, OnLLMResponse);   
+            }
             HP = Match.instance.GlobalSetting.MaxHP;
             transform.position = Match.instance.GetRebornPos(Team);
             transform.forward = (Vector3.zero - transform.position).normalized;
@@ -374,6 +403,13 @@ namespace Main
             }
             OnOnDrawGizmos();
         }
+
+        private void Kill()
+        {
+            Utils.LLMUserPrompt(
+                Match.instance.LLMSettingData.KillPrompt, OnLLMResponse);
+            AddScore(Match.instance.GlobalSetting.ScoreForKill);
+        }
         private void AddScore(int score)
         {
             m_Score += score;
@@ -398,6 +434,42 @@ namespace Main
                 m_TurretTF.forward = Vector3.RotateTowards(
                     m_TurretTF.forward, toTarget.normalized, Time.deltaTime * Mathf.Deg2Rad * 180f, 1);
             }
+        }
+        private void OnLLMResponse(string response)
+        {
+            try
+            {
+                m_Utterance = JsonConvert.DeserializeObject<Match.UtteranceData>(response);
+            }
+            catch (Exception)
+            {
+                m_Utterance = new Match.UtteranceData()
+                {
+                    content = response
+                };
+                //Debug.LogError(e);
+            }
+            m_UtteranceTimer.SetExpiredTime(Time.time + 3f);
+            UpdateUtterance();
+        }
+        private void UpdateUtterance()
+        {
+            var info = GetName();
+            if (m_Utterance != null)
+            {
+                string emotion = string.Empty;
+                if (!string.IsNullOrEmpty(m_Utterance.emotion))
+                {
+                    switch (m_Utterance.emotion)
+                    {
+                        case "Happy": emotion = "(^_^)"; break;
+                        case "Toxic": emotion = "(¬‿¬)"; break;
+                        case "Sad": emotion = "(ToT)"; break;
+                    }   
+                }
+                info = $"{info}:{m_Utterance.content}{emotion}";
+            }
+            m_NameTextMesh.text = info;
         }
         private Transform Find(Transform root, string name)
         {

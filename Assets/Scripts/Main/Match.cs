@@ -62,9 +62,53 @@ namespace Main
             public float FieldSize = 100f;
             public List<RebornAreaSetting> RebornAreas;
         }
+
+        public class UtteranceData
+        {
+            public string content;
+            public string emotion;
+        }
+
+        [Serializable]
+        public class LLMSetting
+        {
+            public bool EnableLLM = false;
+            public string URL = "http://127.0.0.1:1234/v1/chat/completions";
+            public string APIKey;
+            public float Temperature = 1f;
+            public readonly string SystemPrompt = @"你是一位坦克大战电子游戏比赛选手，性格很奔放，回复的时候遵循以下要求
+1. 说话很简短，每次只说一句话
+2. 每句话控制在10个字以内
+3. 用中文说话
+4. 回复的同时，返回以下emotion类型
+     1. Happy: 赢了或者开心的时候返回
+     2. Sad: 不服气的时候返回
+     3. Toxic: 嘲讽的时候返回";
+
+            public readonly string JsonScheme = @"{
+  ""type"": ""object"",
+  ""properties"": {
+    ""content"": {
+      ""type"": ""string""
+    },
+    ""emotion"": {
+      ""type"": ""string""
+    }
+  },
+  ""required"": [
+    ""content"",
+    ""emotion""
+  ]
+}";
+            public string KillPrompt = @"我击败了敌人，说一句嘲讽对手的话";
+            public string GetStarPrompt = @"我吃到了星星，得了分，说一句开心的话";
+            public string GetSuperStarPrompt = @"我吃到了超级星星，得了很多分，说一句欢呼的话";
+            public string RebornPrompt = @"我被敌人击败了，现在重新出发，说一句不服气的话";
+        }
         
         public MatchSettingData GlobalSetting = new MatchSettingData();
         public FieldSettingData FieldSetting = new FieldSettingData();
+        public LLMSetting LLMSettingData = new LLMSetting();
 
         public float FieldSize => FieldSetting.FieldSize;
 
@@ -357,7 +401,7 @@ namespace Main
                 {
                     if(t.IsDead && t.CanReborn(Time.time))
                     {
-                        t.ReBorn();
+                        t.ReBorn(false);
                     }
                 }
             }

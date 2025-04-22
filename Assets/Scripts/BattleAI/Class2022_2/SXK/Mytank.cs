@@ -32,17 +32,17 @@ namespace SXK
                 t.TurretTurnTo(t.Position + t.Forward);
             }
             t.Fire();
-            bool hasStar = false;
+            //bool hasStar = false;
             float nearestDist = float.MaxValue;
-            Star nearestStar = null;
+            //Star nearestStar = null;
             foreach (var pair in Match.instance.GetStars())
             {
                 Star s = pair.Value;
                 if (s.IsSuperStar)
                 {
 
-                    hasStar = true;
-                    nearestStar = s;
+                    //hasStar = true;
+                    //nearestStar = s;
                     break;
                 }
                 else
@@ -50,9 +50,9 @@ namespace SXK
                     float dist = (s.Position - t.Position).sqrMagnitude;
                     if (dist < nearestDist)
                     {
-                        hasStar = true;
+                        //hasStar = true;
                         nearestDist = dist;
-                        nearestStar = s;
+                        //nearestStar = s;
                         Debug.Log(nearestDist);
                     }
                 }

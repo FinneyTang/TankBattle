@@ -86,7 +86,7 @@ namespace ZSJ
     }
     class Strategy
     {
-        private bool moveReady=true;
+        //private bool moveReady=true;
         private Information info=new Information();
         private Act act=new Act();
         private Dictionary<int, Star> starDic = Match.instance.GetStars();
@@ -100,7 +100,7 @@ namespace ZSJ
         }
         private void MoveStrategy(MyTank tank)
         {
-            //------Èç¹ûÔÚ¼Ò¾Í»ØÂúÑª
+            //------ï¿½ï¿½ï¿½ï¿½Ú¼Ò¾Í»ï¿½ï¿½ï¿½Ñª
             if ((tank.Position - Match.instance.GetRebornPos(tank.Team)).magnitude <= 10)
             {
                 if (tank.HP < 100)
@@ -109,7 +109,7 @@ namespace ZSJ
                 }
             }
             //------
-            //------¼ÆËãÏÂÒ»¸öÄ¿±êÐÇÐÇ
+            //------ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             starInfos=info.GetStarInfos(tank,Match.instance.GetOppositeTank(tank.Team));
             int nearMyStarNum=-1;
             int nearEnemyStarNum=-1;
@@ -126,7 +126,7 @@ namespace ZSJ
 
             if(nearEnemyStarNum!=-1)
             {
-                if(starInfos[nearEnemyStarNum].enemy_Dis>starInfos[nearEnemyStarNum].my_Dis)//Èç¹ûµÐÈË×î½üµÄÐÇÐÇ£¬ÎÒÃÇ¸ü½ü
+                if(starInfos[nearEnemyStarNum].enemy_Dis>starInfos[nearEnemyStarNum].my_Dis)//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½ï¿½Ç¸ï¿½ï¿½ï¿½
                 {
                     goalStarID = starInfos[nearEnemyStarNum].ID;
                 }
@@ -146,8 +146,8 @@ namespace ZSJ
             if(nearMyStarNum!=-1)
             goalStarID = starInfos[nearMyStarNum].ID;
             //------
-            //------Ç°ÍùÄ¿±êÐÇÐÇ
-            if(Danger(tank))//±ÜÏÕ  ¼ÆËãÅÚµ¯Óë×Ô¼ºµÄ¾àÀë ¼ÆËãÅÚµ¯»÷ÖÐÊ±¼ä ÅÐ¶ÏÊÇ·ñ»á»÷ÖÐ ¾ö¶¨ÊÇ·ñ»Ø±Ü
+            //------Ç°ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            if(Danger(tank))//ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½Ä¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Ø±ï¿½
             {
                 
             }

@@ -19,7 +19,7 @@ namespace KXF
         private IsSuperStarExistAfterXSec _isSuperStarExistAfter5Sec;
         private IsSuperStarExistAfterXSec _isSuperStarExistAfterN1Sec;
 
-        private float noVoidDistance = 3f;
+        //private float noVoidDistance = 3f;
         // Start is called before the first frame update
         public override string GetName()
         {

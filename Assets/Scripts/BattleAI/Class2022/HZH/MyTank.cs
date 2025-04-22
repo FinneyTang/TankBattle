@@ -278,7 +278,7 @@ namespace HZH
         private float m_LastTime = 0;
 
         private float gotime = 4f;//直接前往超级星时间
-        private float RebornRadius = 20f;//重生点附近星星探测
+        //private float RebornRadius = 20f;//重生点附近星星探测
         private float MissileDetectRadius = 20f;//导弹探测
         private float lastTime=0;
         private Tank Enemy;

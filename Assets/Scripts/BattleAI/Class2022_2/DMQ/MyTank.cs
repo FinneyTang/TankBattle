@@ -32,7 +32,7 @@ namespace DMQ
         Missile missileFir;
         Missile missileSec;
         Missile missileThi;
-        int missileTotal = 0;
+        //int missileTotal = 0;
         public override string GetName(){return "DMQ";}
         protected override void OnStart()
         {

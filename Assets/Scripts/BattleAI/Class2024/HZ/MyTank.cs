@@ -26,7 +26,7 @@ namespace HZ
 
         public float timer;
         private float _degree;
-        private bool _needAvoid = true;
+        //private bool _needAvoid = true;
         public StateType _state;
 
         protected override void OnStart()

@@ -183,7 +183,7 @@ namespace WJH
             {
                 GoBackHome = true;
                 //Debug.LogError("HOME");
-                if (isEscape = false)
+                if (isEscape == false)
                 {
                     NowPos = Match.instance.GetRebornPos(Team);
                 }

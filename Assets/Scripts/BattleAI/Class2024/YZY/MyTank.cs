@@ -15,8 +15,8 @@ namespace YZY
         private Vector3 m_HelpPos;
         private readonly List<Tank> m_CachedOppTanks = new List<Tank>();
       //  private readonly List<Missile> OPP_Missile = new List<Missile>()
-      private float m_NextRandomMoveTime = 0f;
-      private float m_RandomMoveDuration = 0f;
+      //private float m_NextRandomMoveTime = 0f;
+      //private float m_RandomMoveDuration = 0f;
       private Vector3 m_RandomMoveDirection;
       
       Match match;

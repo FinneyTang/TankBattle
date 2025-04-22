@@ -8,7 +8,7 @@ namespace AI.UtilityBased
     {
         First, Second
     }
-    abstract public class Selector
+    public abstract class Selector
     {
         public float Sel(float a, float b, out ESelResult ret)
         {
@@ -40,12 +40,11 @@ namespace AI.UtilityBased
             {
                 return -1;
             }
-            float finalValue = us[0].CalcU(agent);
-            int selIndex = 0;
-            ESelResult ret;
+            var finalValue = us[0].CalcU(agent);
+            var selIndex = 0;
             for(int i = 1; i < us.Length; ++i)
             {
-                finalValue = sel.Sel(finalValue, us[i].CalcU(agent), out ret);
+                finalValue = sel.Sel(finalValue, us[i].CalcU(agent), out var ret);
                 if(ret == ESelResult.Second)
                 {
                     selIndex = i;

@@ -23,7 +23,7 @@ namespace AI.UtilityBased
     }
     public class CompositeUtility : Utility
     {
-        protected List<Utility> m_Us = new List<Utility>();
+        protected readonly List<Utility> m_Us = new List<Utility>();
         public virtual CompositeUtility AddUtility(Utility u)
         {
             m_Us.Add(u);
@@ -60,7 +60,7 @@ namespace AI.UtilityBased
     }
     public class WeightedAddtiveComposite : CompositeUtility
     {
-        private List<float> m_Weights = new List<float>();
+        private readonly List<float> m_Weights = new List<float>();
         private bool m_WeightsDirty = false;
         public override CompositeUtility AddUtility(Utility u)
         {

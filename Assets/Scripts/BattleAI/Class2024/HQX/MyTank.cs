@@ -12,28 +12,28 @@ using AI.BehaviourTree;
 namespace HQX
 {
     /// <summary>
-    /// ¾ö²ß²ãµÄÉè¼Æ£¬ConditionµÄÔ¤ÏÈÖ¸¶¨
+    /// ï¿½ï¿½ï¿½ß²ï¿½ï¿½ï¿½ï¿½Æ£ï¿½Conditionï¿½ï¿½Ô¤ï¿½ï¿½Ö¸ï¿½ï¿½
     /// </summary>
 
     /// <summary>
-    /// ¼ì²éµÐÎÒÌ¹¿ËÖ®¼äÊÇ·ñÍ¨Í¸£¬ÓÃ×÷¿ª»ðÅÐ¶ÏÊ¹ÓÃ
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½ï¿½Ö®ï¿½ï¿½ï¿½Ç·ï¿½Í¨Í¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½Ê¹ï¿½ï¿½
     /// </summary>
     class IsFireLineClear : Condition
     {
         public override bool IsTrue(IAgent agent)
         {
-            // »ñÈ¡ÎÒ·½Ì¹¿ËºÍµÐ·½Ì¹¿Ë
+            // ï¿½ï¿½È¡ï¿½Ò·ï¿½Ì¹ï¿½ËºÍµÐ·ï¿½Ì¹ï¿½ï¿½
             Tank myTank = (Tank)agent;
             Tank enemyTank = Match.instance.GetOppositeTank(myTank.Team);
 
-            // ¼ì²éÎÒ·½Ì¹¿ËºÍµÐ·½Ì¹¿ËÖ®¼äÊÇ·ñ´æÔÚÍ¨ÊÓ
+            // ï¿½ï¿½ï¿½ï¿½Ò·ï¿½Ì¹ï¿½ËºÍµÐ·ï¿½Ì¹ï¿½ï¿½Ö®ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½
             return new IsBothCanSeeOpp(myTank.FirePos, myTank.FirePos + myTank.TurretAiming * Vector3.Distance(myTank.FirePos, enemyTank.Position)).IsTrue(agent);
 
         }
     }
 
     /// <summary>
-    /// µ¥¶À³éÏó³öÀ´µÄÌõ¼þ£¬ÓÃÓÚÅÐ¶ÏAÎïÌåºÍBÎïÌåÖ®¼äÊÇ·ñÓÐ×èµ²
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½Ö®ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½èµ²
     /// </summary>
     class IsBothCanSeeOpp : Condition
     {
@@ -52,7 +52,7 @@ namespace HQX
     }
 
     /// <summary>
-    /// ¼ì²éÎÒ·½Ì¹¿ËÎ»ÖÃÊÇ·ñÄÜ¿´µ½Ö¸¶¨Î»ÖÃ
+    /// ï¿½ï¿½ï¿½ï¿½Ò·ï¿½Ì¹ï¿½ï¿½Î»ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Ü¿ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½Î»ï¿½ï¿½
     /// </summary>
     class IsMyTankPosCanSee : Condition
     {
@@ -68,7 +68,7 @@ namespace HQX
     }
 
     /// <summary>
-    /// ¼ì²éÎÒ·½ÊÇ·ñÄÜ¿´µ½µÐ·½Ì¹¿Ë£¬ÈôµÐ·½Ì¹¿ËÎ´ËÀÍö£¬¼ì²éÎÒ·½Ì¹¿ËÎ»ÖÃÊÇ·ñÄÜ¿´µ½µÐ·½Ì¹¿ËÇ°·½ºÍºó·½¸÷3.5¸öµ¥Î»Î»ÖÃ£¨ÓÃÓÚÔ¤ÅÐÉä»÷ÓÃ£©
+    /// ï¿½ï¿½ï¿½ï¿½Ò·ï¿½ï¿½Ç·ï¿½ï¿½Ü¿ï¿½ï¿½ï¿½ï¿½Ð·ï¿½Ì¹ï¿½Ë£ï¿½ï¿½ï¿½ï¿½Ð·ï¿½Ì¹ï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò·ï¿½Ì¹ï¿½ï¿½Î»ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Ü¿ï¿½ï¿½ï¿½ï¿½Ð·ï¿½Ì¹ï¿½ï¿½Ç°ï¿½ï¿½ï¿½Íºó·½¸ï¿½3.5ï¿½ï¿½ï¿½ï¿½Î»Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã£ï¿½
     /// </summary>
     class IsMyCanSeeEneTank : Condition
     {
@@ -89,14 +89,14 @@ namespace HQX
     }
 
     /// <summary>
-    /// ¼ì²éÎÒ·½Ãé×¼½Ç¶ÈÊÇ·ñÐ¡ÓÚÖ¸¶¨½Ç¶È
+    /// ï¿½ï¿½ï¿½ï¿½Ò·ï¿½ï¿½ï¿½×¼ï¿½Ç¶ï¿½ï¿½Ç·ï¿½Ð¡ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Ç¶ï¿½
     /// </summary>
     class IsMyAimingAngleLessThan : Condition
     {
         private Tank enemyTankC;
         private float angleC;
         
-        //ÔÚµ÷ÓÃÕâ¸öÀàµÄÊ±ºò£¬Í¨¹ý¶ÔÆä¹¹Ôìº¯Êý½øÐÐµ÷ÓÃ²¢¸³Öµ£¬ÊµÏÖÁËÍâ²¿Êý¾Ý¶ÔÄÚ´«²Î£¬¶øÄÚ²¿Êý¾ÝÈÔÈ»±£³Ö·â×°£¨²»»á±»ÎÛÈ¾£©
+        //ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½ï¿½ä¹¹ï¿½ìº¯ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½Ã²ï¿½ï¿½ï¿½Öµï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½ï¿½â²¿ï¿½ï¿½ï¿½Ý¶ï¿½ï¿½Ú´ï¿½ï¿½Î£ï¿½ï¿½ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È»ï¿½ï¿½ï¿½Ö·ï¿½×°ï¿½ï¿½ï¿½ï¿½ï¿½á±»ï¿½ï¿½È¾ï¿½ï¿½
         public IsMyAimingAngleLessThan(Tank enemyTank, float angle = 90f)
         {
             enemyTankC = enemyTank;
@@ -111,7 +111,7 @@ namespace HQX
     }
 
     /// <summary>
-    /// ¼ì²é±ÈÈüÊ£ÓàÊ±¼äÊÇ·ñÐ¡ÓÚÖ¸¶¨Ê±¼ä
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê£ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ç·ï¿½Ð¡ï¿½ï¿½Ö¸ï¿½ï¿½Ê±ï¿½ï¿½
     /// </summary>
     class IsMatchTimeLessThan : Condition
     {
@@ -128,7 +128,7 @@ namespace HQX
     }
 
     /// <summary>
-    /// ¼ì²éÎÒ·½Ì¹¿Ëµ½Ö¸¶¨Î»ÖÃµÄÂ·¾¶¾àÀëÊÇ·ñÐ¡ÓÚÖ¸¶¨¾àÀë
+    /// ï¿½ï¿½ï¿½ï¿½Ò·ï¿½Ì¹ï¿½Ëµï¿½Ö¸ï¿½ï¿½Î»ï¿½Ãµï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Ð¡ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     class IsMyTankPathDistanceLessThan : Condition
     {
@@ -147,7 +147,7 @@ namespace HQX
     }
 
     /// <summary>
-    /// ¼ì²âÎÒ·½·ÖÊýÊÇ·ñ±ÈµÐÈË¸ß
+    /// ï¿½ï¿½ï¿½ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Èµï¿½ï¿½Ë¸ï¿½
     /// </summary>
     class IsMyScoreGreaterThan : Condition
     {
@@ -163,7 +163,7 @@ namespace HQX
     }
 
     /// <summary>
-    /// ¼ì²âµÐ·½ÊÇ·ñËÀÍö
+    /// ï¿½ï¿½ï¿½Ð·ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     class IsTankDead : Condition
     {
@@ -179,7 +179,7 @@ namespace HQX
     }
 
     /// <summary>
-    /// ³éÏó³öÀ´µÄ±È½ÏÀà£¬ÓÃÓÚ±È½ÏAºÍBµÄ´óÐ¡
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä±È½ï¿½ï¿½à£¬ï¿½ï¿½ï¿½Ú±È½ï¿½Aï¿½ï¿½Bï¿½Ä´ï¿½Ð¡
     /// </summary>
     class IsNumALessNumB : Condition
     {
@@ -199,7 +199,7 @@ namespace HQX
     }
 
     /// <summary>
-    /// ÓÃÓÚ¼ì²âÊÕµ½µÄwarningTypeÓë´«ÈëµÄÊÇ·ñÒ»ÖÂ
+    /// ï¿½ï¿½ï¿½Ú¼ï¿½ï¿½ï¿½Õµï¿½ï¿½ï¿½warningTypeï¿½ë´«ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Ò»ï¿½ï¿½
     /// </summary>
     class IsWarningFlagNotEqual : Condition
     {
@@ -218,7 +218,7 @@ namespace HQX
     }
 
     /// <summary>
-    /// ÅÐ¶ÏAºÍBµÄ¾àÀëÊÇ·ñÐ¡ÓÚ¸ø¶¨Öµ
+    /// ï¿½Ð¶ï¿½Aï¿½ï¿½Bï¿½Ä¾ï¿½ï¿½ï¿½ï¿½Ç·ï¿½Ð¡ï¿½Ú¸ï¿½ï¿½ï¿½Öµ
     /// </summary>
     class IsLineDistanceLess : Condition
     {
@@ -239,7 +239,7 @@ namespace HQX
     }
 
     /// <summary>
-    /// ÅÐ¶Ï³¬ÐÇÊÇ·ñ´æÔÚ
+    /// ï¿½Ð¶Ï³ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     class IsSuperStarExist : Condition
     {
@@ -259,7 +259,7 @@ namespace HQX
 
 
     /// <summary>
-    ///ÐÐÎª&ÔË¶¯²ãµÄÉè¼Æ£¬StateMachineµÄ½¨Á¢
+    ///ï¿½ï¿½Îª&ï¿½Ë¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½StateMachineï¿½Ä½ï¿½ï¿½ï¿½
     /// </summary>
     enum EStateType
     {
@@ -384,9 +384,9 @@ namespace HQX
         private float lastTime;
         private Vector3 lastPos;
         private Vector3 averageSpeed;
-        private float maxSpeed;
+        //private float maxSpeed;
 
-        private StateMachine m_FSM;    //×´Ì¬»úÉùÃ÷
+        private StateMachine m_FSM;    //×´Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
         public Missile AvoidingMissile;
         public bool AvoidingDir;
@@ -449,13 +449,13 @@ namespace HQX
         protected override void OnStart()
         {
             base.OnStart();
-            //×´Ì¬»ú³õÊ¼»¯
+            //×´Ì¬ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½
             m_FSM = new StateMachine(this);
             m_FSM.AddState(new FindEnemyState());
             m_FSM.AddState(new BackToHomeState());
             m_FSM.AddState(new FindStarState());
             m_FSM.SetDefaultState((int)EStateType.FindStar);
-            //±ÈÈü»ù´¡¶ÔÏó»ñÈ¡
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡
             match = Match.instance;
             myTank = match.GetTank(Team);
             //enemyTank = match.GetOppositeTank(Team);
@@ -468,7 +468,7 @@ namespace HQX
             AvoidingDir = false;
             lastPos = enemyTank.Position;
             lastTime = Time.time;
-            maxSpeed = 10.0f;
+            //maxSpeed = 10.0f;
 
 
 
@@ -483,28 +483,28 @@ namespace HQX
                 Debug.DrawLine(FirePos, FirePos + TurretAiming * Vector3.Distance(FirePos, enemyTank.Position), Color.black);
             }
 
-            //»ð¿ØºÍ¹æ±ÜDebug
+            //ï¿½ï¿½ØºÍ¹ï¿½ï¿½Debug
             if (WarningMissles.Count > 0)
             {
                 if (Vector3.Distance(WarningMissles[0].Position, enemyTank.Position) < 3.75f)
                 {
-                    Debug.LogError("µÐ·½·¢Éäµ¼µ¯");
+                    Debug.LogError("ï¿½Ð·ï¿½ï¿½ï¿½ï¿½äµ¼ï¿½ï¿½");
                 }
                 if (Vector3.Distance(WarningMissles[0].Position, myTank.Position + Vector3.up * 3) < 4f)
                 {
-                    Debug.LogError("µÐ·½µ¼µ¯½üÉí");
+                    Debug.LogError("ï¿½Ð·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
                 }
             }
 
             if (hitWarningFlag != MissileWarningType.Safe && (Vector3.Distance(myTank.transform.position, enemyTank.transform.position) < EvadeMinDistance))//&& !AvoidEvadeConditionPlus()
             {
-                Debug.LogWarning("Âú×ãÌØÊâÌõ¼þ²»½øÐÐ¹æ±Ü");
+                Debug.LogWarning("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¹ï¿½ï¿½");
             }
 
         }
 
         /// <summary>
-        /// ConditionµÄ¸üÐÂ
+        /// Conditionï¿½Ä¸ï¿½ï¿½ï¿½
         /// </summary>
         private void ConditionBaseUpdate()
         {
@@ -527,23 +527,23 @@ namespace HQX
         }
 
         /// <summary>
-        /// ÐÅÏ¢²ãµÄ¸üÐÂ
+        /// ï¿½ï¿½Ï¢ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½
         /// </summary>
         /// <param name="hitWarningFlagC"></param>
         private void KnowledgeLayer(out MissileWarningType hitWarningFlagC)
         {
             DetectFlyingMissile();
-            hitWarningFlagC = HitWarning();//hitWarningFlagC½«×÷ÎªÊä³ö
+            hitWarningFlagC = HitWarning();//hitWarningFlagCï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½
             averageSpeed = CalculateAverageTankSpeed(lastTime, TankSpeeds,lastPos);
             ConditionBaseUpdate();
         }
 
         /// <summary>
-        /// »ð¿ØÏµÍ³²ßÂÔ(»ùÓÚCondition)
+        /// ï¿½ï¿½ï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½Condition)
         /// </summary>
         private void FireControlSystemAct()
         {
-            //»ð¿ØÏµÍ³--Ãé×¼
+            //ï¿½ï¿½ï¿½ÏµÍ³--ï¿½ï¿½×¼
             if (!enemyTank.IsDead)
             {
                 //if(enemyTank)
@@ -554,7 +554,7 @@ namespace HQX
                 TurretTurnTo(match.GetRebornPos(enemyTank.Team));
             }
 
-            //»ð¿ØÏµÍ³--¿ª»ð
+            //ï¿½ï¿½ï¿½ÏµÍ³--ï¿½ï¿½ï¿½ï¿½
             if (!enemyTank.IsDead && FireConditionWhenEnemyAlive.IsTrue(myTank))
             {
                 Fire();
@@ -567,7 +567,7 @@ namespace HQX
         }
 
         /// <summary>
-        /// ÒÆ¶¯ÏµÍ³²ßÂÔ(»ùÓÚCondition)
+        /// ï¿½Æ¶ï¿½ÏµÍ³ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½Condition)
         /// </summary>
         private void MoveingControlSystemAct()
         {
@@ -575,48 +575,48 @@ namespace HQX
             {
                 DropByStar(15f);
                 Move(myRebornPos);
-                //Debug.LogWarning("±£Ãü");
+                //Debug.LogWarning("ï¿½ï¿½ï¿½ï¿½");
             }
             else if (EvadeRule.IsTrue(this))
             {
                 //hitWarningFlag != MissileWarningType.Safe && Vector3.Distance(myTank.transform.position, enemyTank.transform.position) > EvadeMinDistance
                 //&& !AvoidEvadeConditionPlus()
                 EvadeMissile(WarningMissles[0], hitWarningFlag);
-                //Debug.LogWarning("ÕýÔÚ¹æ±Ü");
+                //Debug.LogWarning("ï¿½ï¿½ï¿½Ú¹ï¿½ï¿½");
             }
             else if (SuperStarRuleA.IsTrue(this))
             {
                 Move(new Vector3(0, 0.5f, 0));
-                //Debug.LogWarning("ÕýÔÚÇ¿ÖÆÖ¸ÒýÇ°Íù³¬ÐÇµã");
+                //Debug.LogWarning("ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½Ö¸ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Çµï¿½");
             }
             else if (SuperStarRuleB.IsTrue(this))
             {
                 Move(new Vector3(0, 0.5f, 0));
-                //Debug.LogWarning("ÕýÔÚÇ¿ÖÆÖ¸ÒýÇ°Íù³¬ÐÇµã");
+                //Debug.LogWarning("ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½Ö¸ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Çµï¿½");
             }
             else if (MoreRecover.IsTrue(this))
             {
                 //Vector3.Distance(myTank.Position, myRebornPos) < 2f && myTank.HP < 60f
                 Move(myRebornPos);
-                Debug.LogWarning("¶à»Ø»áÑª");
+                Debug.LogWarning("ï¿½ï¿½Ø»ï¿½Ñª");
             }
 
-            //ÆäËûÌõ¼þÊ¡ÂÔ£¬ÕâÀïÉúÃüÖµÅÐ¶ÏµÄÂß¼­ÊÇ£º
-            //»ñÈ¡µ½µÐÎÒÉúÃüÖµ£¬²¢Í¬³ý25À´µÃµ½Ò»¸ö±ÈÀý£¬²¢ÓÃMathf.CeilToIntº¯ÊýÏòÉÏÈ¡Õû£¬ÔÙ½øÐÐ±È½Ï
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¡ï¿½Ô£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½Ð¶Ïµï¿½ï¿½ß¼ï¿½ï¿½Ç£ï¿½
+            //ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½25ï¿½ï¿½ï¿½Ãµï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Mathf.CeilToIntï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Ù½ï¿½ï¿½Ð±È½ï¿½
             else if (!enemyTank.IsDead && ((IsMyTankPosCanSee(AimAdvanceAmountPosition(enemyTank)) || IsMyCanSeeEneTank()) && ((Mathf.CeilToInt(myTank.HP / 20f)) > Mathf.CeilToInt(enemyTank.HP / 20f)) && Vector3.Distance(enemyTank.Position, match.GetRebornPos(enemyTank.Team)) > 12f))
             {
 
                 Move(enemyTank.Position);
-                //Debug.LogWarning("×·»÷µÐÈË");
+                //Debug.LogWarning("×·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
             }
             else if ((Mathf.CeilToInt(myTank.HP / 20f)) + 1 < Mathf.CeilToInt(enemyTank.HP / 20f))
             {
                 DropByStar(15f);
                 Move(myRebornPos);
-                //Debug.LogWarning("ÑªÁ¿±ÈµÐÈËÉÙµÃ¶à£¬»Ø¼Ò²¹Ñª");
+                //Debug.LogWarning("Ñªï¿½ï¿½ï¿½Èµï¿½ï¿½ï¿½ï¿½ÙµÃ¶à£¬ï¿½Ø¼Ò²ï¿½Ñª");
 
             }
-            //Èç¹û±ÈÈüÊ£ÓàÊ±¼äÉÙÓÚ70ÃëÇÒÎÒµÄ·ÖÊý±ÈµÐ·½¸ß£¬Ì¹¿Ë½«³¢ÊÔÒÆ¶¯µ½µÐ·½ÇøÓò×î½üµÄÐÇÐÇÎ»ÖÃ£»Èç¹ûÃ»ÓÐÐÇÐÇ£¬ÔòÒÆ¶¯»Ø¸´»îÎ»ÖÃ
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê£ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½70ï¿½ï¿½ï¿½ï¿½ï¿½ÒµÄ·ï¿½ï¿½ï¿½ï¿½ÈµÐ·ï¿½ï¿½ß£ï¿½Ì¹ï¿½Ë½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½Ð·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½Î»ï¿½ï¿½
             else if (new AndCondition(new IsMatchTimeLessThan(70f), new IsMyScoreGreaterThan(enemyTank.Score + 10)).IsTrue(this))
             {
                 //match.RemainingTime < 70f && myTank.Score - 10 >= enemyTank.Score
@@ -624,35 +624,35 @@ namespace HQX
                 if (EnemyAreaNearestStar() != null)
                 {
                     Move(EnemyAreaNearestStar().Position);
-                    //Debug.LogWarning("ÕÒµÐ³¡ÐÇÐÇ");
+                    //Debug.LogWarning("ï¿½ÒµÐ³ï¿½ï¿½ï¿½ï¿½ï¿½");
                 }
                 else
                 {
                     Move(myRebornPos);
-                    //Debug.LogWarning("»Ø¼Ò");
+                    //Debug.LogWarning("ï¿½Ø¼ï¿½");
                 }
             }
             else if (!enemyTank.IsDead && NearestStarAndFar() != null && (myTank.HP > 25) && Mathf.CeilToInt(enemyTank.HP / 25f) >= (Mathf.CeilToInt(myTank.HP / 25f)))
             {
                 Move(NearestStarAndFar().Position);
-                //Debug.LogWarning("ÕÒ°²È«ÐÇÐÇ");
+                //Debug.LogWarning("ï¿½Ò°ï¿½È«ï¿½ï¿½ï¿½ï¿½");
             }
             else if (NearestStar() != null && (myTank.HP > 25))
             {
                 Move(NearestStar().Position);
-                //Debug.LogWarning("ÕÒ½üÐÇÐÇ");
+                //Debug.LogWarning("ï¿½Ò½ï¿½ï¿½ï¿½ï¿½ï¿½");
             }
             else if(myTank.HP>80)
             {
                 DropByStar(15f);
                 Move(new Vector3(19.18f, 0.50f, 11.59f));
-                //Debug.LogWarning("µ½×¼±¸µã");
+                //Debug.LogWarning("ï¿½ï¿½×¼ï¿½ï¿½ï¿½ï¿½");
             }
             else
             {
                 DropByStar(15f);
                 Move(myRebornPos);
-                //Debug.LogWarning("»Ø¼Ò");
+                //Debug.LogWarning("ï¿½Ø¼ï¿½");
 
             }
             //if (Input.GetMouseButton(1))
@@ -663,7 +663,7 @@ namespace HQX
         }
 
         /// <summary>
-        /// ¾ö²ß²ãºÍÐÐÎª²ã
+        /// ï¿½ï¿½ï¿½ß²ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½
         /// </summary>
         private void StratedgyAndBehaviorLayer()
         {
@@ -675,12 +675,12 @@ namespace HQX
         {
             base.OnUpdate();
 
-            //ÐÅÏ¢²ã
+            //ï¿½ï¿½Ï¢ï¿½ï¿½
             KnowledgeLayer(out hitWarningFlag);
-            //¾ö²ß²ãºÍÐÐÎª²ãUpdate
+            //ï¿½ï¿½ï¿½ß²ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Update
             StratedgyAndBehaviorLayer();
 
-            //ÐÐÎª²ãUpdate
+            //ï¿½ï¿½Îªï¿½ï¿½Update
             //Tank oppTank = Match.instance.GetOppositeTank(Team);
             //if (oppTank != null && oppTank.IsDead == false)
             //{
@@ -715,7 +715,7 @@ namespace HQX
         }
 
         /// <summary>
-        /// ¼ÆËã´ÓÌ¹¿Ëµ±Ç°Î»ÖÃµ½Ä¿±êÎ»ÖÃµÄÊµ¼Ê¾àÀë£¨»ùÓÚNavMesh£¬·ÇÖ±Ïß¾àÀë£©
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½Ëµï¿½Ç°Î»ï¿½Ãµï¿½Ä¿ï¿½ï¿½Î»ï¿½Ãµï¿½Êµï¿½Ê¾ï¿½ï¿½ë£¨ï¿½ï¿½ï¿½ï¿½NavMeshï¿½ï¿½ï¿½ï¿½Ö±ï¿½ß¾ï¿½ï¿½ë£©
         /// </summary>
         /// <param name="TarPos"></param>
         /// <returns></returns>
@@ -741,7 +741,7 @@ namespace HQX
                     //Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red, 3);
                     TotalDistance += Vector3.Distance(path.corners[i], path.corners[i + 1]);
                 }
-                //TotalDistance += Vector3.Distance(myTank.transform.position, path.corners[0]) + Vector3.Distance(TarPos, path.corners[path.corners.Length - 1]);ÒÑ¾­¼Ó¹ýÁË
+                //TotalDistance += Vector3.Distance(myTank.transform.position, path.corners[0]) + Vector3.Distance(TarPos, path.corners[path.corners.Length - 1]);ï¿½Ñ¾ï¿½ï¿½Ó¹ï¿½ï¿½ï¿½
             }
 
 
@@ -750,7 +750,7 @@ namespace HQX
         }
 
         /// <summary>
-        /// ¼ÆËã´ÓµÐ·½Ì¹¿Ëµ±Ç°Î»ÖÃµ½Ä¿±êÎ»ÖÃµÄÊµ¼Ê¾àÀë£¨»ùÓÚNavMesh£¬·ÇÖ±Ïß¾àÀë£©
+        /// ï¿½ï¿½ï¿½ï¿½ÓµÐ·ï¿½Ì¹ï¿½Ëµï¿½Ç°Î»ï¿½Ãµï¿½Ä¿ï¿½ï¿½Î»ï¿½Ãµï¿½Êµï¿½Ê¾ï¿½ï¿½ë£¨ï¿½ï¿½ï¿½ï¿½NavMeshï¿½ï¿½ï¿½ï¿½Ö±ï¿½ß¾ï¿½ï¿½ë£©
         /// </summary>
         /// <param name="TarPos"></param>
         /// <returns></returns>
@@ -783,7 +783,7 @@ namespace HQX
                     //Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red, 3);
                     TotalDistance += Vector3.Distance(path.corners[i], path.corners[i + 1]);
                 }
-                //TotalDistance += Vector3.Distance(myTank.transform.position, path.corners[0]) + Vector3.Distance(TarPos, path.corners[path.corners.Length - 1]);ÒÑ¾­¼Ó¹ýÁË
+                //TotalDistance += Vector3.Distance(myTank.transform.position, path.corners[0]) + Vector3.Distance(TarPos, path.corners[path.corners.Length - 1]);ï¿½Ñ¾ï¿½ï¿½Ó¹ï¿½ï¿½ï¿½
             }
 
 
@@ -792,7 +792,7 @@ namespace HQX
         }
 
         /// <summary>
-        /// ÕÒµ½ÀëÎÒ·½×î½ü£¬Í¬Ê±µÐ·½¾àÀë±ÈÎÒ·½Ô¶µÄÐÇÐÇ
+        /// ï¿½Òµï¿½ï¿½ï¿½ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬Ê±ï¿½Ð·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò·ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         /// <returns></returns>
         private Star NearestStarAndFar()
@@ -809,7 +809,7 @@ namespace HQX
                 int starId = -1;
                 foreach (var item in stars)
                 {
-                    //µ±ÎÒ·½Ì¹¿Ëµ½¸ÃÐÇÐÇÂ·¾¶×î¶Ì£¬ÇÒµÐ·½Â·¾¶µ½¸ÃÐÇÐÇµÄ¾àÀë±ÈÎÒ·½Ô¶Ê±£¬»á°Ñ¸ÃÐÇÐÇ×÷Îª×î½üÐÇÐÇ´«»Ø
+                    //ï¿½ï¿½ï¿½Ò·ï¿½Ì¹ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½Ì£ï¿½ï¿½ÒµÐ·ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÇµÄ¾ï¿½ï¿½ï¿½ï¿½ï¿½Ò·ï¿½Ô¶Ê±ï¿½ï¿½ï¿½ï¿½Ñ¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ï¿½ï¿½
                     if (PathDistance(item.Position) < mindis && PathDistance(item.Position) < EnemyPathDistance(item.Position))
                     {
                         mindis = PathDistance(item.Position);
@@ -828,7 +828,7 @@ namespace HQX
         }
 
         /// <summary>
-        /// ÕÒ¾àÀëÍæ¼Ò×î½üµÄÐÇÐÇ
+        /// ï¿½Ò¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         /// <returns></returns>
         private Star NearestStar()
@@ -863,7 +863,7 @@ namespace HQX
         }
 
         /// <summary>
-        /// ÕÒµÐ·½³¡µØÖÐÀëÎÒ·½Ì¹¿Ë×î½üµÄÐÇÐÇ
+        /// ï¿½ÒµÐ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò·ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         /// <returns></returns>
         private Star EnemyAreaNearestStar()
@@ -871,7 +871,7 @@ namespace HQX
             List<Star> stars = new List<Star>();
             foreach (var item in match.GetStars().Values)
             {
-                //´ÓÎÒ·½¸´»îÎ»ÖÃ³¯Ç°£¬ÅÐ¶ÏÊÇ·ñÄÜÖ±½Ó¿´µ½ÐÇÐÇ£¬Èç¹û¿´²»µ½£¬Ôò´ó¸ÅÂÊÊôÓÚµÐ·½³¡µØÖÐ
+                //ï¿½ï¿½ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ã³ï¿½Ç°ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ö±ï¿½Ó¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÚµÐ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 if (!IsBothCanSeeOpp(myRebornPos + Vector3.up, item.Position))
                 {
                     stars.Add(item);
@@ -883,7 +883,7 @@ namespace HQX
             {
                 float mindis = 10000f;
                 int starId = -1;
-                //±éÀúËùÓÐÐÇÐÇ£¬Èç¹ûÓÐ¸ü½üµÄÐÇÐÇ£¬Ôò¸üÐÂÐÇÐÇIDºÍ¾àÀë¡£
+                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½ï¿½ï¿½Ð¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½IDï¿½Í¾ï¿½ï¿½ë¡£
                 foreach (var item in stars)
                 {
                     if (PathDistance(item.Position) < mindis)
@@ -903,7 +903,7 @@ namespace HQX
         }
 
         /// <summary>
-        /// ¼ì²â·ÉÐÐÖÐµÄµ¼µ¯£¬½«µÐ·½µ¼µ¯´æÈëMissileÁÐ±íÖÐ
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÐµÄµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Missileï¿½Ð±ï¿½ï¿½ï¿½
         /// </summary>
         private void DetectFlyingMissile()
         {
@@ -917,7 +917,7 @@ namespace HQX
         }
 
         /// <summary>
-        /// ÎªMissileÁÐ±íÖÐµÄµ¼µ¯ÅÐ¶ÏÊÇ·ñÓÐ»÷ÖÐ·çÏÕ£¬·µ»Ø¸Ãµ¼µ¯µÄ·çÏÕÃ¶¾ÙÐÍ
+        /// ÎªMissileï¿½Ð±ï¿½ï¿½ÐµÄµï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½Ð»ï¿½ï¿½Ð·ï¿½ï¿½Õ£ï¿½ï¿½ï¿½ï¿½Ø¸Ãµï¿½ï¿½ï¿½ï¿½Ä·ï¿½ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         private MissileWarningType HitWarning()
         {
@@ -927,27 +927,27 @@ namespace HQX
             {
                 foreach (var missile in Missles)
                 {
-                    //ÅÐ¶Ïµ¼µ¯ÑØµ±Ç°ËÙ¶È·½ÏòÒÆ¶¯Ò»¶Î¾àÀëºó£¬ÎÒµÄÌ¹¿ËÊÇ·ñÄÜ¹»ÔÚx-zÆ½ÃæÉÏ¿´µ½µ¼µ¯(Ô¤²âËã·¨£ºµ¼µ¯µÄµ±Ç°Î»ÖÃ¼ÓÉÏµ¼µ¯ËÙ¶ÈµÄµ¥Î»ÏòÁ¿³ËÒÔÌ¹¿ËºÍµ¼µ¯ÔÚx-zÆ½ÃæÉÏµÄ¾àÀë)
+                    //ï¿½Ð¶Ïµï¿½ï¿½ï¿½ï¿½Øµï¿½Ç°ï¿½Ù¶È·ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½Ò»ï¿½Î¾ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½Ì¹ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Ü¹ï¿½ï¿½ï¿½x-zÆ½ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(Ô¤ï¿½ï¿½ï¿½ã·¨ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½Ç°Î»ï¿½Ã¼ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½Ù¶ÈµÄµï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½ËºÍµï¿½ï¿½ï¿½ï¿½ï¿½x-zÆ½ï¿½ï¿½ï¿½ÏµÄ¾ï¿½ï¿½ï¿½)
                     if (!IsBothCanSeeOpp(missile.Position, missile.Position + missile.Velocity.normalized * Vector3.Distance(myTank.Position, new Vector3(missile.Position.x, myTank.Position.y, missile.Position.z))))
                     {
                         continue;
                     }
 
-                    //tmpÊÇÒ»¸öÊý×é£¬ÓÃÓÚ´æ·ÅÒÔ£¨Ì¹¿ËµÄÎ»ÖÃ³ö·¢£¬ÏòÌ¹¿ËµÄÇ°·½ÒÆ¶¯1.5µ¥Î»£¬È»ºóÏòÉÏÒÆ¶¯3µ¥Î»£©ÎªÖÐÐÄ£¬°ë¾¶Îª2.5f£¬ÊôÓÚLayer_Entity MaskÎïÌå
-                    //ÕâÑù×ÓÉè¼Æ²àÖØÓÚÕýÃæ¶ÔÇ¹Ê±ºòµÄ¼ì²â
+                    //tmpï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½é£¬ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½Ô£ï¿½Ì¹ï¿½Ëµï¿½Î»ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½Ëµï¿½Ç°ï¿½ï¿½ï¿½Æ¶ï¿½1.5ï¿½ï¿½Î»ï¿½ï¿½È»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½3ï¿½ï¿½Î»ï¿½ï¿½Îªï¿½ï¿½ï¿½Ä£ï¿½ï¿½ë¾¶Îª2.5fï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Layer_Entity Maskï¿½ï¿½ï¿½ï¿½
+                    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¹Ê±ï¿½ï¿½Ä¼ï¿½ï¿½
                     var tmp = Physics.OverlapSphere(myTank.Position + myTank.Forward * 1.5f + Vector3.up * 3f, 2.5f, LayerMask.GetMask("Layer_Entity"));
-                    //var tmp = Physics.OverlapSphere(myTank.Position + Vector3.up * 3f, 3.5f, LayerMask.GetMask("Layer_Entity"));//¸Ä±äÇòÌåÎ»ÖÃ²âÊÔ
+                    //var tmp = Physics.OverlapSphere(myTank.Position + Vector3.up * 3f, 3.5f, LayerMask.GetMask("Layer_Entity"));//ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ã²ï¿½ï¿½ï¿½
 
-                    //ÓÃ½ºÄÒÌåÌæ´ú²âÊÔ
-                    // ½ºÄÒÌåµÄÁ½¸ö¶Ëµã·Ö±ðÉèÖÃÔÚÌ¹¿ËÇ°·½ºÍºó·½£¬ÒÔ¸²¸Ç¸ü´óµÄ¼ì²â·¶Î§
-                    //Vector3 point1 = myTank.Position + Vector3.up * 3f; // ÉÏ¶Ëµã
-                    //Vector3 point2 = myTank.Position - myTank.Forward * 1.5f + Vector3.up * 3f; // ÏÂ¶Ëµã
+                    //ï¿½Ã½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ëµï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½ï¿½Ç°ï¿½ï¿½ï¿½Íºó·½£ï¿½ï¿½Ô¸ï¿½ï¿½Ç¸ï¿½ï¿½ï¿½Ä¼ï¿½â·¶Î§
+                    //Vector3 point1 = myTank.Position + Vector3.up * 3f; // ï¿½Ï¶Ëµï¿½
+                    //Vector3 point2 = myTank.Position - myTank.Forward * 1.5f + Vector3.up * 3f; // ï¿½Â¶Ëµï¿½
                     //float capsuleRadius = 2.5f;
                     //var tmp = Physics.OverlapCapsule(point1, point2, capsuleRadius, LayerMask.GetMask("Layer_Entity"));
 
                     //Gizmos.DrawSphere(myTank.Position + Vector3.up * 3f, 3.5f);
 
-                    //±éÀútmpÖÐµÄËùÓÐÔªËØ,Èç¹ûÊÇµÐ·½µ¼µ¯£¬Ôò°Ñµ¼µ¯·ÅÈëWarningMisslesÁÐ±íÖÐ£¬²¢·µ»ØMissileWarningType.Near
+                    //ï¿½ï¿½ï¿½ï¿½tmpï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½Ôªï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ÇµÐ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½WarningMisslesï¿½Ð±ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½MissileWarningType.Near
                     if (tmp.Length > 0 && tmp[0].GetComponentInParent<Missile>().Team != myTank.Team)
                     {
                         if (WarningMissles.Count == 0)
@@ -958,14 +958,14 @@ namespace HQX
                         {
                             WarningMissles[0] = missile;
                         }
-                        //Debug.Log("Ì¹¿ËÁÚ½üÊÜ»÷Ô¤¾¯");
+                        //Debug.Log("Ì¹ï¿½ï¿½ï¿½Ú½ï¿½ï¿½Ü»ï¿½Ô¤ï¿½ï¿½");
                         return MissileWarningType.Near;
                     }
-                    //Ì¹¿Ëµ±Ç°Î»ÖÃ±»Ëø¶¨Ô¤¾¯£¬ÓÃÈýÌõÉäÏßÀ´¼ì²âµ¼µ¯µÄÔ¤²âÐÐ½øÂ·Ïß£¬·Ö±ðÊÇ£º
-                    //´Óµ¼µ¯µ±Ç°Î»ÖÃÖ±½ÓÏòµ¼µ¯µÄËÙ¶È·½Ïò·¢Éä
-                    //´Óµ¼µ¯µ±Ç°Î»ÖÃÏòÓÒÆ«ÒÆ1.6µ¥Î»ºóÏòµ¼µ¯µÄËÙ¶È·½Ïò·¢Éä
-                    //´Óµ¼µ¯µ±Ç°Î»ÖÃÏò×óÆ«ÒÆ1.6µ¥Î»ºóÏòµ¼µ¯µÄËÙ¶È·½Ïò·¢Éä
-                    //ÈçºÎÈÎºÎÒ»ÌõÉäÏßÅöµ½ÁËTank MaskµÄÎïÌå£¨Ò²¾ÍÊÇÎÒ·½Ì¹¿Ë£©£¬½«ÕâÐ©µ¼µ¯´æÈëWarningMisslesÁÐ±í£¬²¢·µ»ØLocked µ¼µ¯Ô¤¾¯Ã¶¾ÙÀàÐÍ
+                    //Ì¹ï¿½Ëµï¿½Ç°Î»ï¿½Ã±ï¿½ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½âµ¼ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½Ð½ï¿½Â·ï¿½ß£ï¿½ï¿½Ö±ï¿½ï¿½Ç£ï¿½
+                    //ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½Ç°Î»ï¿½ï¿½Ö±ï¿½ï¿½ï¿½òµ¼µï¿½ï¿½ï¿½ï¿½Ù¶È·ï¿½ï¿½ï¿½ï¿½ï¿½
+                    //ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½Ç°Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ«ï¿½ï¿½1.6ï¿½ï¿½Î»ï¿½ï¿½ï¿½òµ¼µï¿½ï¿½ï¿½ï¿½Ù¶È·ï¿½ï¿½ï¿½ï¿½ï¿½
+                    //ï¿½Óµï¿½ï¿½ï¿½ï¿½ï¿½Ç°Î»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ«ï¿½ï¿½1.6ï¿½ï¿½Î»ï¿½ï¿½ï¿½òµ¼µï¿½ï¿½ï¿½ï¿½Ù¶È·ï¿½ï¿½ï¿½ï¿½ï¿½
+                    //ï¿½ï¿½ï¿½ï¿½Îºï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Tank Maskï¿½ï¿½ï¿½ï¿½ï¿½å£¨Ò²ï¿½ï¿½ï¿½ï¿½ï¿½Ò·ï¿½Ì¹ï¿½Ë£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½WarningMisslesï¿½Ð±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Locked ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     else if (Physics.Raycast(missile.Position, missile.Velocity.normalized, Vector3.Distance(myTank.Position + Vector3.up * (missileHeight - 0.5f), missile.Position) + 3f, PhysicsUtils.LayerMaskTank) || 
                              Physics.Raycast(missile.Position + missile.transform.right * 1.62f, missile.Velocity.normalized, Vector3.Distance(myTank.Position + Vector3.up * (missileHeight - 0.5f), missile.Position) + 3f, PhysicsUtils.LayerMaskTank) || 
                              Physics.Raycast(missile.Position - missile.transform.right * 1.62f, missile.Velocity.normalized, Vector3.Distance(myTank.Position + Vector3.up * (missileHeight - 0.5f), missile.Position) + 3f, PhysicsUtils.LayerMaskTank))
@@ -973,43 +973,43 @@ namespace HQX
                         WarningMissles.Add(missile);
                         Debug.DrawRay(missile.Position, missile.Velocity, Color.black);
                         //EvadeMissile(missile);
-                        //Debug.Log("Ì¹¿ËÖÐÐÄÊÜ»÷Ô¤¾¯");
+                        //Debug.Log("Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü»ï¿½Ô¤ï¿½ï¿½");
                         return MissileWarningType.Locked;
 
                     }
-                    //ÌáÇ°Á¿ÊÜ»÷Ô¤¾¯£¬¼ì²éµ¼µ¯µÄËÙ¶È·½ÏòÓëÌ¹¿ËµÄÔ¤ÆÚÎ»ÖÃÖ®¼äµÄ½Ç¶ÈÊÇ·ñÐ¡ÓÚ30¶È£¬ÊÇÔò·µ»ØAdvanceµ¼µ¯Ô¤¾¯Ã¶¾ÙÀàÐÍ
+                    //ï¿½ï¿½Ç°ï¿½ï¿½ï¿½Ü»ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½éµ¼ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶È·ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½Ëµï¿½Ô¤ï¿½ï¿½Î»ï¿½ï¿½Ö®ï¿½ï¿½Ä½Ç¶ï¿½ï¿½Ç·ï¿½Ð¡ï¿½ï¿½30ï¿½È£ï¿½ï¿½ï¿½ï¿½ò·µ»ï¿½Advanceï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½Ã¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     else if (Vector3.Angle(AimAdvanceAmountPosition(myTank) - missile.Position, missile.Velocity) < 30f)
                     {
                         WarningMissles.Add(missile);
-                        //Debug.Log("ÌáÇ°Á¿ÊÜ»÷Ô¤¾¯");
+                        //Debug.Log("ï¿½ï¿½Ç°ï¿½ï¿½ï¿½Ü»ï¿½Ô¤ï¿½ï¿½");
                         return MissileWarningType.Advance;
                     }
                 }
             }
-            return MissileWarningType.Safe;//ÆäËûµÄ¾ÍÊÇÂÒ´òµÄµ¼µ¯£¬²»ÓÃ¹Ü
+            return MissileWarningType.Safe;//ï¿½ï¿½ï¿½ï¿½ï¿½Ä¾ï¿½ï¿½ï¿½ï¿½Ò´ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¹ï¿½
         }
 
         /// <summary>
-        /// ¹æ±Üµ¼µ¯º¯Êý£¬¶ÔÓÚ²»Í¬µÄÔ¤¾¯ÀàÐÍÓÐ²»Í¬µÄ´¦ÀíÂß¼­
+        /// ï¿½ï¿½Üµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú²ï¿½Í¬ï¿½ï¿½Ô¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð²ï¿½Í¬ï¿½Ä´ï¿½ï¿½ï¿½ï¿½ß¼ï¿½
         /// </summary>
         /// <param name="warnmissile"></param>
         /// <param name="warningType"></param>
         private void EvadeMissile(Missile warnmissile, MissileWarningType warningType)
         {
-            Vector3 evadeOffset = myTank.transform.forward * 3f;                                //¼ÆËãÒ»¸öÃûÎª evadeOffset µÄÏòÁ¿£¬ËüÊÇÌ¹¿ËÇ°½ø·½ÏòµÄ3±¶¡£Õâ¸öÏòÁ¿ÓÃÓÚÔÚ¹æ±ÜÊ±Ôö¼ÓÌ¹¿ËµÄÒÆ¶¯¾àÀë
-            float angle = Vector3.Angle(warnmissile.Velocity, myTank.Forward);                  //¼ÆËãµ¼µ¯ËÙ¶ÈÏòÁ¿ºÍÌ¹¿ËÇ°½ø·½ÏòÖ®¼äµÄ½Ç¶È£¨ÕâÀïÃ»ÓÃÉÏ£©
-            Debug.Assert(warningType != MissileWarningType.Safe);                               //Ê¹ÓÃ Debug.Assert È·±£ warningType ²»ÊÇ MissileWarningType.Safe
-            var dir = Vector3.Cross(warnmissile.Velocity.normalized, myTank.transform.up) * 7f; //¹æ±Ü·½Ïò´¹Ö±ÓÚµ¼µ¯ËÙ¶È·½Ïò£¬Ê¹ÓÃ Vector3.Cross ¼ÆËãµ¼µ¯ËÙ¶ÈÏòÁ¿ºÍÌ¹¿ËÉÏ·½ÏòÁ¿µÄ²æ»ý£¬µÃµ½Ò»¸ö´¹Ö±ÓÚÕâÁ½¸öÏòÁ¿µÄÐÂÏòÁ¿ dir£¬²¢½«Æä³¤¶ÈÀ©´ó7±¶
+            Vector3 evadeOffset = myTank.transform.forward * 3f;                                //ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Îª evadeOffset ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¹ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½Ëµï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½
+            float angle = Vector3.Angle(warnmissile.Velocity, myTank.Forward);                  //ï¿½ï¿½ï¿½ãµ¼ï¿½ï¿½ï¿½Ù¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö®ï¿½ï¿½Ä½Ç¶È£ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Ï£ï¿½
+            Debug.Assert(warningType != MissileWarningType.Safe);                               //Ê¹ï¿½ï¿½ Debug.Assert È·ï¿½ï¿½ warningType ï¿½ï¿½ï¿½ï¿½ MissileWarningType.Safe
+            var dir = Vector3.Cross(warnmissile.Velocity.normalized, myTank.transform.up) * 7f; //ï¿½ï¿½Ü·ï¿½ï¿½ï¿½Ö±ï¿½Úµï¿½ï¿½ï¿½ï¿½Ù¶È·ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ Vector3.Cross ï¿½ï¿½ï¿½ãµ¼ï¿½ï¿½ï¿½Ù¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ dirï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ä³¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½7ï¿½ï¿½
 
             //Debug.LogError(Vector3.Distance(warnmissile.Position, myTank.Position) + " " + (warnmissile.Velocity.magnitude));
 
-            //´¦ÀíLockedÀàÐÍµÄµ¼µ¯²ßÂÔA
+            //ï¿½ï¿½ï¿½ï¿½Lockedï¿½ï¿½ï¿½ÍµÄµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½A
             if (warningType == MissileWarningType.Locked)
             {
-                //ÓÐÕýÔÚ´¦ÀíµÄµ¼µ¯£¬ÇÒ´«ÈëµÄµ¼µ¯ºÍÕýÔÚ¶ã±ÜµÄµ¼µ¯¹þÏ£ÖµÒ»ÖÂ
+                //ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò´ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ÜµÄµï¿½ï¿½ï¿½ï¿½ï¿½Ï£ÖµÒ»ï¿½ï¿½
                 if (AvoidingMissile != null && warnmissile.GetHashCode() == AvoidingMissile.GetHashCode())
                 {
-                    //Í¨¹ýAvoidingDirÀ´¾ö²ßÈçºÎ¶ã±Ü(+/-)
+                    //Í¨ï¿½ï¿½AvoidingDirï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¶ï¿½ï¿½(+/-)
                     if (AvoidingDir)
                     {
                         Move(myTank.transform.position + dir + evadeOffset);
@@ -1020,21 +1020,21 @@ namespace HQX
                     }
                     return;
                 }
-                //Èç¹ûÃ»ÓÐÕýÔÚ´¦Àí¶ã±ÜµÄµ¼µ¯£¬Ôò°Ñ´«ÈëµÄµ¼µ¯×÷ÎªÕýÔÚ´¦ÀíµÄ¶ã±ÜµÄµ¼µ¯
+                //ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½ï¿½ÜµÄµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½ï¿½ï¿½Äµï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½Ä¶ï¿½ÜµÄµï¿½ï¿½ï¿½
                 AvoidingMissile = warnmissile;
             }
 
 
 
-            //´¦ÀíLockedÀàÐÍµÄµ¼µ¯²ßÂÔB
+            //ï¿½ï¿½ï¿½ï¿½Lockedï¿½ï¿½ï¿½ÍµÄµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
             if (warningType == MissileWarningType.Locked)
             {
-                //Debug.LogWarning("²ÉÓÃÉßÐÎ¹æ±Ü");
-                //Èç¹ûÃ»ÓÐ¼ì²âµ½Ç½Ãæ£¨DetectWall£©£¬Ôò¸ù¾ÝÊÇ·ñÄÜ¿´µ½¶Ô·½£¨IsBothCanSeeOpp£©À´Ñ¡Ôñ¹æ±Ü·½Ïò¡£
+                //Debug.LogWarning("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¹ï¿½ï¿½");
+                //ï¿½ï¿½ï¿½Ã»ï¿½Ð¼ï¿½âµ½Ç½ï¿½æ£¨DetectWallï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Ü¿ï¿½ï¿½ï¿½ï¿½Ô·ï¿½ï¿½ï¿½IsBothCanSeeOppï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½Ü·ï¿½ï¿½ï¿½
                 if (!DetectWall(dir + evadeOffset) && !DetectWall(-dir + evadeOffset))
                 {
 
-                    //¸ù¾ÝµØÐÎÑÚÌåÑ¡Ôñ¹æ±Ü·½Ïò£¬Èç¹ûÌ¹¿ËÔÚ dir + evadeOffset ·½ÏòÉÏ²»ÄÜ¿´µ½µ¼µ¯£¬ÔòÏò¸Ã·½Ïò¹æ±Ü£»Èç¹û²»ÄÜ£¬Ôò¼ì²é -dir + evadeOffset ·½Ïò
+                    //ï¿½ï¿½ï¿½Ýµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½Ü·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ dir + evadeOffset ï¿½ï¿½ï¿½ï¿½ï¿½Ï²ï¿½ï¿½Ü¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½ -dir + evadeOffset ï¿½ï¿½ï¿½ï¿½
                     if (!IsBothCanSeeOpp(myTank.Position + dir + evadeOffset, warnmissile.Position))
                     {
                         Move(myTank.transform.position + dir + evadeOffset);
@@ -1049,7 +1049,7 @@ namespace HQX
                     }
                     else
                     {
-                        //¸ù¾Ý³µÍ·³¯ÏòµÄÆ«ºÃÑ¡Ôñ¹æ±Ü·½Ïò
+                        //ï¿½ï¿½ï¿½Ý³ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½Æ«ï¿½ï¿½Ñ¡ï¿½ï¿½ï¿½Ü·ï¿½ï¿½ï¿½
                         float chooseSide = Vector3.Dot(dir, myTank.Forward);
                         if (chooseSide >= 0)
                         {
@@ -1068,43 +1068,43 @@ namespace HQX
 
 
                 }
-                //µ¥·½ÏòÓÐÇ½Çé¿öµÄ´¦Àí
+                //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½ï¿½ï¿½
                 else if (!DetectWall(dir + evadeOffset))
                 {
-                    //Debug.Log("¹æ±ÜÊ±¼ì²âµ½Ç½Ãæ");
+                    //Debug.Log("ï¿½ï¿½ï¿½Ê±ï¿½ï¿½âµ½Ç½ï¿½ï¿½");
                     Move(myTank.transform.position + dir + evadeOffset);
                     Debug.DrawLine(myTank.Position, myTank.transform.position + dir + evadeOffset, Color.red, during);
                     AvoidingDir = true;
                 }
                 else if (!DetectWall(-dir + evadeOffset))
                 {
-                    //Debug.Log("¹æ±ÜÊ±¼ì²âµ½Ç½Ãæ");
+                    //Debug.Log("ï¿½ï¿½ï¿½Ê±ï¿½ï¿½âµ½Ç½ï¿½ï¿½");
                     Move(myTank.transform.position - dir + evadeOffset);
                     Debug.DrawLine(myTank.Position, myTank.transform.position - dir + evadeOffset, Color.red, during);
                     AvoidingDir = false;
                 }
             }
-            //NearºÍAdvanceÀàÐÍµÄµ¼µ¯¶¼ÊÇÍ¨¹ý¼±Í£À´¹æ±ÜµÄ
+            //Nearï¿½ï¿½Advanceï¿½ï¿½ï¿½ÍµÄµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¨ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½ï¿½Üµï¿½
             else if (warningType == MissileWarningType.Near)
             {
-                //Debug.LogWarning("³µÇ°ÓÐµ¼µ¯£¬½ô¼±Í£³µ");
+                //Debug.LogWarning("ï¿½ï¿½Ç°ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½");
                 Move(myTank.Position);
 
             }
             else if (warningType == MissileWarningType.Advance)
             {
-                //Debug.LogWarning("ÌáÇ°Á¿µ¼µ¯£¬¼±Í£¶ã±Ü");
+                //Debug.LogWarning("ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½ï¿½");
                 Move(myTank.Position);
             }
             else
             {
-                //Debug.LogError("Èô±¨´í£¬Ðë´¦Àí");
+                //Debug.LogError("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë´¦ï¿½ï¿½");
             }
 
         }
 
         /// <summary>
-        /// ÓÃÓÚ¼ì²âÌ¹¿Ëµ±Ç°Î»ÖÃÊÇ·ñÓÐÇ½Ãæ»ò³¡¾°ÖÐµÄÆäËûÕÏ°­ÎïÔÚÖ¸¶¨·½ÏòÉÏ
+        /// ï¿½ï¿½ï¿½Ú¼ï¿½ï¿½Ì¹ï¿½Ëµï¿½Ç°Î»ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ç½ï¿½ï¿½ò³¡¾ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         /// <param name="dir"></param>
         /// <returns></returns>
@@ -1114,7 +1114,7 @@ namespace HQX
         }
 
         /// <summary>
-        /// ¼ÆËãÔÚÉä»÷Ò»¸öÒÆ¶¯ÖÐµÄµÐ·½Ì¹¿ËÊ±Ó¦¸ÃÃé×¼µÄÎ»ÖÃ
+        /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ÐµÄµÐ·ï¿½Ì¹ï¿½ï¿½Ê±Ó¦ï¿½ï¿½ï¿½ï¿½×¼ï¿½ï¿½Î»ï¿½ï¿½
         /// </summary>
         /// <param name="TargetTank"></param>
         /// <param name="AdvanceWeight"></param>
@@ -1128,33 +1128,33 @@ namespace HQX
             //}
 
             Vector3 AimPos;
-            float distance = Vector3.Distance(myTank.Position, enemyTank.Position); //µÐÎÒÖ®¼ä¾àÀë
-            float missileFlyingTime = distance / match.GlobalSetting.MissileSpeed;  //¼ÆËãµ¼µ¯·Éµ½Ä¿±êµãµÄÊ±¼ä
-            //AdvanceWeightµ÷ºÍÌáÇ°Á¿ºÍÌ¹¿ËÎ»ÖÃ
-            //Èç¹û AdvanceWeight ½Ó½ü1£¬ÄÇÃ´Ô¤²âÎ»ÖÃ½«¸ü¶àµØÒÀÀµÓÚÄ¿±êÌ¹¿ËµÄÒÆ¶¯Ç÷ÊÆ¡£ÕâÒâÎ¶×ÅÈç¹ûÄ¿±êÌ¹¿ËÒÔÒ»¶¨ËÙ¶ÈÇ°½ø£¬Ô¤²âÎ»ÖÃ½«¸üÔ¶ÀëÄ¿±êÌ¹¿ËµÄµ±Ç°Î»ÖÃ£¬¸ü¿¿½üËüÎ´À´µÄÎ»ÖÃ¡£ÕâÔÚÄ¿±êÌ¹¿ËÒÆ¶¯ËÙ¶È½Ï¿ì»òÕßµ¼µ¯·ÉÐÐÊ±¼ä½Ï³¤Ê±ÌØ±ðÓÐÓÃ¡£
-            //Èç¹û AdvanceWeight ½Ó½ü0£¬ÄÇÃ´Ô¤²âÎ»ÖÃ½«¸ü½Ó½üÄ¿±êÌ¹¿ËµÄµ±Ç°Î»ÖÃ¡£Õâ¿ÉÄÜÔÚÄ¿±êÌ¹¿Ë¼¸ºõ²»ÒÆ¶¯»òÕßµ¼µ¯·ÉÐÐÊ±¼ä·Ç³£¶ÌÊ±¸üÎªÊÊÓÃ¡£
-            //AdvanceWeight = CalculateAdvanceWeight(averageSpeed,maxSpeed);//¶¯Ì¬¸üÐÂÈ¨ÖØ
+            float distance = Vector3.Distance(myTank.Position, enemyTank.Position); //ï¿½ï¿½ï¿½ï¿½Ö®ï¿½ï¿½ï¿½ï¿½ï¿½
+            float missileFlyingTime = distance / match.GlobalSetting.MissileSpeed;  //ï¿½ï¿½ï¿½ãµ¼ï¿½ï¿½ï¿½Éµï¿½Ä¿ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+            //AdvanceWeightï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Ì¹ï¿½ï¿½Î»ï¿½ï¿½
+            //ï¿½ï¿½ï¿½ AdvanceWeight ï¿½Ó½ï¿½1ï¿½ï¿½ï¿½ï¿½Ã´Ô¤ï¿½ï¿½Î»ï¿½Ã½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½Ì¹ï¿½Ëµï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½Æ¡ï¿½ï¿½ï¿½ï¿½ï¿½Î¶ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ù¶ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Ô¤ï¿½ï¿½Î»ï¿½Ã½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½Ä¿ï¿½ï¿½Ì¹ï¿½ËµÄµï¿½Ç°Î»ï¿½Ã£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½Î»ï¿½Ã¡ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½Ì¹ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½Ù¶È½Ï¿ï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ï³ï¿½Ê±ï¿½Ø±ï¿½ï¿½ï¿½ï¿½Ã¡ï¿½
+            //ï¿½ï¿½ï¿½ AdvanceWeight ï¿½Ó½ï¿½0ï¿½ï¿½ï¿½ï¿½Ã´Ô¤ï¿½ï¿½Î»ï¿½Ã½ï¿½ï¿½ï¿½ï¿½Ó½ï¿½Ä¿ï¿½ï¿½Ì¹ï¿½ËµÄµï¿½Ç°Î»ï¿½Ã¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½Ì¹ï¿½Ë¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ç³ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Îªï¿½ï¿½ï¿½Ã¡ï¿½
+            //AdvanceWeight = CalculateAdvanceWeight(averageSpeed,maxSpeed);//ï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½È¨ï¿½ï¿½
             AimPos = TargetTank.Position + TargetTank.Forward + TargetTank.Velocity * missileFlyingTime * AdvanceWeight;
             return AimPos;
         }
 
 
         /// <summary>
-        /// ÓÃÓÚ²âÊÔ´«ÈëµÄAÎïÌåºÍBÎïÌåÖ®¼äÊÇ·ñÓÐ×èµ²£¬Î´×èµ²Ê±·µ»ØT
+        /// ï¿½ï¿½ï¿½Ú²ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½Ö®ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½èµ²ï¿½ï¿½Î´ï¿½èµ²Ê±ï¿½ï¿½ï¿½ï¿½T
         /// </summary>
         public bool IsBothCanSeeOpp(Vector3 APos, Vector3 BPos)
         {
             return !Physics.Linecast(APos, BPos, PhysicsUtils.LayerMaskScene);
         }
         /// <summary>
-        /// ÓÃÓÚ²âÊÔÎÒ·½Ì¹¿ËºÍ´«ÈëµÄÎïÌåÖ®¼äÊÇ·ñÓÐ×èµ²£¬Î´×èµ²Ê±·µ»ØT£¬Ç¶Ì×Ê¹ÓÃIsBothCanSeeOpp
+        /// ï¿½ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½Ò·ï¿½Ì¹ï¿½ËºÍ´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö®ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½èµ²ï¿½ï¿½Î´ï¿½èµ²Ê±ï¿½ï¿½ï¿½ï¿½Tï¿½ï¿½Ç¶ï¿½ï¿½Ê¹ï¿½ï¿½IsBothCanSeeOpp
         /// </summary>
         private bool IsMyTankPosCanSee(Vector3 pos)
         {
             return IsBothCanSeeOpp(myTank.Position, pos);
         }
         /// <summary>
-        /// ÎÒ·½Ì¹¿ËÊÇ·ñÓÐÊÓÏß½Ó´¥µ½µÐ·½Ì¹¿ËµÄÇ°·½»òºó·½Ä³¸öµã£¬´Ó¶øÅÐ¶ÏÊÇ·ñÓÐ¿ÉÄÜ½øÐÐÓÐÐ§Éä»÷
+        /// ï¿½Ò·ï¿½Ì¹ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß½Ó´ï¿½ï¿½ï¿½ï¿½Ð·ï¿½Ì¹ï¿½Ëµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ã£¬ï¿½Ó¶ï¿½ï¿½Ð¶ï¿½ï¿½Ç·ï¿½ï¿½Ð¿ï¿½ï¿½Ü½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½ï¿½
         /// </summary>
         /// <returns></returns>
         private bool IsMyCanSeeEneTank()
@@ -1167,7 +1167,7 @@ namespace HQX
         }
 
         /// <summary>
-        /// Ë³Â·ÄÃÒ»ÏÂÐÇÐÇ
+        /// Ë³Â·ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         /// <param name="range"></param>
         private void DropByStar(float range)
@@ -1179,7 +1179,7 @@ namespace HQX
         }
 
         /// <summary>
-        /// ¼ÆËãµÐ·½Ì¹¿ËµÄËÙ¶È£¬ÒÔ´ËÀ´ÓÅ»¯Ãé×¼Ëã·¨
+        /// ï¿½ï¿½ï¿½ï¿½Ð·ï¿½Ì¹ï¿½Ëµï¿½ï¿½Ù¶È£ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ï¿½Å»ï¿½ï¿½ï¿½×¼ï¿½ã·¨
         /// </summary>
         /// <param name="lastTime"></param>
         /// <param name="TankSpeeds"></param>
@@ -1208,7 +1208,7 @@ namespace HQX
                     return Vector3.zero;
                 else
                 {
-                    // ¸üÐÂ lastPos ºÍ lastTime Îªµ±Ç°µÄÎ»ÖÃºÍÊ±¼ä
+                    // ï¿½ï¿½ï¿½ï¿½ lastPos ï¿½ï¿½ lastTime Îªï¿½ï¿½Ç°ï¿½ï¿½Î»ï¿½Ãºï¿½Ê±ï¿½ï¿½
                     lastPos = enemyTank.transform.position;
                     lastTime = Time.time;
                     return speed / TankSpeeds.Count; 
@@ -1220,14 +1220,14 @@ namespace HQX
         }
 
         /// <summary>
-        /// ¼ÆËãÓ°ÏìÒò×ÓµÄÈ¨ÖØ
+        /// ï¿½ï¿½ï¿½ï¿½Ó°ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½È¨ï¿½ï¿½
         /// </summary>
         /// <param name="targetVelocity"></param>
         /// <returns></returns>
         private  float CalculateAdvanceWeight(Vector3 targetVelocity , float maxSpeed)
         {
 
-            // ¼ÆËãËÙ¶ÈµÄ´óÐ¡
+            // ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶ÈµÄ´ï¿½Ð¡
             float speedMagnitude = Math.Abs(targetVelocity.magnitude);
             Debug.LogWarning(speedMagnitude);
 
@@ -1236,7 +1236,7 @@ namespace HQX
                 maxSpeed = speedMagnitude;
             }
 
-            // ½«ËÙ¶È´óÐ¡Ó³Éäµ½ (0, 1) Çø¼äÄÚ
+            // ï¿½ï¿½ï¿½Ù¶È´ï¿½Ð¡Ó³ï¿½äµ½ (0, 1) ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             //float advanceWeight = Math.Min(speedMagnitude / maxSpeed, 1.0f);
             float advanceWeight = Mathf.Lerp(0f, 1f, speedMagnitude / maxSpeed);
 

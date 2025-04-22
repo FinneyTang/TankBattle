@@ -104,7 +104,7 @@ namespace WSX
         {
             Tank tank = (Tank)agent;
             bool hasStar = false;
-            float nearestStarDistance = float.MaxValue;
+            //float nearestStarDistance = float.MaxValue;
             float ShortestPathLength = float.MaxValue;
             Vector3 nearestStarPos = Vector3.zero;
             foreach (var pair in Match.instance.GetStars())
