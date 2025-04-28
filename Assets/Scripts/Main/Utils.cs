@@ -92,6 +92,7 @@ namespace Main
                 public JsonSchemaDef json_schema;
             }
             
+            public string model;
             public Message[] messages;
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public ResponseFormat response_format;
@@ -123,7 +124,8 @@ namespace Main
             string apiKey, string prompt, Action<string> callback)
         {
             var apiUrl = Match.instance.LLMSettingData.URL;
-            if (string.IsNullOrEmpty(apiUrl))
+            var modelName = Match.instance.LLMSettingData.ModelName;
+            if (string.IsNullOrEmpty(apiUrl) || string.IsNullOrEmpty(modelName))
             {
                 callback?.Invoke(string.Empty);
                 Debug.LogError("API URL is not set in the LLMSettingData.");
@@ -141,7 +143,8 @@ namespace Main
                     new Message { role = "user", content = prompt }
                 }
             };
-            if (!string.IsNullOrEmpty(Match.instance.LLMSettingData.JsonScheme))
+            if (Match.instance.LLMSettingData.UseJsonScheme &&
+                !string.IsNullOrEmpty(Match.instance.LLMSettingData.JsonScheme))
             {
                 var respFormat = new LLMRequest.ResponseFormat
                 {
@@ -150,12 +153,13 @@ namespace Main
                     {
                         name = "user_json_response",
                         strict = true,
-                        schema = JsonConvert.DeserializeObject<LLMRequest.JsonSchema>(Match.instance.LLMSettingData.JsonScheme)
+                        schema = JsonConvert.DeserializeObject<LLMRequest.JsonSchema>(
+                            Match.instance.LLMSettingData.JsonScheme)
                     }
                 };
                 req.response_format = respFormat;
             }
-            
+            req.model = modelName;
             req.temperature = Match.instance.LLMSettingData.Temperature;
             
             var jsonBody = JsonConvert.SerializeObject(req);

@@ -75,15 +75,20 @@ namespace Main
             public bool EnableLLM = false;
             public string URL = "http://127.0.0.1:1234/v1/chat/completions";
             public string APIKey;
+            public string ModelName = "qwen2.5-3b-instruct";
             public float Temperature = 1f;
-            public readonly string SystemPrompt = @"你是一位坦克大战电子游戏比赛选手，性格很奔放，回复的时候遵循以下要求
+            public bool UseJsonScheme = true;
+            public readonly string SystemPrompt = @"你是一位坦克大战电子游戏比赛选手，性格很奔放，需要根据不同情况回复不同的句子
+
+回复的时候的句子遵循以下要求
 1. 说话很简短，每次只说一句话
 2. 每句话控制在10个字以内
-3. 用中文说话
-4. 回复的同时，返回以下emotion类型
-     1. Happy: 赢了或者开心的时候返回
-     2. Sad: 不服气的时候返回
-     3. Toxic: 嘲讽的时候返回";
+3. 回复的句子用中文说话
+
+在回复句子的同时，也返回以下一种心情emotion类型
+1. Happy: 赢了或者开心的时候返回
+2. Sad: 不服气的时候返回
+3. Toxic: 嘲讽的时候返回";
 
             public readonly string JsonScheme = @"{
   ""type"": ""object"",
