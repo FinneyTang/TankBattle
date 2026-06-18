@@ -1,0 +1,71 @@
+behaviors:
+  TankBattlePPO:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 2048
+      buffer_size: 40960
+      learning_rate: 0.0005
+      beta: 0.01
+      epsilon: 0.15
+      lambd: 0.95
+      num_epoch: 6
+      learning_rate_schedule: linear
+    network_settings:
+      normalize: true
+      hidden_units: 512
+      num_layers: 4
+    reward_signals:
+      extrinsic:
+        gamma: 0.995
+        strength: 1.0
+    behavioral_cloning:
+      demo_path: ./TrainingData/BcDemos
+      strength: 0.05
+      steps: 100000
+    keep_checkpoints: 5
+    checkpoint_interval: 500000
+    max_steps: 8000000
+    time_horizon: 1024
+    summary_freq: 100000
+
+environment_parameters:
+  lesson_stage:
+    curriculum:
+      - name: Stage0_SafeStarCollector
+        completion_criteria:
+          measure: progress
+          behavior: TankBattlePPO
+          threshold: 0.05
+          min_lesson_length: 200
+          require_reset: true
+        value: 0.0
+
+      - name: Stage1_StarCollectorCompetition
+        completion_criteria:
+          measure: progress
+          behavior: TankBattlePPO
+          threshold: 0.1
+          min_lesson_length: 300
+          require_reset: true
+        value: 1.0
+
+      - name: Stage2_FireTraining
+        completion_criteria:
+          measure: progress
+          behavior: TankBattlePPO
+          threshold: 0.4
+          min_lesson_length: 400
+          require_reset: true
+        value: 2.0
+
+      - name: Stage3_MixedOpponents
+        completion_criteria:
+          measure: progress
+          behavior: TankBattlePPO
+          threshold: 0.7
+          min_lesson_length: 500
+          require_reset: true
+        value: 3.0
+
+      - name: Stage4_FullCompetition
+        value: 4.0

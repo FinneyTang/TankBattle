@@ -1,0 +1,24 @@
+﻿evaluation:
+  neural_script: NeuralAI.TankBattleAgent
+  games_per_opponent: 200
+  promotion_rules:
+    min_mean_win_rate: 0.55
+    min_mean_score_delta: 3.0
+    require_non_negative_score_delta_against_each_baseline: true
+  baseline_opponents:
+    - UtilityBasedAI.MyTank
+    - SM.MyTank
+  metrics:
+    - neural_win
+    - team_a_score
+    - team_b_score
+    - score_delta
+    - team_a_stars
+    - team_b_stars
+    - team_a_superstars
+    - team_b_superstars
+    - team_a_kills
+    - team_b_kills
+    - team_a_deaths
+    - team_b_deaths
+  output_csv: ./TrainingData/evaluation.csv

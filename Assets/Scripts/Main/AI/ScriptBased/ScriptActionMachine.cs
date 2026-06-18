@@ -9,7 +9,7 @@ namespace AI.ScriptBased
         protected readonly Queue<ScriptAction> m_Actions = new Queue<ScriptAction>();
         protected ScriptAction m_CurrentAction = null;
 
-        protected bool IsLoop
+        public bool IsLoop
         {
             get; set;
         }

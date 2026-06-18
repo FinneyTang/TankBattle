@@ -1,0 +1,198 @@
+{
+  "curriculumStages": [
+    {
+      "opponentScript": "",
+      "opponentPool": [
+        "ScriptBasedAI.MyTank",
+        "ScriptBasedAI.MyTank",
+        "StarCollectorAI.MyTank",
+        "StarCollectorAI.MyTank",
+        "UtilityBasedAI.MyTank",
+        "StarCollectorAI.MyTank"
+      ],
+      "randomizeOpponent": true,
+      "matchTimeOverrideSeconds": 0
+    },
+    {
+      "opponentScript": "",
+      "opponentPool": [
+        "ScriptBasedAI.MyTank",
+        "StarCollectorAI.MyTank",
+        "UtilityBasedAI.MyTank",
+        "StarCollectorAI.MyTank"
+      ],
+      "randomizeOpponent": true,
+      "matchTimeOverrideSeconds": 0
+    },
+    {
+      "opponentScript": "",
+      "opponentPool": [
+        "RuleBasedAI.MyTank",
+        "StarCollectorAI.MyTank",
+        "StarCollectorAI.MyTank",
+        "StarCollectorAI.MyTank",
+        "UtilityBasedAI.MyTank",
+        "SensorAI.MyTank"
+      ],
+      "randomizeOpponent": true,
+      "matchTimeOverrideSeconds": 0
+    },
+    {
+      "opponentScript": "",
+      "opponentPool": [
+        "ScriptBasedAI.MyTank",
+        "StarCollectorAI.MyTank",
+        "StarCollectorAI.MyTank",
+        "StarCollectorAI.MyTank",
+        "UtilityBasedAI.MyTank",
+        "RuleBasedAI.MyTank",
+        "SensorAI.MyTank",
+        "FSM.MyTank",
+        "UtilityBasedAI.MyTank",
+        "BT.MyTank",
+        "GOAP.MyTank",
+        "RuleBasedAI.MyTank",
+        "SensorAI.MyTank"
+      ],
+      "randomizeOpponent": true,
+      "matchTimeOverrideSeconds": 0
+    },
+    {
+      "opponentScript": "",
+      "opponentPool": [
+        "ScriptBasedAI.MyTank",
+        "StarCollectorAI.MyTank",
+        "FSM.MyTank",
+        "UtilityBasedAI.MyTank",
+        "BT.MyTank",
+        "GOAP.MyTank",
+        "RuleBasedAI.MyTank",
+        "SensorAI.MyTank",
+        "FSM.MyTank",
+        "UtilityBasedAI.MyTank",
+        "BT.MyTank",
+        "GOAP.MyTank",
+        "RuleBasedAI.MyTank",
+        "SensorAI.MyTank",
+        "LTY.RuleBasedTank",
+        "LGB.MyTank",
+        "HZR.MyTank",
+        "SYK.MyTank",
+        "HYQ.MyTank",
+        "ZYH_ICE.MyTank",
+        "SM.MyTank"
+      ],
+      "randomizeOpponent": true,
+      "matchTimeOverrideSeconds": 0
+    },
+    {
+      "opponentScript": "",
+      "opponentPool": [
+        "FSM.MyTank",
+        "UtilityBasedAI.MyTank",
+        "BT.MyTank",
+        "GOAP.MyTank",
+        "RuleBasedAI.MyTank",
+        "SensorAI.MyTank",
+        "LTY.RuleBasedTank",
+        "LGB.MyTank",
+        "HZR.MyTank",
+        "SYK.MyTank",
+        "HYQ.MyTank",
+        "ZYH_ICE.MyTank",
+        "SM.MyTank"
+      ],
+      "randomizeOpponent": true,
+      "matchTimeOverrideSeconds": 0
+    }
+  ],
+  "rewardConfig": {
+    "superStarScoreReward": 3,
+    "opponentScorePenaltyMultiplier": 0.2,
+    "damageRewardPerHit": 0.1,
+    "deathPenalty": 1.0,
+    "dodgeRewardPerThreat": 0.02,
+    "maxDodgeRewardPerStep": 0.1,
+    "healRewardPerHp": 0.02,
+    "threatCrossTrackDistance": 2.5,
+    "threatTimeWindow": 2.0,
+    "stageScales": [
+      {
+        "starRewardScale": 3.0,
+        "damageDealtScale": 1.0,
+        "deathPenaltyScale": 1.5,
+        "fireAccuracyScale": 1.5,
+        "healRewardScale": 1.0
+      },
+      {
+        "starRewardScale": 2,
+        "damageDealtScale": 1.0,
+        "deathPenaltyScale": 1.5,
+        "fireAccuracyScale": 1.0,
+        "healRewardScale": 1.5
+      },
+      {
+        "starRewardScale": 2,
+        "damageDealtScale": 1.5,
+        "deathPenaltyScale": 1.2,
+        "fireAccuracyScale": 1.2,
+        "healRewardScale": 1.5
+      },
+      {
+        "starRewardScale": 1.5,
+        "damageDealtScale": 1.2,
+        "deathPenaltyScale": 1.2,
+        "fireAccuracyScale": 1.0,
+        "healRewardScale": 1.2
+      },
+      {
+        "starRewardScale": 1.0,
+        "damageDealtScale": 1.0,
+        "deathPenaltyScale": 1.0,
+        "fireAccuracyScale": 1.0,
+        "healRewardScale": 1.0
+      }
+    ],
+    "timePenaltyThresholdHigh": 0.75,
+    "timePenaltyThresholdMedium": 0.5,
+    "timePenaltyThresholdLow": 0.25,
+    "timePenaltyHealthy": -0.0001,
+    "timePenaltyMedium": -0.0002,
+    "timePenaltyLow": -0.0003,
+    "timePenaltyCritical": -0.0004,
+    "invalidMovePenalty": 0.01,
+    "wastedShotPenalty": 0.005,
+    "superStarWeight": 6.0,
+    "normalStarWeight": 1.0,
+    "homeWeightMultiplier": 5.0,
+    "homeWeightMax": 5.5,
+    "starProgressClampMin": -0.01,
+    "starProgressClampMax": 0.01,
+    "minMoveSqrMagnitude": 0.0001,
+    "minToTargetSqrMagnitude": 0.0001,
+    "antiFarmingAlignmentThreshold": -0.3,
+    "missileThreatDiscount": 0.2,
+    "starProgressNormalizationOffset": 1.0,
+    "superStarPrepWindowStartOffset": -10.0,
+    "superStarPrepWindowEndOffset": 10.0,
+    "superStarPrepClampMin": -0.01,
+    "superStarPrepClampMax": 0.01,
+    "movementDeathPenalty": 0,
+    "movementIdleThreshold": 0.01,
+    "movementVelocityThresholdSqr": 0.01,
+    "movementIdlePenalty": -0.001,
+    "fireAccuracyDotThreshold": 0.98,
+    "fireAccuracyPenaltyMultiplier": 0.05,
+    "fireAccuracyBlockedPenalty": 0.08,
+    "fireAccuracyMinSqrMagnitude": 0.0001,
+    "aimingDotThreshold": 0.95,
+    "aimingReward": 0.002,
+    "aimingMinSqrMagnitude": 0.0001,
+    "missileMinVelocitySqr": 0.0001,
+    "missileMaxDetectionDistance": 60.0,
+    "missileSphereCastRadius": 1.0,
+    "terminalScoreNormalizerMultiplier": 4.0,
+    "terminalWinnerBase": 1.5,
+    "terminalLoserBase": -1
+  }
+}

@@ -55,6 +55,7 @@ namespace ScriptBasedAI
         {
             base.OnStart();
             m_Machine = new ScriptActionMachine(this);
+            m_Machine.IsLoop = true;
             m_Machine.AddAction(new MoveTo(Vector3.zero));
             m_Machine.AddAction(new WaitForSeconds(2f));
             m_Machine.AddAction(new Fire());
