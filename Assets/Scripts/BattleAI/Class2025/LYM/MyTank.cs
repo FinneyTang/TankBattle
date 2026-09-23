@@ -424,7 +424,6 @@ namespace LYM
             Tank oppTank = Match.instance.GetOppositeTank(Team);
             if (oppTank != null && !oppTank.IsDead)
             {
-                Transform turret = transform.GetChild(1);
                 Vector3 firePos = FirePos; // 炮口位置（Y=3）
                 Vector3 enemyPos = new Vector3(oppTank.Position.x, firePos.y, oppTank.Position.z);
                 Vector3 enemyVel = oppTank.Velocity;
@@ -445,7 +444,7 @@ namespace LYM
                             Vector3 predictedPos = new Vector3(enemyPos.x + vel.x * predictedTime, firePos.y, enemyPos.z + vel.y * predictedTime);
                             Vector3 targetDir = (predictedPos - firePos).normalized;
                             targetDir.y = 0;
-                            turret.forward = Vector3.Lerp(turret.forward,targetDir,Time.deltaTime * 180);
+                            TurretTurnTo(Position + targetDir);
                             float distanceThreshold = 14 * 14;
                             if ((transform.position - enemyPos).sqrMagnitude < distanceThreshold)
                                 Fire();
@@ -455,10 +454,10 @@ namespace LYM
                                 float castDistance = Vector3.Distance(firePos, predictedPos) - 2f;
                                 if (Physics.SphereCast(firePos,0.23f,targetDir,out hit,castDistance))
                                 {
-                                    if (hit.collider.GetComponent<FireCollider>() != null && Vector3.Angle(turret.forward, targetDir) < 2f)
+                                    if (hit.collider.GetComponent<FireCollider>() != null && Vector3.Angle(TurretAiming, targetDir) < 2f)
                                         Fire();
                                 }
-                                else if (Vector3.Angle(turret.forward, targetDir) < 2.1f)
+                                else if (Vector3.Angle(TurretAiming, targetDir) < 2.1f)
                                     Fire();
                             }
                             return;
@@ -469,8 +468,8 @@ namespace LYM
                 // 预测失败时瞄准当前位置（保持Y轴同高）
                 Vector3 fallbackDir = (enemyPos - firePos).normalized;
                 fallbackDir.y = 0;
-                turret.forward = Vector3.Lerp(turret.forward, fallbackDir, Time.deltaTime * 180);
-                if (Vector3.Angle(turret.forward, fallbackDir) < 2f)
+                TurretTurnTo(Position + fallbackDir);
+                if (Vector3.Angle(TurretAiming, fallbackDir) < 2f)
                 {
                     Fire();
                 }

@@ -94,7 +94,6 @@ namespace WWJ
         
         private void ExecuteLogic(Tank myTank, Tank oppTank)
         {
-            Transform turret = myTank.transform.GetChild(1).transform; // 获取炮塔Transform
             // 计算敌方速度并记录
             Vector3 v = (oppTank.transform.position - lastPos) / (Time.time - lastTime);
             lastPos = oppTank.transform.position;
@@ -119,7 +118,7 @@ namespace WWJ
             // Vector3 turnToPosition = firePosition + turnToForward;
             turnToForward = Vector3.ProjectOnPlane(turnToForward, Vector3.up); // 投影到水平面
             // turret.forward = Vector3.Lerp(turret.forward, turnToForward, Time.deltaTime * 180); // 平滑转向
-            turret.forward = turnToForward;
+            myTank.TurretTurnTo(myTank.Position + turnToForward);
 
             // 根据距离和碰撞检测决定是否开火
             if (Vector3.Distance(myTank.Position, oppTank.Position) < 20)

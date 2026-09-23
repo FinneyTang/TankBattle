@@ -30,7 +30,6 @@ namespace HZR
             Tank oppTank = Match.instance.GetOppositeTank(t.Team);
             if (oppTank != null && oppTank.IsDead == false)
             {
-                Transform turret = t.transform.GetChild(1).transform;
                 Vector3 v = (oppTank.transform.position - lastPos) / (Time.time - lastTime);
                 lastPos = oppTank.transform.position;
                 lastTime = Time.time;
@@ -50,7 +49,7 @@ namespace HZR
                 Debug.DrawRay(firePosition, turnToForward, Color.red);
                 Vector3 turnToPosition = firePosition + turnToForward;
                 turnToForward = Vector3.ProjectOnPlane(turnToForward, Vector3.up);
-                turret.forward = Vector3.Lerp(turret.forward, turnToForward, Time.deltaTime * 180);
+                t.TurretTurnTo(t.Position + turnToForward);
                 if (Vector3.Distance(t.Position, oppTank.Position) < 14)
                 {
                     Debug.Log("距离较近，无需判断直接射击");

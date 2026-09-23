@@ -75,7 +75,6 @@ namespace WBQ
             Tank enemy = Match.instance.GetOppositeTank(tank.Team);
             if (enemy != null && !enemy.IsDead)
             {
-                Transform turret = tank.transform.GetChild(1);
                 Vector2 enemyPos =  new Vector2(enemy.Position.x, enemy.Position.z);
                 Vector2 enemyVelocity = new Vector2(enemy.Velocity.x, enemy.Velocity.z);
                 Vector2 turretPos = new Vector2(tank.FirePos.x, tank.FirePos.z);
@@ -97,18 +96,18 @@ namespace WBQ
                     {
                         Vector2 predictPos = enemyPos +  enemyVelocity * time;
                         Vector3 aimPoint = new Vector3(predictPos.x, tank.FirePos.y,predictPos.y);
-                        targetDirection = (aimPoint - turret.position).normalized;
+                        targetDirection = (aimPoint - tank.FirePos).normalized;
                     }
                     else //根为0
                     {
-                        targetDirection = (enemy.Position - turret.position).normalized;
+                        targetDirection = (enemy.Position - tank.FirePos).normalized;
                     }
                 }
                 else //无根
                 {
-                    targetDirection = (enemy.Position - turret.position).normalized;
+                    targetDirection = (enemy.Position - tank.FirePos).normalized;
                 }
-                turret.forward = Vector3.Lerp(turret.forward, targetDirection, Time.deltaTime * 720f);
+                tank.TurretTurnTo(tank.Position + targetDirection);
                 workingMemory.SetValue((int)E_BBkey.TurretTargetDir, targetDirection);
             }
             else //无敌人

@@ -340,7 +340,6 @@ namespace ZSJ2025
         {
             if (m_EnemyTank != null && m_EnemyTank.IsDead == false)
             {
-                Transform turret = this.transform.GetChild(1);
                 Vector2 oppPosition = new Vector2(m_EnemyTank.Position.x, m_EnemyTank.Position.z);
                 Vector2 oppVelocity = new Vector2(m_EnemyTank.Velocity.x, m_EnemyTank.Velocity.z);
                 Vector2 myFirePosition = new Vector2(this.FirePos.x, this.FirePos.z);
@@ -352,7 +351,7 @@ namespace ZSJ2025
                 float predictedTime = (-b - Mathf.Sqrt(delta)) / (2 * a);
                 Vector2 predictedPosition = deltaPosition + oppVelocity * predictedTime;
                 Vector3 targetDirection = new Vector3(predictedPosition.x, 0, predictedPosition.y);
-                turret.forward = Vector3.Lerp(turret.forward, targetDirection, Time.deltaTime * 180);
+                this.TurretTurnTo(this.Position + targetDirection);
                 if ((this.Position - m_EnemyTank.Position).magnitude < 15)
                 {
                     this.Fire();

@@ -195,7 +195,6 @@ namespace LRB
             Vector3 opponentHomePos = Match.instance.GetRebornPos(enemy.Team);
             if (enemy != null && enemy.IsDead == false)
             {
-                Transform turret = tank.transform.GetChild(1);
                 Vector2 enemyPosition = new Vector2(enemy.Position.x, enemy.Position.z);
                 Vector2 enemyVelocity = new Vector2(enemy.Velocity.x, enemy.Velocity.z);
                 Vector2 turretPosition = new Vector2(tank.FirePos.x, tank.FirePos.z);
@@ -218,20 +217,19 @@ namespace LRB
                     {
                         Vector2 intercept = enemyPosition + enemyVelocity * time;
                         Vector3 aimPoint = new Vector3(intercept.x, tank.FirePos.y, intercept.y);
-                        targetDirection = (aimPoint - turret.position).normalized;
+                        targetDirection = (aimPoint - tank.FirePos).normalized;
                     }
                     else
                     {
-                        targetDirection = (enemy.Position - turret.position).normalized;
+                        targetDirection = (enemy.Position - tank.FirePos).normalized;
                     }
                 }
                 else
                 {
-                    targetDirection = (enemy.Position - turret.position).normalized;
+                    targetDirection = (enemy.Position - tank.FirePos).normalized;
                 }
 
-                turret.forward = Vector3.Lerp(turret.forward, targetDirection, Time.deltaTime * 720);
-                //tank.TurretTurnTo(targetDirection);
+                tank.TurretTurnTo(tank.Position + targetDirection);
             }
             else if (opponentHomePos != null)
             {

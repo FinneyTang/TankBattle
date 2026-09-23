@@ -186,12 +186,6 @@ namespace PW
         {
             if (opponentTank != null && !opponentTank.IsDead)
             {
-                Transform turretTransform = this.transform.GetChild(1);
-                if (turretTransform == null)
-                {
-                    return;
-                }
-
                 Vector2 oppPositionVec2 = new Vector2(opponentTank.Position.x, opponentTank.Position.z);
                 Vector2 oppVelocityVec2 = new Vector2(opponentTank.Velocity.x, opponentTank.Velocity.z);
                 Vector2 myFirePositionVec2 = new Vector2(this.FirePos.x, this.FirePos.z);
@@ -228,7 +222,7 @@ namespace PW
                     targetDirectionVec3 = (opponentTank.Position - this.FirePos).normalized;
                 }
 
-                turretTransform.forward = Vector3.Lerp(turretTransform.forward, targetDirectionVec3, Time.deltaTime * 180f);
+                this.TurretTurnTo(this.Position + targetDirectionVec3);
 
                 if ((this.Position - opponentTank.Position).magnitude < 15f)
                 {

@@ -31,7 +31,6 @@ namespace YJY
             Tank oppTank = Match.instance.GetOppositeTank(t.Team);
             if (oppTank != null && oppTank.IsDead == false)//这里是敌军坦克没有死亡的时候
             {
-                Transform turret = t.transform.GetChild(1).transform;
                 Vector3 v = (oppTank.transform.position - lastPos) / (Time.time - lastTime);//敌军坦克方向
                 lastPos = oppTank.transform.position;
                 lastTime = Time.time;
@@ -53,7 +52,7 @@ namespace YJY
                 Debug.DrawRay(firePosition, turnToForward, Color.red);
                 Vector3 turnToPosition = firePosition + turnToForward;
                 turnToForward = Vector3.ProjectOnPlane(turnToForward, Vector3.up);
-                turret.forward = Vector3.Lerp(turret.forward, turnToForward, Time.deltaTime * 180);
+                t.TurretTurnTo(t.Position + turnToForward);
                 if (Vector3.Distance(t.Position, oppTank.Position) < 16)//判断与地方坦克的距离//旧：<14//优化思路：找到性价比最高的极限距离
                 {//现有脚本可能会导致距离近的时候不进行走位了，可以考虑更改一下走位逻辑，开火距离可以增大
                     Debug.Log("距离较近，无需判断直接射击Y");
