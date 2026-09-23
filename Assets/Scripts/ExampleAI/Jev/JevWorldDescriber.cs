@@ -67,12 +67,13 @@ namespace Jev
         public const string MoveInstructions =
             "I am the tank described in `self`. Considering `enemies`, `stars`, `teammates`, `threats`, `match` " +
             "and my `current_plan`, which destination should my tank body drive to right now to maximize my team's " +
-            "final score while staying alive? Only the movement is decided here; aiming is decided separately.";
+            "final score while staying alive? Decide the way someone with my `self.personality` would. " +
+            "Only the movement is decided here; aiming is decided separately.";
 
         public const string AimInstructions =
             "I am the tank described in `self`. Which enemy should my turret aim at right now? Prefer enemies I can " +
-            "see (clear line of fire), that are close, nearly dead, or currently aiming at me. Choose `none` only if " +
-            "no enemy is worth tracking.";
+            "see (clear line of fire), that are close, nearly dead, or currently aiming at me, and decide the way " +
+            "someone with my `self.personality` would. Choose `none` only if no enemy is worth tracking.";
 
         private readonly Tank m_Self;
         private readonly JevConfig m_Config;
@@ -366,6 +367,7 @@ namespace Jev
 
             var self = new Dictionary<string, object>
             {
+                { "personality", m_Config.ResolvePlayStyleText() },
                 { "hp", HpBucket(m_Self.HP) },
                 { "location", SelfLocation() },
                 { "gun", m_Self.CanFire() ? "ready to fire" : "reloading" },
@@ -419,8 +421,8 @@ namespace Jev
             criteria[MoveOption.Home] =
                 "Return to my home zone to recover HP; use when HP is low and dying would hand the enemy points.";
             criteria[MoveOption.Hold] =
-                "Stay where I am; use when the current spot is good, for example recovering inside the home zone or " +
-                "an enemy is driving into my line of fire.";
+                "Stop and stay exactly where I am for a moment; only worth it while I am still recovering HP in the " +
+                "home zone, or an enemy is about to drive into my line of fire. Standing still with full HP gains nothing.";
             criteria[MoveOption.Roam] =
                 "Patrol to a random spot on the field looking for new stars; use only when nothing better is available.";
             if (m_Config.DodgeMode == EDodgeMode.Jev && HasThreat)
@@ -594,32 +596,31 @@ namespace Jev
             return "far";
         }
 
-        private static string HpBucket(int hp)
+        /// <summary>Coarse HP level: full / high / medium / low / critical.</summary>
+        public static string HpLevel(int hp)
         {
             var setting = Match.instance.GlobalSetting;
             float ratio = setting.MaxHP > 0 ? (float)hp / setting.MaxHP : 0f;
-            int hitsToDie = setting.DamagePerHit > 0 ? Mathf.CeilToInt((float)hp / setting.DamagePerHit) : 99;
-            string level;
             if (ratio >= 0.99f)
             {
-                level = "full";
+                return "full";
             }
-            else if (ratio >= 0.7f)
+            if (ratio >= 0.7f)
             {
-                level = "high";
+                return "high";
             }
-            else if (ratio >= 0.4f)
+            if (ratio >= 0.4f)
             {
-                level = "medium";
+                return "medium";
             }
-            else if (ratio >= 0.2f)
-            {
-                level = "low";
-            }
-            else
-            {
-                level = "critical";
-            }
+            return ratio >= 0.2f ? "low" : "critical";
+        }
+
+        private static string HpBucket(int hp)
+        {
+            var setting = Match.instance.GlobalSetting;
+            int hitsToDie = setting.DamagePerHit > 0 ? Mathf.CeilToInt((float)hp / setting.DamagePerHit) : 99;
+            string level = HpLevel(hp);
             string hits;
             switch (hitsToDie)
             {

@@ -37,6 +37,23 @@ One request carries two independent Choice questions, one per execution channel:
 | `move_to` | `star_<id>`, `enemy_N`, `teammate_N`, `away_from_enemies`, `home`, `hold`, `roam`, `sidestep` (Jev dodge mode only, while a missile threatens me) | NavMesh path to the target |
 | `aim_at` | `enemy_N`, `none` | turret tracking; fires when aligned and line of sight is clear |
 
+## Play style (steering by natural language)
+
+`PlayStyle` picks a preset (`Balanced` (default), `Aggressive`, `Cautious`, `Greedy`) or `Custom`, which
+uses the free text in `PlayStyleText`. The resolved sentence goes into the state as `self.personality`
+and both questions ask Jev to decide "the way someone with my personality would". The presets describe
+character only ("a hot-headed, fearless brawler", "a careful, patient survivor", "a greedy treasure
+hunter") and deliberately contain no tactical rules: the experiment is whether Jev derives different
+behaviour from personality alone. With `ShowPlayStyleInName` the tank is called `Jev-Aggressive` etc.,
+so two personalities can fight each other and their logs stay apart. Compare them by the `move.answer` /
+`aim.answer` distributions and the HP breakdown, not just by score.
+
+Example `~/.typesafe/tankbattle_jev.json`:
+
+```json
+{ "PlayStyle": "Custom", "PlayStyleText": "I am a cowardly homebody who panics at the first sign of danger." }
+```
+
 ## Distances
 
 With `UsePathDistances` (default on) every distance shown to Jev (stars, enemies, teammates, home) and
@@ -98,6 +115,44 @@ output tokens are free on TypeSafe's price list) and dodges. With `ShowStatsInGi
 counters are appended to the tank's yellow gizmo label in the Scene view; nothing is drawn on the game
 screen. At match end the same numbers go to the Unity console as one line and to the jsonl log as a
 `summary` record with a `stats` object.
+
+**Decision distribution.** Every Jev answer is also counted by category: `move_to` as star / enemy /
+teammate / home / away / hold / roam / sidestep, `aim_at` as enemy / none, plus how each answer was
+applied (switched, same, kept_low_confidence, invalid) and the average confidence. The move split is
+additionally broken down by my HP level (full / high / medium / low / critical), which is the quickest
+way to see whether a play style changed anything: a cautious tank should show `home` appearing already
+at `medium`, an aggressive one should show `enemy` dominating at `high`. The gizmo label shows the
+overall percentages live; the console summary adds the HP breakdown; the jsonl `summary.decisions`
+object has the raw counts.
+
+## Unattended matches and log analysis
+
+1. Close the Unity editor for this project (a batch editor cannot open a project that is already open).
+2. Run matches:
+
+```bash
+Assets/Scripts/ExampleAI/Jev/Tools/run_jev_matches.sh -n 5 -a Jev.MyTank -b TJQ.MyTank -c '{"PlayStyle":"Aggressive"}'
+```
+
+   Default mode `-M editor` starts a batch-mode Unity editor (`-batchmode -nographics`) that opens
+   `BattleField.unity` and enters play mode via `Jev.EditorTools.JevBuild.RunMatches`. `JevMatchRunner`
+   (activated only by `--jev-matches`) sets the team scripts before each match, plays them back to back by
+   reloading the scene, appends one line per match to `Logs/Jev/matches_<stamp>.jsonl` and exits the
+   process. `-c` passes JevConfig overrides for that run only, so two styles can be compared with two
+   invocations. Keep `-t 1`: Jev requests take wall-clock time, so a faster time scale means fewer
+   decisions per game second. Expect about a minute of editor start-up per invocation.
+
+   `-M player` runs a headless player built with **Tools > Jev > Build Headless Player** instead. Note that
+   a player build of this project currently fails because a student script (`Class2025/LYF`) references
+   `UnityEditor.Handles` without an editor guard; the editor mode sidesteps that.
+3. Summarise any set of logs (works for matches stopped early too, they are flagged incomplete):
+
+```bash
+python3 Assets/Scripts/ExampleAI/Jev/Tools/summarize_jev_logs.py Logs/Jev
+```
+
+   Prints a per-match table (decisions, latency avg/p95/max, tokens, cost, score, move/aim split) and a
+   per-style section with the move distribution broken down by HP level. `--json out.json` dumps the data.
 
 ## Logs
 

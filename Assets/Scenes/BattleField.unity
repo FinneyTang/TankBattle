@@ -2130,7 +2130,7 @@ MonoBehaviour:
   - Team: 0
     TankScript: TJQ.MyTank
   - Team: 1
-    TankScript: TJQ.MyTank
+    TankScript: Jev.MyTank
   GlobalSetting:
     MatchTime: 180
     FireInterval: 1

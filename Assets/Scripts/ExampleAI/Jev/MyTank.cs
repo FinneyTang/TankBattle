@@ -81,9 +81,13 @@ namespace Jev
         private GUIStyle m_GizmoLabelStyle;
 #endif
 
+        /// <summary>Config is needed before OnStart (Match calls GetName during Init), so load lazily.</summary>
+        private JevConfig Config => m_Config ??= JevConfig.Load();
+
         public override string GetName()
         {
-            return "Jev";
+            var config = Config;
+            return config.ShowPlayStyleInName ? $"Jev-{config.PlayStyleLabel}" : "Jev";
         }
 
         // ------------------------------------------------------------------ lifecycle
@@ -91,7 +95,7 @@ namespace Jev
         protected override void OnStart()
         {
             base.OnStart();
-            m_Config = JevConfig.Load();
+            m_Config = Config;
             m_Stats = new JevStats(m_Config.InputTokenPriceUsdPerMillion);
             m_World = new JevWorldDescriber(this, m_Config);
             m_Logger = new JevLogger(GetName(), Team.ToString(), m_Config);
@@ -105,6 +109,8 @@ namespace Jev
                 kind = "start",
                 team = Team.ToString(),
                 model = m_Config.Model,
+                play_style = m_Config.PlayStyleLabel,
+                play_style_text = m_Config.ResolvePlayStyleText(),
                 has_api_key = m_Client.HasApiKey,
                 decision_interval = m_Config.DecisionInterval,
                 move_switch_confidence = m_Config.MoveSwitchConfidence,
@@ -151,10 +157,28 @@ namespace Jev
             m_NextFallbackThinkTime = Time.time;
         }
 
+        /// <summary>
+        /// Match deactivates every tank in the very frame the match ends, so OnUpdate never sees
+        /// IsMathEnd. The summary therefore has to be written from here (and from OnDestroy on quit).
+        /// </summary>
+        private void OnDisable()
+        {
+            if (m_Stats != null && Match.instance != null && Match.instance.IsMathEnd())
+            {
+                PrintSummaryOnce();
+            }
+        }
+
         private void OnDestroy()
         {
             m_Pending?.Abort("tank destroyed");
             m_Pending = null;
+            // A tank that was dead (already inactive) when the match ended never gets OnDisable, and by
+            // the time the scene unloads Match.instance may be gone, so always flush the summary here.
+            if (m_Stats != null)
+            {
+                PrintSummaryOnce();
+            }
             m_Logger?.Dispose();
         }
 
@@ -283,6 +307,10 @@ namespace Jev
             var aim = request.Response.GetAnswer(JevWorldDescriber.QuestionAimAt);
             string moveResult = ApplyMoveAnswer(move);
             string aimResult = ApplyAimAnswer(aim);
+            m_Stats.RecordDecision(
+                move?.choice, moveResult, move?.confidence,
+                aim?.choice, aim != null ? aimResult : null, aim?.confidence,
+                JevWorldDescriber.HpLevel(HP));
             m_DecidedByJev = true;
             m_NextDecisionTime = m_ThreatArrivedWhilePending ? Time.time : Time.time + m_Config.DecisionInterval;
             m_ThreatArrivedWhilePending = false;
@@ -842,6 +870,8 @@ namespace Jev
                 return;
             }
             m_SummaryPrinted = true;
+            var match = Match.instance;
+            bool matchEnded = match != null && match.IsMathEnd();
             Debug.Log(m_Stats.SummaryText($"{GetName()} ({Team})", ModeText(), Score));
             m_Logger.Log(new
             {
@@ -849,10 +879,13 @@ namespace Jev
                 kind = "summary",
                 team = Team.ToString(),
                 score = Score,
-                winner = Match.instance.WinnerTeam.ToString(),
+                match_ended = matchEnded,
+                winner = match != null ? match.WinnerTeam.ToString() : "unknown",
                 dodge_mode = m_Config.DodgeMode.ToString(),
+                play_style = m_Config.PlayStyleLabel,
                 in_fallback = m_InFallback,
                 stats = m_Stats.ToLogObject(),
+                decisions = m_Stats.DistributionLogObject(),
             });
             m_Logger.Dispose();
         }
@@ -860,7 +893,7 @@ namespace Jev
         private string ModeText()
         {
             string source = !m_Client.HasApiKey ? "NO KEY" : m_InFallback ? "FALLBACK" : "JEV";
-            return $"{source}, dodge {m_Config.DodgeMode}";
+            return $"{source}, {m_Config.PlayStyleLabel}, dodge {m_Config.DodgeMode}";
         }
 
         protected override void OnOnDrawGizmos()
@@ -918,6 +951,7 @@ namespace Jev
             if (m_Stats != null && m_Config.ShowStatsInGizmo)
             {
                 label += "\n" + m_Stats.OverlayText($"{GetName()} ({Team})", ModeText());
+                label += "\n" + m_Stats.DistributionText();
             }
             Handles.Label(Position + Vector3.up * 4f, label, m_GizmoLabelStyle);
 #endif

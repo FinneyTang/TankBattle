@@ -40,6 +40,61 @@ namespace Jev
         /// <summary>Seconds to stay in fallback before probing Jev again.</summary>
         public float FallbackRetryInterval = 5f;
 
+        // ---- play style (natural-language steering experiment) ----
+        /// <summary>
+        /// Preset name: Balanced, Aggressive, Cautious, Greedy, or Custom. The matching personality text is
+        /// placed in the state as `self.personality` and the questions ask Jev to act in character. The
+        /// presets describe character only, never tactics. Unknown names fall back to PlayStyleText, then Balanced.
+        /// </summary>
+        public string PlayStyle = "Balanced";
+        /// <summary>Free-text personality, used when PlayStyle is "Custom".</summary>
+        public string PlayStyleText = "";
+        /// <summary>Append the style to the tank's name ("Jev-Aggressive") so matches and logs are easy to tell apart.</summary>
+        public bool ShowPlayStyleInName = true;
+
+        public const string StyleBalanced = "Balanced";
+        public const string StyleAggressive = "Aggressive";
+        public const string StyleCautious = "Cautious";
+        public const string StyleGreedy = "Greedy";
+        public const string StyleCustom = "Custom";
+
+        /// <summary>The natural-language style Jev will read.</summary>
+        public string ResolvePlayStyleText()
+        {
+            // Personality only, deliberately without any concrete tactical rules: the experiment is whether
+            // Jev derives different behaviour from character alone.
+            switch ((PlayStyle ?? string.Empty).Trim().ToLowerInvariant())
+            {
+                case "aggressive":
+                    return "I am a hot-headed, fearless brawler. I live for the thrill of a fight, I hate backing down, " +
+                           "and I get bored when nothing is happening.";
+                case "cautious":
+                    return "I am a careful, patient survivor. I hate taking risks and I worry about getting hurt.";
+                case "greedy":
+                    return "I am a greedy treasure hunter. Shiny things are all I care about; I want every star " +
+                           "on the field for myself and I find fighting a waste of time.";
+                case "custom":
+                    if (!string.IsNullOrWhiteSpace(PlayStyleText))
+                    {
+                        return PlayStyleText.Trim();
+                    }
+                    break;
+                case "balanced":
+                case "":
+                    break;
+                default:
+                    if (!string.IsNullOrWhiteSpace(PlayStyleText))
+                    {
+                        return PlayStyleText.Trim();
+                    }
+                    break;
+            }
+            return "I am an even-tempered, pragmatic tank commander with no particular quirks.";
+        }
+
+        /// <summary>Short label for names and logs.</summary>
+        public string PlayStyleLabel => string.IsNullOrWhiteSpace(PlayStyle) ? StyleBalanced : PlayStyle.Trim();
+
         // ---- confidence gating (hysteresis) ----
         /// <summary>Changing destination costs travel time, so demand this much confidence to switch.</summary>
         public float MoveSwitchConfidence = 0.35f;
@@ -102,23 +157,39 @@ namespace Jev
         public static string ConfigDirectory =>
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ConfigDirName);
 
+        /// <summary>
+        /// Defaults, then ~/.typesafe/tankbattle_jev.json, then a "--jev-config {json}" command-line
+        /// argument (used by Tools/run_jev_matches.sh to vary settings per run).
+        /// </summary>
         public static JevConfig Load()
         {
             var config = new JevConfig();
             var path = Path.Combine(ConfigDirectory, ConfigFileName);
-            if (!File.Exists(path))
+            if (File.Exists(path))
             {
-                return config;
+                try
+                {
+                    // PopulateObject only touches keys present in the file, so partial overrides work.
+                    JsonConvert.PopulateObject(File.ReadAllText(path), config);
+                    Debug.Log($"[Jev] Loaded config overrides from {path}");
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning($"[Jev] Failed to read {path}, using defaults: {e.Message}");
+                }
             }
-            try
+            var cli = JevMatchRunner.FindArg(Environment.GetCommandLineArgs(), "config");
+            if (!string.IsNullOrWhiteSpace(cli))
             {
-                // PopulateObject only touches keys present in the file, so partial overrides work.
-                JsonConvert.PopulateObject(File.ReadAllText(path), config);
-                Debug.Log($"[Jev] Loaded config overrides from {path}");
-            }
-            catch (Exception e)
-            {
-                Debug.LogWarning($"[Jev] Failed to read {path}, using defaults: {e.Message}");
+                try
+                {
+                    JsonConvert.PopulateObject(cli, config);
+                    Debug.Log($"[Jev] Applied command-line config override: {cli}");
+                }
+                catch (Exception e)
+                {
+                    Debug.LogWarning($"[Jev] Bad --jev-config JSON ignored: {e.Message}");
+                }
             }
             return config;
         }
